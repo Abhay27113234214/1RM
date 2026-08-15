@@ -1,4 +1,5 @@
 import { login, register } from '../../backend/auth.js'
+import { addMeasurements } from '../../backend/measures.js';
 
 const $ = s => document.querySelector(s);
 // the above is an arrow function used to quickly select an element with a given class or id
@@ -40,21 +41,19 @@ function showToast(message, type = 'ok', duration = 3800) {
         gone = true;
         clearTimeout(timer);
 
-        /* 1. lock current height so we can collapse it smoothly */
         t.style.height = t.offsetHeight + 'px';
 
         requestAnimationFrame(() => {
-            /* 2. slide + fade out */
+            // slide aur fade out vali annimation
             t.classList.add('bye');
-            /* 3. shrink its space so the stack closes the gap */
             t.style.height = '0px';
             t.style.paddingTop = '0';
             t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px'; /* cancels the flex gap */
+            t.style.marginTop = '-10px';
         });
 
         t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500); /* safety net */
+        setTimeout(() => t.remove(), 500); // safety k liye 
     }
 
     const timer = setTimeout(dismiss, duration);
@@ -273,24 +272,35 @@ signupForm.addEventListener('submit', async (e) => {
 });
 
 // measurements dialog buttons 
-$('#obSave').addEventListener('click', () => {
+$('#obSave').addEventListener('click', async () => {
     // TODO: read the values inside #obFields and save them your way.
     // Fields: .mHeight, .mWeight, .mBodyFat, .mAge + chip groups [data-mgroup].
-    let height = document.getElementsByClassName("mHeight").value
-    let weight = document.getElementsByClassName("mWeight").value
-    let age = document.getElementsByClassName("mAge").value
-    let body_fat = document.getElementsByClassName("mBodyFat").value
-
+    const measurements = {
+        height: document.querySelector(".mHeight").value || "NA",
+        weight: document.querySelector(".mWeight").value || "NA",
+        bodyFat: document.querySelector(".mBodyFat").value || "NA",
+        age: document.querySelector(".mAge").value || "NA",
+        sex: document.querySelector('[data-mgroup="sex"] .active')?.textContent || "NA",
+        goal: document.querySelector('[data-mgroup="goal"] .active')?.textContent || "NA",
+        experience: document.querySelector('[data-mgroup="exp"] .on')?.textContent || "NA",
+        trainingDays: document.querySelector('[data-mgroup="days"] .on')?.textContent || "NA"
+    };
+    let result = await addMeasurements(measurements)
+    if (result.success) {
+        showToast('Measurements and goals aligned!')
+    } else {
+        showToast('There was an error. Try again later', 'error')
+    }
     closeDialog();
 });
 
 $('#obSkip').addEventListener('click', () => {
-    // I don't think that there is any need of this function
+    // mujhe ni lagta is function ki koi zaroorat hai
     closeDialog();
 });
 
 
-/* ================= everything below = landing page ================= */
+// iske neeche saara landing page specific code hi hai
 
 const navBar = $('#navBar');
 const onScroll = () => navBar.classList.toggle('scrolled', window.scrollY > 10);
@@ -367,38 +377,38 @@ const waitGo = async () => { while (paused) await sleep(150); };
 const demoRows = [];
 
 function addDemoRow(item) {
-  const row = document.createElement('div');
-  row.className = 'demo-row';
-  row.style.setProperty('--c', item.c);
-  row.innerHTML = '<span class="nm">' + item.name + '</span><span class="mt">' + item.meta + '</span>';
-  demoList.appendChild(row);
+    const row = document.createElement('div');
+    row.className = 'demo-row';
+    row.style.setProperty('--c', item.c);
+    row.innerHTML = '<span class="nm">' + item.name + '</span><span class="mt">' + item.meta + '</span>';
+    demoList.appendChild(row);
 
-  const step = row.offsetHeight + 8;   /* row height + gap = one slot */
-  demoRows.unshift(row);
+    const step = row.offsetHeight + 8;   /* row height + gap = one slot */
+    demoRows.unshift(row);
 
-  /* park the new row just above the list, invisible */
-  row.style.transform = 'translateY(' + (-step) + 'px)';
-  row.style.opacity = '0';
-  void row.offsetWidth;                /* force reflow so the entry animates */
+    /* park the new row just above the list, invisible */
+    row.style.transform = 'translateY(' + (-step) + 'px)';
+    row.style.opacity = '0';
+    void row.offsetWidth;                /* force reflow so the entry animates */
 
-  /* slide every row (including a temporary 4th) into its slot */
-  demoRows.forEach((r, i) => {
-    r.style.transform = 'translateY(' + (i * step) + 'px)';
-  });
+    /* slide every row (including a temporary 4th) into its slot */
+    demoRows.forEach((r, i) => {
+        r.style.transform = 'translateY(' + (i * step) + 'px)';
+    });
 
-  /* fade the new one in, fade the 4th one out as it exits the clip */
-  row.style.opacity = '';
-  if (demoRows.length > 3) {
-    const leaving = demoRows.pop();
-    leaving.style.opacity = '0';
-    setTimeout(() => leaving.remove(), 340);
-  }
+    /* fade the new one in, fade the 4th one out as it exits the clip */
+    row.style.opacity = '';
+    if (demoRows.length > 3) {
+        const leaving = demoRows.pop();
+        leaving.style.opacity = '0';
+        setTimeout(() => leaving.remove(), 340);
+    }
 
-  /* size the list to exactly 3 slots — nothing below can ever shift */
-  demoList.style.height = (3 * step) + 'px';
+    /* size the list to exactly 3 slots — nothing below can ever shift */
+    demoList.style.height = (3 * step) + 'px';
 
-  streakVal++;
-  streakEl.textContent = streakVal;
+    streakVal++;
+    streakEl.textContent = streakVal;
 }
 (async function demoLoop() {
     await sleep(900);

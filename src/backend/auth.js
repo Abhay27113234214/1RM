@@ -16,13 +16,14 @@ let login = async (email, password) => {
             reason: "invalid_password"
         }
     }
+    localStorage.setItem("current_user", JSON.stringify(user))
     return {success: true}
 }
 
 let register = async (user) => {
     let user_response = await fetch(`http://localhost:3000/users?email:eq=${user.email}`)
     let user_in_db = await user_response.json()
-    if (user_in_db >= 1) {
+    if (user_in_db.length >= 1) {
         return {
             success: false,
             reason: "user_already_exists"
@@ -37,6 +38,7 @@ let register = async (user) => {
         body: JSON.stringify(user)
     })
     if (create_user_response.status) {
+        localStorage.setItem("current_user", JSON.stringify(user))
         return {
             success: true
         }
