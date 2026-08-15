@@ -991,29 +991,26 @@ h1 em {
 }
 
 .demo-list {
-    margin-top: 16px;
-    display: grid;
-    gap: 8px;
-    min-height: 172px
+  margin-top: 16px;
+  position: relative;
+  height: 159px;                 /* 3 slots — JS keeps this in sync */
+  overflow: hidden;
+  transition: height .45s var(--ease)
 }
-
 .demo-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 11px 14px;
-    background: var(--bg)
-}
-
-.demo-row.in {
-    animation: rowIn .45s var(--ease)
-}
-
-.demo-row.out {
-    animation: rowOut .3s forwards
+  position: absolute;            /* rows no longer affect page layout */
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  background: var(--bg);
+  transition: transform .45s var(--ease), opacity .3s ease
 }
 
 @keyframes rowIn {

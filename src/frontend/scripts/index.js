@@ -364,20 +364,41 @@ let paused = false, demoIdx = 0, streakVal = 6;
 demoWrap.addEventListener('mouseenter', () => { paused = true; });
 demoWrap.addEventListener('mouseleave', () => { paused = false; });
 const waitGo = async () => { while (paused) await sleep(150); };
+const demoRows = [];
+
 function addDemoRow(item) {
-    const row = document.createElement('div');
-    row.className = 'demo-row in';
-    row.style.setProperty('--c', item.c);
-    row.innerHTML = '<span class="nm">' + item.name + '</span><span class="mt">' + item.meta + '</span>';
-    demoList.prepend(row);
-    const rows = demoList.querySelectorAll('.demo-row:not(.out)');
-    if (rows.length > 3) {
-        const last = rows[rows.length - 1];
-        last.classList.add('out');
-        setTimeout(() => last.remove(), 300);
-    }
-    streakVal++;
-    streakEl.textContent = streakVal;
+  const row = document.createElement('div');
+  row.className = 'demo-row';
+  row.style.setProperty('--c', item.c);
+  row.innerHTML = '<span class="nm">' + item.name + '</span><span class="mt">' + item.meta + '</span>';
+  demoList.appendChild(row);
+
+  const step = row.offsetHeight + 8;   /* row height + gap = one slot */
+  demoRows.unshift(row);
+
+  /* park the new row just above the list, invisible */
+  row.style.transform = 'translateY(' + (-step) + 'px)';
+  row.style.opacity = '0';
+  void row.offsetWidth;                /* force reflow so the entry animates */
+
+  /* slide every row (including a temporary 4th) into its slot */
+  demoRows.forEach((r, i) => {
+    r.style.transform = 'translateY(' + (i * step) + 'px)';
+  });
+
+  /* fade the new one in, fade the 4th one out as it exits the clip */
+  row.style.opacity = '';
+  if (demoRows.length > 3) {
+    const leaving = demoRows.pop();
+    leaving.style.opacity = '0';
+    setTimeout(() => leaving.remove(), 340);
+  }
+
+  /* size the list to exactly 3 slots — nothing below can ever shift */
+  demoList.style.height = (3 * step) + 'px';
+
+  streakVal++;
+  streakEl.textContent = streakVal;
 }
 (async function demoLoop() {
     await sleep(900);
