@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRIND ✱ The Minimal Workout Log</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF4A11'>✱</text></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@latest/latin-400-normal.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@latest/latin-500-normal.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@latest/latin-700-normal.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/latin-400-italic.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/latin-600-normal.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/latin-600-italic.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/index.css">
+</head>
+
+<body>
+
+  <div class="nav-bar" id="navBar">
+    <div class="wrap nav">
+      <a class="logo" href="#top"><span class="mark">✱</span>GRIND</a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#coach">Coach</a>
+        <a href="#report">Report</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#faq">FAQ</a>
+        <button class="btn-primary nav-cta" id="authBtn">Sign in</button>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+    <div class="wrap">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">The minimal workout log</div>
+          <h1>Train hard.<br><em>log everything.</em></h1>
+          <p class="hero-sub">GRIND is a quiet place for loud progress. Ten seconds to log a session, zero noise in
+            return — plus smart weight calls, a full catalogue, and a weekly report you'll actually want to read.</p>
+          <div class="hero-ctas">
+            <button class="btn-primary" id="heroCta">Sign in — it's free <span class="arr">→</span></button>
+            <a class="btn-quiet" href="#coach">Meet the coach ↓</a>
+          </div>
+        </div>
+
+        <div class="hero-demo">
+          <div class="hero-doodle doodle auto" aria-hidden="true">
+          </div>
+          <div class="float-chip fc1"><b>+2.5 kg</b> · next session</div>
+          <div class="float-chip fc2"><b>✱</b> 6-day streak</div>
+          <div class="float-chip fc3">PR · bench <b>85 kg</b></div>
+          <div class="offset-wrap" id="demoWrap">
+            <div class="panel">
+              <div class="demo-head">
+                <span class="demo-title">Today ✱ <span id="demoDate"></span></span>
+                <span class="live"><span class="live-dot"></span>live</span>
+              </div>
+              <div class="demo-input"><span id="typeTarget"></span><span class="cursor"></span></div>
+              <div class="demo-list" id="demoList"></div>
+              <div class="demo-foot">
+                <span>streak · <b id="demoStreak">6</b> days</span>
+                <span>volume · <b>12,480</b> kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>consistency beats intensity<b>✱</b>no skipped mondays<b>✱</b>progressive overload<b>✱</b>trust the
+          process<b>✱</b>show up anyway<b>✱</b></span>
+        <span>consistency beats intensity<b>✱</b>no skipped mondays<b>✱</b>progressive overload<b>✱</b>trust the
+          process<b>✱</b>show up anyway<b>✱</b></span>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section class="stats reveal">
+        <div class="stat">
+          <div class="num"><span data-count="128400">0</span><span class="sfx">+</span></div>
+          <div class="lbl">sets logged</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span data-count="6.2" data-dec="1">0</span><span class="sfx">M kg</span></div>
+          <div class="lbl">lifted this year</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span data-count="1240">0</span><span class="sfx">+</span></div>
+          <div class="lbl">exercises indexed</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span data-count="4300">0</span><span class="sfx">+</span></div>
+          <div class="lbl">lifters logging weekly</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="ecg-sec" aria-hidden="true"><svg id="ecgSvg" preserveAspectRatio="none"></svg></div>
+
+    <div class="wrap">
+      <section class="section" id="features">
+        <div class="sec-head reveal">
+          <div class="eyebrow">Why GRIND</div>
+          <h2>Everything you need.<br><em>nothing you don't.</em></h2>
+          <p>Most fitness apps want your attention. GRIND just wants your numbers — then quietly hands you back better
+            ones.</p>
+        </div>
+        <div class="features">
+          <div class="feat reveal"><span class="fx">✱</span>
+            <h3>Logged in <em>seconds</em></h3>
+            <p>Name, sets, reps, weight, done. A form so fast you can log between sets without losing your pump.</p>
+          </div>
+          <div class="feat reveal"><span class="fx">✱</span>
+            <h3>Coach-grade <em>weight calls</em></h3>
+            <p>Tell GRIND how the set felt; it tells you what to load next. Progress, hold, or deload — never guess at
+              the rack again.</p>
+          </div>
+          <div class="feat reveal"><span class="fx">✱</span>
+            <h3>A catalogue with <em>no gaps</em></h3>
+            <p>1,240+ exercises with muscle groups and equipment baked in. And if something's missing — build it
+              yourself.</p>
+          </div>
+          <div class="feat reveal"><span class="fx">✱</span>
+            <h3>Progress you can <em>see</em></h3>
+            <p>Sixteen-week heatmaps, day streaks and week-over-week deltas. The trend is the motivation.</p>
+          </div>
+          <div class="feat reveal"><span class="fx">✱</span>
+            <h3>Yours <em>alone</em></h3>
+            <p>Your data lives in your browser. No account, no cloud, no tracking. Close the tab, it's still yours.</p>
+          </div>
+          <div class="feat reveal"><span class="fx">✱</span>
+            <h3>Built for <em>focus</em></h3>
+            <p>No feed, no badges, no guilt notifications. Just a quiet ledger of every time you showed up.</p>
+          </div>
+        </div>
+      </section>
+
+      <section style="padding-bottom:40px">
+        <div class="banner reveal">
+          <img
+            src="https://image.qwenlm.ai/public_source/8293be0c-4a96-47cb-a823-cd6c43511e6e/1f14c468b-5122-49e4-b9fe-bd5b7d51fd6e.png"
+            alt="A quiet gym at golden hour, a single loaded barbell resting on a squat rack with light streaming through a high window"
+            loading="lazy">
+          <div class="banner-content">
+            <div class="banner-eyebrow">The philosophy</div>
+            <h2>Loud effort.<br><em>quiet app.</em></h2>
+            <p>The work happens on the floor — chalk, iron, breath. GRIND just makes sure none of it gets forgotten.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="spot reveal" id="coach">
+        <div class="spot-copy">
+          <div class="arm-doodle" aria-hidden="true">
+            <svg class="doodle" viewBox="0 0 100 96" width="88">
+              <path pathLength="1" class="si" d="M16 86 C 12 66 20 54 36 49" />
+              <path pathLength="1" class="si" style="--dd:.2s" d="M36 49 C 28 32 40 16 58 18 C 74 20 82 34 76 46" />
+              <path pathLength="1" class="si" style="--dd:.4s" d="M76 46 C 88 46 96 56 92 66 C 88 76 76 78 70 72" />
+              <path pathLength="1" class="si" style="--dd:.6s" d="M70 72 C 64 80 52 82 44 76 C 36 82 24 88 16 86" />
+              <path pathLength="1" class="sa" style="--dd:.85s" d="M54 10 l6 -8" />
+              <path pathLength="1" class="sa" style="--dd:.95s" d="M68 14 l10 -5" />
+            </svg>
+          </div>
+          <div class="eyebrow">Smart weights</div>
+          <h2>Know exactly<br><em>what to load.</em></h2>
+          <p>Every set you log teaches GRIND your strength curve. Before your next session it hands you a number — add
+            weight, hold, or back off — based on reps in reserve, not vibes.</p>
+          <ul class="tick-list">
+            <li>Progression calls tuned to each lift, not generic percentages</li>
+            <li>Reads how close you were to failure, set by set</li>
+            <li>Works on catalogue exercises and your custom ones too</li>
+          </ul>
+        </div>
+        <div class="offset-wrap">
+          <div class="panel">
+            <div class="demo-head">
+              <span class="demo-title">Coach ✱ smart weights</span>
+              <span class="live"><span class="live-dot"></span>auto</span>
+            </div>
+            <div class="chips coach-ex" id="coachChips"></div>
+            <div class="coach-last">Last session · <b id="coachLast"></b></div>
+            <div class="rir-row">
+              <span class="rir-label">Reps in reserve</span>
+              <div class="seg" id="rirBtns"></div>
+            </div>
+            <div class="coach-out out-up" id="coachOut">
+              <div><span class="coach-num" id="coachNum">0</span><span class="coach-unit">kg</span></div>
+              <div>
+                <span class="coach-badge" id="coachBadge"></span>
+                <p class="coach-note" id="coachNote"></p>
+              </div>
+            </div>
+            <div class="coach-trend-row">
+              <span class="trend-lbl">last 4 sessions → next</span>
+              <div class="coach-trend" id="coachTrend"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="spot flip reveal" id="report">
+        <div class="spot-copy">
+          <div class="eyebrow">The weekly report</div>
+          <h2>Your weeks,<br><em>at a glance.</em></h2>
+          <p>Sixteen weeks of showing up, drawn as a heatmap. Darker means more work. Empty means rest — which is part
+            of the plan too. Best weeks, longest streaks and total volume, all without opening a single menu.</p>
+          <ul class="tick-list">
+            <li>Sixteen weeks, one honest picture</li>
+            <li>Rest days included — recovery is training too</li>
+            <li>Hover any square to relive the session</li>
+          </ul>
+        </div>
+        <div class="panel-flat">
+          <div class="demo-head">
+            <span class="demo-title">Consistency ✱ 16 weeks</span>
+            <span class="live"><span class="live-dot"></span>updating</span>
+          </div>
+          <div class="heat-wrap">
+            <div class="heat-note" aria-hidden="true">
+            </div>
+            <div class="heat" id="heat"></div>
+          </div>
+          <div class="heat-legend">
+            less <span class="gap"></span>
+            <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i>
+            <span class="gap"></span> more
+          </div>
+          <div class="heat-stats">
+            <div class="hs">
+              <div class="hv">21</div>
+              <div class="hl">longest streak · days</div>
+            </div>
+            <div class="hs">
+              <div class="hv">6</div>
+              <div class="hl">best week · sessions</div>
+            </div>
+            <div class="hs">
+              <div class="hv">48,920</div>
+              <div class="hl">total volume · kg</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="spot reveal" id="catalog">
+        <div class="spot-copy">
+          <div class="eyebrow">The catalogue</div>
+          <h2>Every lift,<br><em>indexed.</em></h2>
+          <p>Barbell or bodyweight, erg or pool — 1,240 exercises with muscle groups, equipment and difficulty built in.
+            Filter, find, log. No more typing "shoulder thing" into a notes app.</p>
+          <ul class="tick-list">
+            <li>Organised by movement pattern and equipment</li>
+            <li>Each exercise carries its own progression rules</li>
+            <li>Can't find it? <a href="#custom" style="border-bottom:1.5px solid var(--accent)">Build your own ↓</a>
+            </li>
+          </ul>
+        </div>
+        <div class="cat-panel">
+          <div class="demo-head">
+            <span class="demo-title">Browse ✱ catalogue</span>
+            <span class="cat-count" id="catCount"></span>
+          </div>
+          <div class="chips" id="catChips"></div>
+          <div class="ex-grid" id="exGrid"></div>
+          <div class="cat-foot">
+            <span class="cat-count">…and 1,200 more inside</span>
+            <a href="#custom">Request one ✱</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="spot flip reveal" id="custom">
+        <div class="spot-copy">
+          <div class="eyebrow">Custom exercises</div>
+          <h2>If it exists,<br><em>you can log it.</em></h2>
+          <p>Copenhagen planks, farmer carries, your coach's cursed circuit — create custom movements with their own
+            muscle group, equipment and tracking style. They join your catalogue like they were always there, and the
+            smart weight calls work on them too.</p>
+          <ul class="tick-list">
+            <li>Track by reps, time, or distance</li>
+            <li>Own muscle group and equipment tags</li>
+            <li>Full history and recommendations included</li>
+          </ul>
+        </div>
+        <div class="offset-wrap">
+          <div class="panel">
+            <div class="demo-head">
+              <span class="demo-title">New exercise ✱ draft</span>
+              <span class="live"><span class="live-dot"></span>editing</span>
+            </div>
+            <div class="mock-field">
+              <label>Name</label>
+              <div class="mock-input">Copenhagen Plank</div>
+            </div>
+            <div class="mock-field">
+              <label>Muscle group</label>
+              <div class="chips" data-group="mg">
+                <button type="button" class="chip">Push</button>
+                <button type="button" class="chip">Pull</button>
+                <button type="button" class="chip">Legs</button>
+                <button type="button" class="chip active">Core</button>
+                <button type="button" class="chip">Cardio</button>
+              </div>
+            </div>
+            <div class="mock-field">
+              <label>Equipment</label>
+              <div class="chips" data-group="eq">
+                <button type="button" class="chip active">Bodyweight</button>
+                <button type="button" class="chip">Barbell</button>
+                <button type="button" class="chip">Dumbbell</button>
+                <button type="button" class="chip">Machine</button>
+              </div>
+            </div>
+            <div class="mock-field">
+              <label>Track by</label>
+              <div class="seg" data-group="tb" style="display:flex;width:max-content">
+                <button type="button" class="on">Time</button>
+                <button type="button">Reps</button>
+                <button type="button">Distance</button>
+              </div>
+            </div>
+            <button class="save-btn" id="saveEx" type="button">Save to catalogue ✱</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="versus" style="padding-top:20px">
+        <div class="sec-head reveal">
+          <div class="eyebrow">The difference</div>
+          <h2>Most apps want <em>your attention.</em></h2>
+          <p>We looked at everything a fitness app could be, and removed almost all of it. Here's what remains when you
+            design for the workout instead of the screen time.</p>
+        </div>
+        <div class="versus">
+          <div class="vs-col vs-them reveal">
+            <div class="vs-head">typical fitness apps</div>
+            <div class="vs-row"><span class="vs-k">signup</span><span class="vs-v">Email, password, paywall</span></div>
+            <div class="vs-row"><span class="vs-k">log a set</span><span class="vs-v">Six taps through menus</span>
+            </div>
+            <div class="vs-row"><span class="vs-k">your data</span><span class="vs-v">Their cloud, their rules</span>
+            </div>
+            <div class="vs-row"><span class="vs-k">motivation</span><span class="vs-v">Guilt notifications</span></div>
+            <div class="vs-row"><span class="vs-k">price</span><span class="vs-v">$9.99 a month</span></div>
+          </div>
+          <div class="vs-col vs-us reveal">
+            <div class="vs-head">✱ GRIND</div>
+            <div class="vs-row"><span class="vs-k">signup</span><span class="vs-v">Open the page. Start.</span></div>
+            <div class="vs-row"><span class="vs-k">log a set</span><span class="vs-v">Ten seconds, <em>flat</em></span>
+            </div>
+            <div class="vs-row"><span class="vs-k">your data</span><span class="vs-v">Your browser,
+                <em>yours</em></span></div>
+            <div class="vs-row"><span class="vs-k">motivation</span><span class="vs-v">A quiet streak <em>✱</em></span>
+            </div>
+            <div class="vs-row"><span class="vs-k">price</span><span class="vs-v"><em>Free forever</em></span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="bb-sec reveal" aria-hidden="true">
+        <svg class="doodle bb" viewBox="0 0 680 96">
+          <path pathLength="1" class="si solid" d="M40 48 C 220 45 460 45 640 48" />
+          <g class="bb-l">
+            <path class="si solid" d="M93 20 h16 v56 h-16 Z" />
+            <path class="si solid" d="M113 28 h12 v40 h-12 Z" />
+            <path class="si solid" d="M129 40 h6 v16 h-6 Z" />
+          </g>
+          <g class="bb-r">
+            <path class="si solid" d="M571 20 h16 v56 h-16 Z" />
+            <path class="si solid" d="M555 28 h12 v40 h-12 Z" />
+            <path class="si solid" d="M545 40 h6 v16 h-6 Z" />
+          </g>
+          <path pathLength="1" class="sa" style="--dd:.8s"
+            d="M340 30 c2 8 6 12 14 14 c-8 2 -12 6 -14 14 c-2 -8 -6 -12 -14 -14 c8 -2 12 -6 14 -14 Z" />
+        </svg>
+        <div class="bb-cap">add plate. repeat.</div>
+      </div>
+
+      <section class="section" id="method" style="padding-top:60px">
+        <div class="sec-head reveal">
+          <div class="eyebrow">The method</div>
+          <h2>Three steps.<br><em>that's the whole system.</em></h2>
+        </div>
+        <div class="method reveal">
+          <div class="step">
+            <div class="step-doodle" aria-hidden="true">
+              <svg class="doodle" viewBox="0 0 48 48" width="46">
+                <path pathLength="1" class="si" d="M12 42 V8 H30 V42" />
+                <circle pathLength="1" class="si" style="--dd:.3s" cx="26" cy="25" r="1.6" />
+                <path pathLength="1" class="sa" style="--dd:.45s" d="M46 25 H32 M32 25 l5 -4 M32 25 l5 4" />
+              </svg>
+            </div>
+            <div class="no">01</div>
+            <h3>Show up</h3>
+            <p>The hardest part is the door. GRIND doesn't fix that — it just makes everything after it easier.</p>
+          </div>
+          <div class="step">
+            <div class="step-doodle" aria-hidden="true">
+              <svg class="doodle" viewBox="0 0 48 48" width="46">
+                <path pathLength="1" class="si" d="M12 32 L30 14 l6 6 L18 38 Z" />
+                <path pathLength="1" class="si" style="--dd:.3s" d="M12 32 l-2 8 8 -2" />
+                <path pathLength="1" class="sa" style="--dd:.5s" d="M24 44 C 30 42 38 46 44 44" />
+              </svg>
+            </div>
+            <div class="no">02</div>
+            <h3>Log it</h3>
+            <p>Ten seconds per exercise. Sets, reps, weight. The log remembers what your memory won't.</p>
+          </div>
+          <div class="step">
+            <div class="step-doodle" aria-hidden="true">
+              <svg class="doodle" viewBox="0 0 48 48" width="46">
+                <path pathLength="1" class="si" d="M6 40 H42" />
+                <path pathLength="1" class="si" style="--dd:.2s" d="M12 40 V30 M21 40 V22 M30 40 V12" />
+                <path pathLength="1" class="sa" style="--dd:.45s"
+                  d="M8 26 C 18 20 30 12 40 6 M40 6 l-8 1 M40 6 l-2 8" />
+              </svg>
+            </div>
+            <div class="no">03</div>
+            <h3>Compound</h3>
+            <p>Small numbers stacked daily become unrecognizable totals. Watch the chart do the talking.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="floor" style="padding-top:30px">
+        <div class="sec-head reveal">
+          <div class="eyebrow">From the floor</div>
+          <h2>Where the numbers<br><em>come from.</em></h2>
+          <p>No renders, no stock smiles. Just the places the logs get written — the rack, the bar, the track.</p>
+        </div>
+        <div class="strip">
+          <figure class="reveal">
+            <div class="img-box">
+              <span class="img-tag"><b>✱</b> strength</span>
+              <img
+                src="https://image.qwenlm.ai/public_source/8293be0c-4a96-47cb-a823-cd6c43511e6e/1028405d0-bf68-43c0-a483-67798be57277.png"
+                alt="Close-up of a chalked barbell sleeve loaded with iron plates" loading="lazy">
+            </div>
+            <figcaption><span class="cap-no">01</span><span class="cap-tx">Chalk, knurl and a number worth
+                beating.</span></figcaption>
+          </figure>
+          <figure class="reveal">
+            <div class="img-box">
+              <span class="img-tag"><b>✱</b> show up</span>
+              <img
+                src="https://image.qwenlm.ai/public_source/8293be0c-4a96-47cb-a823-cd6c43511e6e/177511d9a-6c6c-445f-979e-f97d29e5a74c.png"
+                alt="An athlete holding the bottom position of a back squat in a minimal concrete gym" loading="lazy">
+            </div>
+            <figcaption><span class="cap-no">02</span><span class="cap-tx">The hardest set is the one through the
+                door.</span></figcaption>
+          </figure>
+          <figure class="reveal">
+            <div class="img-box">
+              <span class="img-tag"><b>✱</b> cardio</span>
+              <img
+                src="https://image.qwenlm.ai/public_source/8293be0c-4a96-47cb-a823-cd6c43511e6e/1c5ff1b3e-9414-411b-9ebe-cd5f3713fe22.png"
+                alt="A lone runner on an empty athletics track at dawn, long shadow on the lanes" loading="lazy">
+            </div>
+            <figcaption><span class="cap-no">03</span><span class="cap-tx">Miles count. So do the easy ones.</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    </div>
+
+    <section class="section" id="love" style="padding-top:30px">
+      <svg class="spark" style="top:70px;left:4%" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+          d="M12 2 C 13 8 16 11 22 12 C 16 13 13 16 12 22 C 11 16 8 13 2 12 C 8 11 11 8 12 2 Z" />
+      </svg>
+      <svg class="spark" style="top:150px;right:5%;animation-delay:1.1s" width="20" height="20" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+          d="M12 2 C 13 8 16 11 22 12 C 16 13 13 16 12 22 C 11 16 8 13 2 12 C 8 11 11 8 12 2 Z" />
+      </svg>
+      <svg class="spark" style="bottom:50px;left:11%;animation-delay:2s" width="18" height="18" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+          d="M12 2 C 13 8 16 11 22 12 C 16 13 13 16 12 22 C 11 16 8 13 2 12 C 8 11 11 8 12 2 Z" />
+      </svg>
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="eyebrow">Wall of love</div>
+          <h2>Lifters <em>talk.</em></h2>
+        </div>
+        <div class="love-grid">
+          <div class="love-card reveal"><span class="fx">✱</span>
+            <p class="lq">"The weight suggestions are scarily good. It's like my old coach — minus the yelling, plus the
+              patience."</p>
+            <div class="lwho"><b>Jonas B.</b>powerlifter · logging 9 months</div>
+          </div>
+          <div class="love-card reveal"><span class="fx">✱</span>
+            <p class="lq">"I've kept a 40-day streak because of that little heatmap. Numbers don't lie, and neither does
+              the grid."</p>
+            <div class="lwho"><b>Priya S.</b>runner · logging 1 year</div>
+          </div>
+          <div class="love-card reveal"><span class="fx">✱</span>
+            <p class="lq">"Made a custom 'farmer carry up the stairs' exercise. GRIND didn't judge me. It just logged
+              it."</p>
+            <div class="lwho"><b>Theo R.</b>strongman hopeful · logging 4 months</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section" id="faq" style="padding-top:20px">
+        <div class="sec-head reveal">
+          <div class="eyebrow">FAQ</div>
+          <h2>Fine print,<br><em>in large print.</em></h2>
+        </div>
+        <div class="faq-list reveal">
+          <div class="faq-item"><button class="faq-q">Is GRIND actually free?<span class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Yes. Completely — no trial, no paywall, no premium tier hiding your own data. It's a log, not a
+                  business model.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item"><button class="faq-q">Why do you ask for my measurements?<span
+                class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Height, weight, body fat (if you know it) and a few basics let the coach calibrate smarter starting
+                  weights and progression calls for your body. It's completely optional — skip it and fill it in later
+                  whenever you feel like it.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item"><button class="faq-q">How do the smart weight recommendations work?<span
+                class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>GRIND reads your recent sets — weight, reps, and how close you were to failure (reps in reserve).
+                  From that it makes one of three calls: add load, hold and chase an extra rep, or deload and rebuild.
+                  It's the same simple progression logic a good coach uses, applied automatically to your actual
+                  numbers.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item"><button class="faq-q">What's in the exercise catalogue?<span
+                class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>More than 1,200 movements across push, pull, legs, core and cardio — each tagged with muscle groups,
+                  equipment and difficulty, and each carrying its own progression rules for the recommendation engine.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item"><button class="faq-q">Can I add exercises that aren't in the catalogue?<span
+                class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Absolutely. Build custom exercises with a name, muscle group, equipment and how they're measured —
+                  reps, time or distance. They join your catalogue instantly and get the same history, charts and smart
+                  recommendations as built-in lifts.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item"><button class="faq-q">Where is my data stored?<span class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>In your browser's local storage. Nothing is uploaded anywhere, and we couldn't read it even if we
+                  wanted to. Clearing browser data clears the log, so treat it like a gym bag — keep it with you.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item"><button class="faq-q">Does it work on my phone?<span class="faq-icon">+</span></button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Fully responsive. Log a set from the rack with one thumb, review your week from the couch with both.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reveal" style="padding-bottom:110px">
+        <div class="cta-block">
+          <span class="cta-star s1">✱</span>
+          <span class="cta-star s2">✱</span>
+          <div class="eyebrow">Free forever · No paywall</div>
+          <h2>Start <em>today.</em></h2>
+          <p>Your first set is ten seconds away — and the coach already has a suggestion for the next one.</p>
+          <div class="cta-btn-wrap">
+            <a class="btn-accent" href="app.html">Open the log <span class="arr">→</span></a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div><b>✱</b> GRIND © 2026 — made for the ones who show up.</div>
+      <div class="foot-links">
+        <a href="#features">Features</a>
+        <a href="#coach">Coach</a>
+        <a href="#report">Report</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#faq">FAQ</a>
+        <a href="app.html">The log</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================ -->
+  <!-- DIALOGS — UI & transitions only. Authentication /             -->
+  <!-- authorization logic is intentionally left out (it's yours).   -->
+  <!-- Search for "TODO" to find the exact hook points.              -->
+  <!-- ============================================================ -->
+  <div class="modal" id="authModal" aria-hidden="true">
+    <div class="modal-back" data-close></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal-x" data-close aria-label="Close dialog">✕</button>
+
+      <!-- dialog 1: sign in / create account -->
+      <div class="modal-card" id="authCard">
+        <div class="demo-head" style="margin-bottom:6px">
+          <span class="demo-title" id="authTitle">GRIND ✱ Welcome back</span>
+          <span class="live"><span class="live-dot"></span>private</span>
+        </div>
+
+        <div class="seg auth-seg" id="authSeg">
+          <button type="button" id="tabSignin" class="on">Sign in</button>
+          <button type="button" id="tabSignup">Create account</button>
+        </div>
+
+        <form id="signinForm" novalidate>
+          <div class="m-field">
+            <label for="siEmail">Email</label>
+            <input id="siEmail" type="email" autocomplete="email" placeholder="you@iron.club">
+          </div>
+          <div class="m-field">
+            <label for="siPass">Password</label>
+            <input id="siPass" type="password" autocomplete="current-password" placeholder="••••••••">
+          </div>
+          <div class="m-err" id="siErr" aria-live="polite"></div>
+          <button class="m-submit" type="submit">Enter the log <span class="arr">→</span></button>
+          <p class="auth-alt">New here? <button type="button" id="toSignup">Create an account</button></p>
+        </form>
+
+        <form id="signupForm" novalidate hidden>
+          <div class="step-lbl">step 1 of 2 · the basics</div>
+          <div class="m-field">
+            <label for="suName">Name</label>
+            <input id="suName" type="text" autocomplete="name" placeholder="Mara K.">
+          </div>
+          <div class="m-field">
+            <label for="suEmail">Email</label>
+            <input id="suEmail" type="email" autocomplete="email" placeholder="you@iron.club">
+          </div>
+          <div class="m-field">
+            <label for="suPass">Password</label>
+            <input id="suPass" type="password" autocomplete="new-password" placeholder="6+ characters">
+          </div>
+          <div class="m-err" id="suErr1" aria-live="polite"></div>
+          <button class="m-submit" type="submit" id="suContinue">Continue <span class="arr">→</span></button>
+          <p class="m-note" style="margin-top:14px">Next up: optional measurements to calibrate your smart coach.</p>
+        </form>
+      </div>
+
+      <!-- dialog 2: measurements onboarding (opens after Continue) -->
+      <div class="modal-card" id="onboardCard" hidden>
+        <div class="demo-head" style="margin-bottom:0">
+          <span class="demo-title">GRIND ✱ Account created</span>
+          <span class="live"><span class="live-dot"></span>step 2 of 2</span>
+        </div>
+        <div class="ob-check">✓ basics done — one optional step left</div>
+        <h3 class="ob-title">Now, your <em>numbers.</em></h3>
+        <p class="m-note">Height, weight, body fat if you know it — this is what sharpens the smart coach: starting
+          weights, targets, progression. Skip anything you don't know. Totally optional, fill it in later anytime.</p>
+        <div id="obFields"></div>
+        <div class="m-err" id="obErr" aria-live="polite"></div>
+        <div class="m-row">
+          <button class="m-skip" type="button" id="obSkip">Skip — fill it later</button>
+          <button class="m-submit" type="button" id="obSave">Save &amp; unlock coach <span class="arr">→</span></button>
+        </div>
+        <p class="ob-foot">✱ You can update these anytime from your profile.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- measurement fields template (cloned into dialog 2) -->
+  <template id="measureTpl">
+    <div class="m-grid">
+      <div class="m-field">
+        <label>Height · cm</label>
+        <input class="mHeight" type="number" min="0" max="272" placeholder="175" inputmode="decimal">
+      </div>
+      <div class="m-field">
+        <label>Weight · kg</label>
+        <input class="mWeight" type="number" min="0" max="400" step="0.1" placeholder="72.5" inputmode="decimal">
+      </div>
+      <div class="m-field">
+        <label>Body fat · % · optional</label>
+        <input class="mBodyFat" type="number" min="0" max="70" step="0.1" placeholder="18" inputmode="decimal">
+      </div>
+    </div>
+    <div class="m-field">
+      <label>Age</label>
+      <input class="mAge" type="number" min="10" max="120" placeholder="28" inputmode="numeric">
+    </div>
+    <div class="m-field">
+      <label>Sex</label>
+      <div class="chips m-chips" data-mgroup="sex">
+        <button type="button" class="chip">Woman</button>
+        <button type="button" class="chip">Man</button>
+        <button type="button" class="chip">Non-binary</button>
+        <button type="button" class="chip active">Prefer not to say</button>
+      </div>
+    </div>
+    <div class="m-field">
+      <label>Main goal</label>
+      <div class="chips m-chips" data-mgroup="goal">
+        <button type="button" class="chip active">Build muscle</button>
+        <button type="button" class="chip">Get stronger</button>
+        <button type="button" class="chip">Lose fat</button>
+        <button type="button" class="chip">Just move</button>
+      </div>
+    </div>
+    <div class="m-field">
+      <label>Experience</label>
+      <div class="seg" data-mgroup="exp" style="display:flex;width:max-content">
+        <button type="button" class="on">Beginner</button>
+        <button type="button">Intermediate</button>
+        <button type="button">Advanced</button>
+      </div>
+    </div>
+    <div class="m-field">
+      <label>Training days / week</label>
+      <div class="seg" data-mgroup="days" style="display:flex;width:max-content">
+        <button type="button">2-3</button>
+        <button type="button" class="on">4-5</button>
+        <button type="button">6-7</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="../scripts/index.js"></script>
+</body>
+
+</html>

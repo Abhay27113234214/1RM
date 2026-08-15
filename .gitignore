@@ -1,0 +1,4 @@
+db.json
+tests/
+package*.*
+node_modules/
