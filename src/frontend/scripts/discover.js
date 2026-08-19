@@ -111,6 +111,7 @@ $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
 
 /* ============================================================
 DATA — creators only, using the same image URLs from home.html.
+Added `spots` to match home page's Spot feature.
 ============================================================ */
 const IMG = {
   squat:   'https://image.qwenlm.ai/public_source/ee22d622-2276-4959-8a0e-f65a28451fea/1f41c75e0-9af2-44db-a45c-33950d808340.png',
@@ -123,7 +124,7 @@ const CREATORS = [
   {
     id: 'c1', day: 'today', when: '2h',
     name: 'Maya Chen', handle: '@mayalifts', initials: 'MC', verified: true,
-    followers: '12.4k', streak: 18, collabs: 12, comments: 8, plans: 214,
+    followers: '12.4k', streak: 18, collabs: 12, comments: 8, plans: 214, spots: 142,
     title: 'Push days, heavy triples, honest logs.',
     img: IMG.barbell, tag: 'Push',
     rows: [
@@ -136,7 +137,7 @@ const CREATORS = [
   {
     id: 'c2', day: 'today', when: '5h',
     name: 'Jonas Weber', handle: '@jonaspulls', initials: 'JW', verified: false,
-    followers: '3.1k', streak: 7, collabs: 4, comments: 3, plans: 46,
+    followers: '3.1k', streak: 7, collabs: 4, comments: 3, plans: 46, spots: 38,
     title: 'Deadlift day is the best day.',
     img: IMG.strong, tag: 'Pull',
     rows: [
@@ -149,7 +150,7 @@ const CREATORS = [
   {
     id: 'c3', day: 'today', when: '8h',
     name: 'Priya Raman', handle: '@priya.sq', initials: 'PR', verified: true,
-    followers: '8.9k', streak: 31, collabs: 9, comments: 14, plans: 128,
+    followers: '8.9k', streak: 31, collabs: 9, comments: 14, plans: 128, spots: 215,
     title: 'Squat nerd. 31-day streak and counting.',
     img: IMG.squat, tag: 'Legs',
     rows: [
@@ -162,7 +163,7 @@ const CREATORS = [
   {
     id: 'c4', day: 'week', when: 'Mon',
     name: 'Coach Elena Voss', handle: '@elenavoss', initials: 'EV', verified: true,
-    followers: '124k', streak: 64, collabs: 31, comments: 42, plans: 89,
+    followers: '124k', streak: 64, collabs: 31, comments: 42, plans: 89, spots: 412,
     title: 'Programming that actually works.',
     img: IMG.barbell, tag: 'Coach',
     rows: [
@@ -175,7 +176,7 @@ const CREATORS = [
   {
     id: 'c5', day: 'week', when: 'Tue',
     name: 'Tomás Silva', handle: '@tomascore', initials: 'TS', verified: false,
-    followers: '940', streak: 4, collabs: 2, comments: 1, plans: 21,
+    followers: '940', streak: 4, collabs: 2, comments: 1, plans: 21, spots: 12,
     title: 'Small account, big engines.',
     img: IMG.runner, tag: 'Core',
     rows: [
@@ -188,7 +189,7 @@ const CREATORS = [
   {
     id: 'c6', day: 'week', when: 'Wed',
     name: 'Sana Fit', handle: '@sanafit', initials: 'SF', verified: true,
-    followers: '210k', streak: 45, collabs: 21, comments: 67, plans: 172,
+    followers: '210k', streak: 45, collabs: 21, comments: 67, plans: 172, spots: 864,
     title: 'No gym? No problem.',
     img: IMG.barbell, tag: 'Home',
     rows: [
@@ -205,7 +206,7 @@ const EXTRA = [
   {
     id: 'c7', day: 'week', when: 'last week',
     name: 'Marcus Iron', handle: '@marcusiron', initials: 'MI', verified: true,
-    followers: '86.5k', streak: 22, collabs: 15, comments: 23, plans: 96,
+    followers: '86.5k', streak: 22, collabs: 15, comments: 23, plans: 96, spots: 320,
     title: 'Bench specialization is a lifestyle.',
     img: IMG.barbell, tag: 'Bench',
     rows: [
@@ -218,7 +219,7 @@ const EXTRA = [
   {
     id: 'c8', day: 'week', when: 'last week',
     name: 'Leo Park', handle: '@leopark', initials: 'LP', verified: false,
-    followers: '12.4k', streak: 40, collabs: 6, comments: 9, plans: 64,
+    followers: '12.4k', streak: 40, collabs: 6, comments: 9, plans: 64, spots: 95,
     title: 'Skills before sets.',
     img: IMG.strong, tag: 'Skills',
     rows: [
@@ -231,7 +232,7 @@ const EXTRA = [
   {
     id: 'c9', day: 'week', when: 'last week',
     name: 'Ava Strong', handle: '@avastrong', initials: 'AS', verified: false,
-    followers: '18.9k', streak: 12, collabs: 8, comments: 11, plans: 88,
+    followers: '18.9k', streak: 12, collabs: 8, comments: 11, plans: 88, spots: 184,
     title: 'Heavy days, honest logs.',
     img: IMG.squat, tag: 'Glutes',
     rows: [
@@ -244,7 +245,7 @@ const EXTRA = [
   {
     id: 'c10', day: 'week', when: 'last week',
     name: 'Nia Okafor', handle: '@niaokafor', initials: 'NO', verified: true,
-    followers: '22k', streak: 29, collabs: 11, comments: 17, plans: 54,
+    followers: '22k', streak: 29, collabs: 11, comments: 17, plans: 54, spots: 210,
     title: 'Lift heavy, run far, recover properly.',
     img: IMG.runner, tag: 'Cardio',
     rows: [
@@ -258,6 +259,7 @@ const EXTRA = [
 
 /* ============================================================
 RENDER — card markup is a 1:1 copy of home's post card
+Added the Spot button inside p-acts.
 ============================================================ */
 const following = new Set();
 
@@ -297,6 +299,7 @@ function creatorHTML(c) {
       </div>
 
       <div class="p-acts">
+        <button class="act" data-action="spot"><span class="st">✱</span>Spot · <span data-count>${c.spots}</span></button>
         <button class="act${isF ? ' on' : ''}" data-action="follow" data-follow-id="${c.handle}">
           <span class="st">✱</span><span class="lb">${isF ? 'Following' : 'Follow'}</span>
         </button>
@@ -377,7 +380,13 @@ document.addEventListener('click', e => {
   if (!btn) return;
   const action = btn.dataset.action;
 
-  if (action === 'follow') {
+  if (action === 'spot') {
+    const on = btn.classList.toggle('on');
+    const n = btn.querySelector('[data-count]');
+    if (n) n.textContent = (+n.textContent) + (on ? 1 : -1);
+  }
+
+  else if (action === 'follow') {
     const handle = btn.dataset.followId;
     const on = !following.has(handle);
     on ? following.add(handle) : following.delete(handle);
