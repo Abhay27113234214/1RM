@@ -1,3 +1,4 @@
 tests/
 package*.*
 node_modules/
+db.json
