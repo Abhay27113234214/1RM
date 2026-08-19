@@ -1,4 +1,4 @@
-export { login, register };
+export { login, register, logout };
 
 let login = async (email, password) => {
     let user_response = await fetch(`http://localhost:3000/users?email:eq=${email}`)
@@ -48,4 +48,8 @@ let register = async (user) => {
             reason: "some_error_occurred"
         }
     }
+}
+
+let logout = () => {
+    localStorage.removeItem('current_user')
 }

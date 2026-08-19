@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>1RM ✱ Session</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23191713'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' fill='%23FF4A11'%3E%E2%9C%B1%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/500.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/700.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400-italic.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600-italic.css">
+    <link rel="stylesheet" href="../styles/workout.css">
+</head>
+
+<body>
+
+    <!-- ═══════════ sticky bar ═══════════ -->
+    <header class="bar">
+        <div class="bar-in">
+            <a class="logo" href="home.html"><span class="mark">✱</span>1RM</a>
+            <div class="bar-date" id="barDate">session</div>
+            <div class="bar-acts">
+                <button class="icon-btn" id="restBtn" aria-label="Rest timer">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <circle cx="12" cy="13" r="8" />
+                        <path d="M12 9.5v3.5l2.4 2.4" />
+                        <path d="M9.5 2h5" />
+                    </svg>
+                </button>
+                <button class="finish-btn" id="finishBtn">Finish ✱</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="log">
+
+        <!-- session strip -->
+        <div class="sess-strip">
+            <div class="ss"><span class="ss-v" id="ssTime">0:00</span><span class="ss-l">elapsed</span></div>
+            <div class="ss"><span class="ss-v" id="ssCount">0</span><span class="ss-l">exercises</span></div>
+            <div class="ss"><span class="ss-v"><b id="ssVol" style="font-weight:600">0</b><i> kg</i></span><span
+                    class="ss-l">volume</span></div>
+        </div>
+
+        <!-- ══ JS hook: render today's exercises into #exList (template: #exTpl) ══ -->
+         <!-- TODO: pehle to hr ek exercise type ka apne tarah ka template hona chahiye hai  -->
+        <div id="exList">
+
+            <!-- <article class="ex-card" style="--c:#FF4A11">
+                <div class="ex-head">
+                    <span class="ex-dot"></span>
+                    <h3 class="ex-name">Bench Press</h3>
+                    <span class="ex-eq">barbell</span>
+                    <button class="ex-del" data-del aria-label="Remove exercise">✕</button>
+                </div>
+                <div class="ex-last">last session · 5 × 5 @ 82.5 kg &nbsp;·&nbsp; <span class="ex-sugg">coach ✱ 85 kg
+                        today</span></div>
+                <div class="sets">
+                    <div class="sets-head"><span>set</span><span>last</span><span>kg</span><span>reps</span><span
+                            class="sh-done">✓</span></div>
+                    <div class="set-row"><span class="s-no">1</span><span class="s-last">82.5 × 5</span><input
+                            class="s-kg" type="number" inputmode="decimal" value="85"><input class="s-reps"
+                            type="number" inputmode="numeric" value="5"><button class="done-btn" data-done
+                            aria-label="Complete set">✓</button></div>
+                    <div class="set-row"><span class="s-no">2</span><span class="s-last">82.5 × 5</span><input
+                            class="s-kg" type="number" inputmode="decimal" value="85"><input class="s-reps"
+                            type="number" inputmode="numeric" value="5"><button class="done-btn" data-done
+                            aria-label="Complete set">✓</button></div>
+                    <div class="set-row"><span class="s-no">3</span><span class="s-last">82.5 × 5</span><input
+                            class="s-kg" type="number" inputmode="decimal" value="85"><input class="s-reps"
+                            type="number" inputmode="numeric" value="5"><button class="done-btn" data-done
+                            aria-label="Complete set">✓</button></div>
+                </div>
+                <div class="ex-foot">
+                    <button class="add-set" data-addset>+ add set</button>
+                    <button class="note-btn" data-note>✱ add note</button>
+                </div>
+                <div class="note-box">
+                    <div><textarea placeholder="How did it feel? Tempo, cues, anything worth remembering…"></textarea>
+                    </div>
+                </div>
+            </article>
+
+            <article class="ex-card" style="--c:#1E9E6A">
+                <div class="ex-head">
+                    <span class="ex-dot"></span>
+                    <h3 class="ex-name">Back Squat</h3>
+                    <span class="ex-eq">barbell</span>
+                    <button class="ex-del" data-del aria-label="Remove exercise">✕</button>
+                </div>
+                <div class="ex-last">last session · 4 × 6 @ 120 kg &nbsp;·&nbsp; <span class="ex-sugg">coach ✱ 125 kg
+                        today</span></div>
+                <div class="sets">
+                    <div class="sets-head"><span>set</span><span>last</span><span>kg</span><span>reps</span><span
+                            class="sh-done">✓</span></div>
+                    <div class="set-row"><span class="s-no">1</span><span class="s-last">120 × 6</span><input
+                            class="s-kg" type="number" inputmode="decimal" value="125"><input class="s-reps"
+                            type="number" inputmode="numeric" value="6"><button class="done-btn" data-done
+                            aria-label="Complete set">✓</button></div>
+                    <div class="set-row"><span class="s-no">2</span><span class="s-last">120 × 6</span><input
+                            class="s-kg" type="number" inputmode="decimal" value="125"><input class="s-reps"
+                            type="number" inputmode="numeric" value="6"><button class="done-btn" data-done
+                            aria-label="Complete set">✓</button></div>
+                </div>
+                <div class="ex-foot">
+                    <button class="add-set" data-addset>+ add set</button>
+                    <button class="note-btn" data-note>✱ add note</button>
+                </div>
+                <div class="note-box">
+                    <div><textarea placeholder="How did it feel? Tempo, cues, anything worth remembering…"></textarea>
+                    </div>
+                </div>
+            </article>
+
+            <article class="ex-card" style="--c:#3B6FE0">
+                <div class="ex-head">
+                    <span class="ex-dot"></span>
+                    <h3 class="ex-name">Barbell Row</h3>
+                    <span class="ex-eq">barbell</span>
+                    <button class="ex-del" data-del aria-label="Remove exercise">✕</button>
+                </div>
+                <div class="ex-last">last session · 4 × 8 @ 70 kg</div>
+                <div class="sets">
+                    <div class="sets-head"><span>set</span><span>last</span><span>kg</span><span>reps</span><span
+                            class="sh-done">✓</span></div>
+                    <div class="set-row"><span class="s-no">1</span><span class="s-last">70 × 8</span><input
+                            class="s-kg" type="number" inputmode="decimal" value="72.5"><input class="s-reps"
+                            type="number" inputmode="numeric" value="8"><button class="done-btn" data-done
+                            aria-label="Complete set">✓</button></div>
+                </div>
+                <div class="ex-foot">
+                    <button class="add-set" data-addset>+ add set</button>
+                    <button class="note-btn" data-note>✱ add note</button>
+                </div>
+                <div class="note-box">
+                    <div><textarea placeholder="How did it feel? Tempo, cues, anything worth remembering…"></textarea>
+                    </div>
+                </div>
+            </article> -->
+
+        </div>
+
+        <!-- add exercise — dismissible dialog + create-your-own -->
+        <div class="add-ex" id="addEx">
+            <button class="add-ex-btn" id="addExBtn">+ Add exercise ✱</button>
+            <div class="add-ex-box" id="addExBox" hidden>
+                <div class="add-ex-head">
+                    <span class="add-ex-lbl">add exercise</span>
+                    <button class="add-ex-x" id="addExClose" aria-label="Close">✕</button>
+                </div>
+                <input id="exSearch" type="text" placeholder="Search 1,240 exercises…">
+                <div class="sugg" id="suggList"></div>
+                <!-- TODO: point this at your exercise-creation page -->
+                <a class="create-ex" id="createExBtn" href="create-exercise.html">
+                    <span class="ce-star">✱</span>
+                    <span>Can't find it? <em>create your own</em></span>
+                    <span class="arr">→</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ═══════════ rest timer dock ═══════════ -->
+    <div class="rest-dock" id="restDock" hidden>
+        <div class="rd-card">
+            <div class="rd-pick" id="rdPick">
+                <div class="rd-head">
+                    <span class="rd-lbl">Rest timer</span>
+                    <button class="rd-x" id="rdClose" aria-label="Close">✕</button>
+                </div>
+                <div class="rd-chips">
+                    <button class="rd-chip" data-rest="45">0:45</button>
+                    <button class="rd-chip on" data-rest="90">1:30</button>
+                    <button class="rd-chip" data-rest="120">2:00</button>
+                    <button class="rd-chip" data-rest="180">3:00</button>
+                </div>
+                <button class="rd-start" id="rdStart">Start rest <span class="arr">→</span></button>
+            </div>
+            <div class="rd-live" id="rdLive" hidden>
+                <div class="rd-time" id="rdTime">1:30</div>
+                <div class="rd-mid">
+                    <div class="rd-sub" id="rdSub">breathe ✱ reset</div>
+                    <div class="rd-bar"><i id="rdBar"></i></div>
+                </div>
+                <div class="rd-acts">
+                    <button class="rd-btn" id="rdAdd">+15s</button>
+                    <button class="rd-btn rd-skip" id="rdSkip">Skip</button>
+                </div>
+            </div>
+            <div class="rd-done" id="rdDone" hidden>
+                <div class="rd-done-t">Time to lift <em>✱</em></div>
+                <div class="rd-sub">back under the bar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ exercise template — for your JS ═══════════ -->
+    <template id="exTpl">
+        <article class="ex-card">
+            <div class="ex-head">
+                <span class="ex-dot"></span>
+                <h3 class="ex-name" data-bind="name"></h3>
+                <span class="ex-eq" data-bind="eq"></span>
+                <button class="ex-del" data-del aria-label="Remove exercise">✕</button>
+            </div>
+            <div class="ex-last" data-bind="last"></div>
+            <div class="sets">
+                <div class="sets-head"><span>set</span><span>last</span><span>kg</span><span>reps</span><span
+                        class="sh-done">✓</span></div>
+                <div class="set-row">
+                    <span class="s-no">1</span><span class="s-last">—</span>
+                    <input class="s-kg" type="number" inputmode="decimal" placeholder="kg">
+                    <input class="s-reps" type="number" inputmode="numeric" placeholder="reps">
+                    <button class="done-btn" data-done aria-label="Complete set">✓</button>
+                </div>
+            </div>
+            <div class="ex-foot">
+                <button class="add-set" data-addset>+ add set</button>
+                <button class="note-btn" data-note>✱ add note</button>
+            </div>
+            <div class="note-box">
+                <div><textarea placeholder="How did it feel? Tempo, cues, anything worth remembering…"></textarea></div>
+            </div>
+        </article>
+    </template>
+
+</body>
+
+</html>
+<script type="module" src="../scripts/workout.js"></script>

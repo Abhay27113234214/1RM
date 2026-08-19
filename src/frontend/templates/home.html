@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>1RM ✱ Home</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF4A11'>✱</text></svg>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/500.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/700.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400-italic.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600-italic.css">
+    <link rel="stylesheet" href="../styles/home.css">
+</head>
+
+<body>
+
+    <!-- ═══════════ nav ═══════════ -->
+    <header class="nav-bar" id="navBar">
+        <div class="wrap nav">
+            <a class="logo" href="home.html"><span class="mark">✱</span>1RM</a>
+            <nav class="nav-links">
+                <a href="home.html" class="here">Home</a>
+                <a href="discover.html">Discover</a>
+                <a href="app.html">The log</a>
+            </nav>
+            <div class="nav-acts">
+                <a class="plus-btn" href="workout.html" aria-label="Log a session" title="Log a session">+</a>
+                <button class="av-btn" data-profile aria-label="My profile"><span  class="av current_user_initials">JB</span></button> 
+                <button class="burger" id="burgerBtn" aria-label="Menu"><i></i><i></i><i></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="p-banner" id="profileBanner" hidden>
+        <div class="pb-card">
+            <a href="#" class="pb-main" id="profileBannerLink">
+                <span class="pb-star">✱</span>
+                <span class="pb-msg">Your coach is guessing — <em>finish your profile</em> so the smart weight calls are
+                    actually yours.</span>
+                <!-- // TODO: yahan pe link krna hai vo profile complete karne vaala page, jahan pe user apni measurements daalega -->
+                <span class="pb-go">Complete<span class="arr">→</span></span>
+            </a>
+            <button class="pb-x" id="profileBannerX" aria-label="Dismiss">✕</button>
+        </div>
+    </div>
+
+    <!-- ═══════════ slide-in menu ═══════════ -->
+    <div class="drawer-back" id="drawerBack"></div>
+    <aside class="drawer" id="drawer" aria-hidden="true">
+        <div class="drawer-head">
+            <span class="av lg current_user_initials">JB</span>
+            <div class="who">
+                <div class="p-name current_user_name">Jonas Berg</div>
+                <div class="drawer-streak"><span class="current_user_username">@jonaslifts<span></div>
+            </div>
+            <button class="drawer-x" id="drawerX" aria-label="Close menu">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="home.html" class="here">Home</a>
+            <a href="discover.html">Discover</a>
+            <a href="#" data-profile>My profile</a> <!-- TODO: my profile vaala page bhi banana hai abhi to yrrrrr -->
+        </nav>
+        <a class="drawer-cta" href="workout.html"><span class="dc-plus">+</span>Log a session<span class="arr">→</span></a>
+        <div class="drawer-foot">
+            <div class="links"><a href="#" data-todo="settings">Settings <!-- TODO: Settings vaala page bhi banana hai yrr --> </a><a href="#" data-todo="signout">Sign out</a></div>
+            <div class="copy"><b>✱</b> 1RM © 2026 — made for the ones who show up.</div>
+        </div>
+    </aside>
+
+    <!-- ═══════════ greeting ═══════════ -->
+    <section class="wrap greet">
+        <div class="eyebrow">Home feed</div>
+        <h1>Your people <em>showed up.</em></h1>
+        <p class="greet-sub">Sessions from lifters you follow — fresh from the floor. Cheer them, steal the program,
+            then
+            log your own.</p>
+        <div class="greet-chips">
+            <span class="gchip"><b>✱ 21</b> day streak</span>
+            <span class="gchip"><b>128</b> sessions</span>
+            <span class="gchip"><b>3</b> this week</span>
+            <span class="gchip"><b>12</b> PRs</span>
+        </div>
+        <div class="greet-date" id="todayLine"><b>✱</b> today <span class="live-dot"></span></div>
+    </section>
+
+    <main class="wrap home">
+
+        <!-- ═══════════ feed column ═══════════ -->
+        <section class="feed-col">
+
+            <!-- start workout — hidden once today's session exists (see JS flag) -->
+            <div class="offset-wrap reveal" id="startWorkout">
+                <div class="panel start-panel">
+                    <div>
+                        <div class="s-eyebrow">Today · nothing logged</div>
+                        <h2 class="start-title">The rack is <em>waiting.</em></h2>
+                        <p class="start-sub">Start your session and today counts toward the streak.</p>
+                    </div>
+                    <a class="btn-primary" href="workout.html"><span class="sb-plus">+</span>Start workout<span
+                            class="arr">→</span></a>
+                </div>
+            </div>
+
+            <div class="day-sep">Today <span class="live-dot"></span></div>
+
+            <!-- ══ JS hook: render posts into #feed using #postTpl ══ -->
+            <div id="feed">
+
+                <div class="post-shell reveal" data-id="w1">
+                    <article class="post" tabindex="0" role="button" aria-label="Open Marta K.'s workout">
+                        <div class="p-head">
+                            <span class="av" style="background:#FF4A11">MK</span>
+                            <div class="p-who">
+                                <div class="p-name">Marta K.</div>
+                                <div class="p-meta"><span>@martakfit</span><span>·</span><span>2h ago</span></div>
+                            </div>
+                            <span class="streak">✱ 12-day streak</span>
+                        </div>
+                        <h3 class="p-title">Leg day — everything heavy.</h3>
+                        <div class="p-img">
+                            <img src="https://image.qwenlm.ai/public_source/ee22d622-2276-4959-8a0e-f65a28451fea/1f41c75e0-9af2-44db-a45c-33950d808340.png"
+                                alt="Loaded barbell in a squat rack, chalk dust in warm light" loading="lazy">
+                            <span class="img-tag"><b>✱</b> strength</span>
+                        </div>
+                        <div class="p-rows">
+                            <div class="p-row pr" style="--c:#1E9E6A"><span class="nm">Back Squat</span><span
+                                    class="mt"><span class="pr-tag">✱ PR</span>5 × 5 · 120 kg</span></div>
+                            <div class="p-row" style="--c:#1E9E6A"><span class="nm">Romanian Deadlift</span><span
+                                    class="mt">3 × 8 ·
+                                    100 kg</span></div>
+                            <div class="p-row" style="--c:#1E9E6A"><span class="nm">Walking Lunges</span><span
+                                    class="mt">3 × 12 · 24
+                                    kg</span></div>
+                        </div>
+                        <div class="p-foot"><span>volume <b>8,420 kg</b></span><span>time <b>68
+                                    min</b></span><span>effort <b>RIR
+                                    2</b></span></div>
+                        <div class="p-acts">
+                            <button class="act" data-action="spot"><span class="st">✱</span>Spot · <span
+                                    data-count>61</span></button>
+                            <button class="act" data-action="comment">Comment · <span>8</span></button>
+                            <button class="act share" data-action="share">Share</button>
+                        </div>
+                        <div class="p-comment"><b>Jonas B. · 1h ago</b>“That squat grind on the last set — earned every
+                            gram of that
+                            PR.”</div>
+                        <div class="p-cbox" hidden>
+                            <input type="text" placeholder="Say something nice…">
+                            <button class="btn-primary" data-action="send">Post</button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="post-shell reveal" data-id="w2">
+                    <article class="post" tabindex="0" role="button" aria-label="Open Priya S.'s workout">
+                        <div class="p-head">
+                            <span class="av" style="background:#D6486F">PS</span>
+                            <div class="p-who">
+                                <div class="p-name">Priya S.</div>
+                                <div class="p-meta"><span>@priyaruns</span><span>·</span><span>4h ago</span></div>
+                            </div>
+                            <span class="streak">✱ 41-day streak</span>
+                        </div>
+                        <h3 class="p-title">Zone 2 Tuesday — week 6.</h3>
+                        <div class="p-img">
+                            <img src="https://image.qwenlm.ai/public_source/ee22d622-2276-4959-8a0e-f65a28451fea/1c1e9d2c0-5c2a-494d-8a3a-ad39e72ede97.png"
+                                alt="Runner on a riverside path at sunrise" loading="lazy">
+                            <span class="img-tag"><b>✱</b> cardio</span>
+                        </div>
+                        <div class="p-rows">
+                            <div class="p-row" style="--c:#D6486F"><span class="nm">5K Run</span><span class="mt">26:12
+                                    · easy</span>
+                            </div>
+                            <div class="p-row" style="--c:#D6486F"><span class="nm">Jump Rope</span><span class="mt">5 ×
+                                    2 min</span>
+                            </div>
+                        </div>
+                        <div class="p-foot"><span>distance <b>6.4 km</b></span><span>time <b>41 min</b></span><span>zone
+                                <b>2</b></span></div>
+                        <div class="p-acts">
+                            <button class="act" data-action="spot"><span class="st">✱</span>Spot · <span
+                                    data-count>24</span></button>
+                            <button class="act" data-action="comment">Comment · <span>3</span></button>
+                            <button class="act share" data-action="share">Share</button>
+                        </div>
+                        <div class="p-cbox" hidden>
+                            <input type="text" placeholder="Say something nice…">
+                            <button class="btn-primary" data-action="send">Post</button>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+
+            <div class="day-sep">Yesterday</div>
+
+            <div id="feed2">
+
+                <div class="post-shell reveal" data-id="w3">
+                    <article class="post" tabindex="0" role="button" aria-label="Open Theo R.'s workout">
+                        <div class="p-head">
+                            <span class="av" style="background:#3B6FE0">TR</span>
+                            <div class="p-who">
+                                <div class="p-name">Theo R.</div>
+                                <div class="p-meta"><span>@theocarry</span><span>·</span><span>6:40 pm</span></div>
+                            </div>
+                        </div>
+                        <h3 class="p-title">Strongman Saturday.</h3>
+                        <div class="p-img">
+                            <img src="https://image.qwenlm.ai/public_source/ee22d622-2276-4959-8a0e-f65a28451fea/1cf2f6474-1f00-459e-98fc-d3a64e74e45d.png"
+                                alt="Farmer carry handles and an atlas stone on a gym floor" loading="lazy">
+                            <span class="img-tag"><b>✱</b> strongman</span>
+                        </div>
+                        <div class="p-rows">
+                            <div class="p-row" style="--c:#D89B0B"><span class="nm">Farmer Carry</span><span
+                                    class="mt">6 × 40 m · 140
+                                    kg</span></div>
+                            <div class="p-row" style="--c:#D89B0B"><span class="nm">Atlas Stone</span><span class="mt">5
+                                    × 3 · 110
+                                    kg</span></div>
+                            <div class="p-row" style="--c:#D89B0B"><span class="nm">Sled Drag</span><span class="mt">8 ×
+                                    20 m · 90
+                                    kg</span></div>
+                        </div>
+                        <div class="p-foot"><span>volume <b>11,300 kg</b></span><span>time <b>75 min</b></span></div>
+                        <div class="p-acts">
+                            <button class="act" data-action="spot"><span class="st">✱</span>Spot · <span
+                                    data-count>33</span></button>
+                            <button class="act" data-action="comment">Comment · <span>5</span></button>
+                            <button class="act share" data-action="share">Share</button>
+                        </div>
+                        <div class="p-cbox" hidden>
+                            <input type="text" placeholder="Say something nice…">
+                            <button class="btn-primary" data-action="send">Post</button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="post-shell reveal" data-id="w4">
+                    <article class="post" tabindex="0" role="button" aria-label="Open Elif T.'s workout">
+                        <div class="p-head">
+                            <span class="av" style="background:#D89B0B">ET</span>
+                            <div class="p-who">
+                                <div class="p-name">Elif T.</div>
+                                <div class="p-meta"><span>@eliflifts</span><span>·</span><span>9:15 am</span></div>
+                            </div>
+                            <span class="streak">✱ 6-day streak</span>
+                        </div>
+                        <h3 class="p-title">Snatch technique, then pulls.</h3>
+                        <div class="p-img">
+                            <img src="https://image.qwenlm.ai/public_source/ee22d622-2276-4959-8a0e-f65a28451fea/1ca2da95c-b059-4cf3-99ed-e71f92315ded.png"
+                                alt="Barbell mid-lift in a chalk cloud" loading="lazy">
+                            <span class="img-tag"><b>✱</b> olympic</span>
+                        </div>
+                        <div class="p-rows">
+                            <div class="p-row pr" style="--c:#3B6FE0"><span class="nm">Snatch</span><span
+                                    class="mt"><span class="pr-tag">✱ PR</span>5 × 2 · 68 kg</span></div>
+                            <div class="p-row" style="--c:#3B6FE0"><span class="nm">Clean Pull</span><span class="mt">4
+                                    × 3 · 95
+                                    kg</span></div>
+                            <div class="p-row" style="--c:#D89B0B"><span class="nm">Back Extension</span><span
+                                    class="mt">3 × 12 · 20
+                                    kg</span></div>
+                        </div>
+                        <div class="p-foot"><span>volume <b>3,940 kg</b></span><span>time <b>80
+                                    min</b></span><span>effort <b>RIR
+                                    3</b></span></div>
+                        <div class="p-acts">
+                            <button class="act" data-action="spot"><span class="st">✱</span>Spot · <span
+                                    data-count>47</span></button>
+                            <button class="act" data-action="comment">Comment · <span>6</span></button>
+                            <button class="act share" data-action="share">Share</button>
+                        </div>
+                        <div class="p-cbox" hidden>
+                            <input type="text" placeholder="Say something nice…">
+                            <button class="btn-primary" data-action="send">Post</button>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+
+            <div class="load-wrap">
+                <button class="btn-quiet" id="loadMore">Load older sessions ✱</button>
+            </div>
+        </section>
+
+        <!-- ═══════════ rail — sticky column on desktop, swipe carousel on mobile ═══════════ -->
+        <aside class="rail">
+
+            <div class="offset-wrap offset-sm reveal">
+                <div class="panel-flat">
+                    <div class="r-h">Your week</div>
+                    <div class="wk">
+                        <i class="l4"></i><i class="l4"></i><i class="l2"></i><i class="today"></i><i></i><i></i><i></i>
+                    </div>
+                    <div class="wk-lbls">
+                        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                    </div>
+                    <div class="hs-row">
+                        <div>
+                            <div class="hv">3<span style="font-size:.55em;color:var(--muted)"> / 5</span></div>
+                            <div class="hl">sessions</div>
+                        </div>
+                        <div>
+                            <div class="hv">12,480</div>
+                            <div class="hl">kg volume</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-flat reveal">
+                <div class="r-h">Lifters to follow</div>
+                <div class="f-row"><span class="av sm" style="background:#D6486F">DM</span>
+                    <div class="f-id">
+                        <div class="f-nm">Dorian M.</div>
+                        <div class="f-hd">@dorianbench · Paris</div>
+                    </div><button class="f-btn" data-action="follow">Follow</button>
+                </div>
+                <div class="f-row"><span class="av sm" style="background:#1E9E6A">AS</span>
+                    <div class="f-id">
+                        <div class="f-nm">Aiko S.</div>
+                        <div class="f-hd">@aikoruns · Tokyo</div>
+                    </div><button class="f-btn" data-action="follow">Follow</button>
+                </div>
+                <div class="f-row"><span class="av sm" style="background:#3B6FE0">NH</span>
+                    <div class="f-id">
+                        <div class="f-nm">Nina H.</div>
+                        <div class="f-hd">@ninapulls · Berlin</div>
+                    </div><button class="f-btn" data-action="follow">Follow</button>
+                </div>
+            </div>
+
+            <div class="panel-flat reveal">
+                <div class="r-h">Fresh PRs</div>
+                <div class="pr-row"><span class="w">Marta K.</span><span class="l">back squat</span><span class="v">120
+                        kg</span></div>
+                <div class="pr-row"><span class="w">Elif T.</span><span class="l">snatch</span><span class="v">68
+                        kg</span>
+                </div>
+                <div class="pr-row"><span class="w">Dorian M.</span><span class="l">bench press</span><span
+                        class="v">100
+                        kg</span></div>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <b>✱</b> 1RM © 2026 — made for the ones who show up.
+    </footer>
+
+    <!-- ═══════════ template — for your JS to render posts ═══════════ -->
+    <template id="postTpl">
+        <div class="post-shell" data-id="">
+            <article class="post" tabindex="0" role="button">
+                <div class="p-head">
+                    <span class="av" data-bind="av"></span>
+                    <div class="p-who">
+                        <div class="p-name" data-bind="name"></div>
+                        <div class="p-meta"><span data-bind="handle"></span><span>·</span><span data-bind="time"></span>
+                        </div>
+                    </div>
+                    <span class="streak" data-bind="streak" hidden></span>
+                </div>
+                <h3 class="p-title" data-bind="title"></h3>
+                <div class="p-img" data-bind="imgwrap" hidden>
+                    <img alt="" loading="lazy">
+                    <span class="img-tag"><b>✱</b> <span data-bind="imgtag"></span></span>
+                </div>
+                <div class="p-rows" data-bind="rows"><!-- clone one .p-row per exercise --></div>
+                <div class="p-foot" data-bind="foot"></div>
+                <div class="p-acts">
+                    <button class="act" data-action="spot"><span class="st">✱</span>Spot · <span data-count
+                            data-bind="spots">0</span></button>
+                    <button class="act" data-action="comment">Comment · <span data-bind="comments">0</span></button>
+                    <button class="act share" data-action="share">Share</button>
+                </div>
+                <div class="p-cbox" hidden>
+                    <input type="text" placeholder="Say something nice…">
+                    <button class="btn-primary" data-action="send">Post</button>
+                </div>
+            </article>
+        </div>
+    </template>
+</body>
+
+</html>
+<script type="module" src="../scripts/home.js"></script>

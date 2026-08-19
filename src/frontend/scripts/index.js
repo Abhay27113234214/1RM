@@ -11,6 +11,16 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 // this is just a simple utility function to stop something from happening for an arbitrary number of 
 // milliseconds
 
+function getMessage() {
+    let params = new URLSearchParams(window.location.search);
+    let message = params.get("message");
+    let status = params.get("status")
+    if (message === "not_logged_in") {
+        showToast("Please Login/Register first", status)
+    }
+}
+getMessage()
+
 // selecting everything using the above selecting arrow functions 
 const modal = $('#authModal');
 const authCard = $('#authCard'), onboardCard = $('#onboardCard');
@@ -219,7 +229,9 @@ signinForm.addEventListener('submit', async e => {
     let result = await login(email, password, showAuthView)
     if (result.success) {
         showToast('User Logged in successfully!!')
-        closeDialog() // shyd yeh baad mein remove karna pade 
+        await sleep(4000)
+        window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
+        // closeDialog() // shyd yeh baad mein remove karna pade 
     } else {
         if (result.reason === 'user_not_found') {
             showToast("No account with that email — create one first.", 'error', 4600)
@@ -288,14 +300,20 @@ $('#obSave').addEventListener('click', async () => {
     let result = await addMeasurements(measurements)
     if (result.success) {
         showToast('Measurements and goals aligned!')
+        await sleep(4000)
+        window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
     } else {
         showToast('There was an error. Try again later', 'error')
     }
     closeDialog();
 });
 
-$('#obSkip').addEventListener('click', () => {
+$('#obSkip').addEventListener('click', async () => {
     // mujhe ni lagta is function ki koi zaroorat hai
+    // hai bhai zaroorat
+    showToast('No worries, You can fill them later on!')
+    await sleep(4000)
+    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
     closeDialog();
 });
 

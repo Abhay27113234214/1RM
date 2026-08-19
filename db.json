@@ -1,0 +1,3667 @@
+{
+  "workouts": [
+    
+  ],
+  "users": [
+    {
+      "name": "abhay",
+      "username": "abhaykohli27",
+      "email": "abhay@gmail.com",
+      "password": "123456",
+      "incomplete": true,
+      "id": "7KgBcEjY-P0"
+    },
+    {
+      "name": "deepu",
+      "username": "deepu23",
+      "email": "deepu@gmail.com",
+      "password": "123456",
+      "incomplete": false,
+      "id": "oQLM3AD0qXA",
+      "age": "21",
+      "sex": "Man",
+      "main_goal": "Get stronger",
+      "experience": "Intermediate",
+      "training_days": "4-5",
+      "measurements": {
+        "height": "185",
+        "weight": "76",
+        "body_fat": "35"
+      }
+    },
+    {
+      "name": "oreo",
+      "username": "oreokohli3",
+      "email": "oreo@gmail.com",
+      "password": "123456",
+      "incomplete": false,
+      "id": "uzRzsAftMcU",
+      "age": "10",
+      "sex": "Man",
+      "main_goal": "Get stronger",
+      "experience": "Intermediate",
+      "training_days": "4-5",
+      "measurements": {
+        "height": "180",
+        "weight": "70",
+        "body_fat": "30"
+      }
+    },
+    {
+      "name": "abheer",
+      "username": "abheer11",
+      "email": "abheer@gmail.com",
+      "password": "123456",
+      "incomplete": true,
+      "id": "T2KjNFfHFlY"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "1",
+      "asset": "None",
+      "name": "Barbell Bench Press",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "2",
+      "asset": "None",
+      "name": "Smith Machine Bench Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "3",
+      "asset": "None",
+      "name": "Dumbbell Bench Press",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "4",
+      "asset": "None",
+      "name": "Machine Chest Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "5",
+      "asset": "None",
+      "name": "Plate Loaded Chest Press",
+      "equipment_type": "plate",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "6",
+      "asset": "None",
+      "name": "Cable Chest Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "7",
+      "asset": "None",
+      "name": "Barbell Incline Bench Press",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "8",
+      "asset": "None",
+      "name": "Smith Machine Incline Bench Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "9",
+      "asset": "None",
+      "name": "Incline Dumbbell Press",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "10",
+      "asset": "None",
+      "name": "Incline Machine Chest Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "11",
+      "asset": "None",
+      "name": "Incline Plate Loaded Chest Press",
+      "equipment_type": "plate",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "12",
+      "asset": "None",
+      "name": "Cable Incline Chest Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "13",
+      "asset": "None",
+      "name": "Barbell Decline Bench Press",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "lower chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "14",
+      "asset": "None",
+      "name": "Dumbbell Decline Press",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "lower chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "15",
+      "asset": "None",
+      "name": "Machine Decline Chest Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lower chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "16",
+      "asset": "None",
+      "name": "Dumbbell Chest Fly",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "17",
+      "asset": "None",
+      "name": "Incline Dumbbell Chest Fly",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "18",
+      "asset": "None",
+      "name": "Cable Chest Fly",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "19",
+      "asset": "None",
+      "name": "Low Cable Chest Fly",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "20",
+      "asset": "None",
+      "name": "High Cable Chest Fly",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lower chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "21",
+      "asset": "None",
+      "name": "Machine Chest Fly",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "22",
+      "asset": "None",
+      "name": "Pec Deck Fly",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "23",
+      "asset": "None",
+      "name": "Plate Chest Fly",
+      "equipment_type": "plate",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "24",
+      "asset": "None",
+      "name": "Resistance Band Chest Fly",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "25",
+      "asset": "None",
+      "name": "Push Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "26",
+      "asset": "None",
+      "name": "Weighted Push Up",
+      "equipment_type": "plate",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts",
+        "core"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "27",
+      "asset": "None",
+      "name": "Incline Push Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "28",
+      "asset": "None",
+      "name": "Decline Push Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "upper chest",
+      "other_muscles": [
+        "triceps",
+        "front delts",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "29",
+      "asset": "None",
+      "name": "Chest Dips",
+      "equipment_type": "none",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "30",
+      "asset": "None",
+      "name": "Weighted Chest Dips",
+      "equipment_type": "other",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "31",
+      "asset": "None",
+      "name": "Assisted Chest Dips",
+      "equipment_type": "machine",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "assisted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "32",
+      "asset": "None",
+      "name": "Barbell Shoulder Press",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "33",
+      "asset": "None",
+      "name": "Smith Machine Shoulder Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "34",
+      "asset": "None",
+      "name": "Dumbbell Shoulder Press",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "35",
+      "asset": "None",
+      "name": "Machine Shoulder Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "36",
+      "asset": "None",
+      "name": "Plate Loaded Shoulder Press",
+      "equipment_type": "plate",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "37",
+      "asset": "None",
+      "name": "Cable Shoulder Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "38",
+      "asset": "None",
+      "name": "Kettlebell Shoulder Press",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "39",
+      "asset": "None",
+      "name": "Arnold Press",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "side delts",
+        "triceps",
+        "upper chest"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "40",
+      "asset": "None",
+      "name": "Dumbbell Lateral Raise",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "41",
+      "asset": "None",
+      "name": "Cable Lateral Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "42",
+      "asset": "None",
+      "name": "Behind The Back Cable Lateral Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "43",
+      "asset": "None",
+      "name": "Machine Lateral Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "44",
+      "asset": "None",
+      "name": "Plate Lateral Raise",
+      "equipment_type": "plate",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "45",
+      "asset": "None",
+      "name": "Resistance Band Lateral Raise",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "46",
+      "asset": "None",
+      "name": "Dumbbell Front Raise",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "upper chest"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "47",
+      "asset": "None",
+      "name": "Cable Front Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "upper chest"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "48",
+      "asset": "None",
+      "name": "Plate Front Raise",
+      "equipment_type": "plate",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "upper chest"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "49",
+      "asset": "None",
+      "name": "Machine Front Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "front delts",
+      "other_muscles": [
+        "upper chest"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "50",
+      "asset": "None",
+      "name": "Reverse Pec Deck",
+      "equipment_type": "machine",
+      "primary_muscle_group": "rear delts",
+      "other_muscles": [
+        "upper back",
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "51",
+      "asset": "None",
+      "name": "Dumbbell Rear Delt Fly",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "rear delts",
+      "other_muscles": [
+        "upper back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "52",
+      "asset": "None",
+      "name": "Cable Rear Delt Fly",
+      "equipment_type": "machine",
+      "primary_muscle_group": "rear delts",
+      "other_muscles": [
+        "upper back",
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "53",
+      "asset": "None",
+      "name": "Resistance Band Rear Delt Fly",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "rear delts",
+      "other_muscles": [
+        "upper back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "54",
+      "asset": "None",
+      "name": "Face Pull",
+      "equipment_type": "machine",
+      "primary_muscle_group": "rear delts",
+      "other_muscles": [
+        "traps",
+        "upper back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "55",
+      "asset": "None",
+      "name": "Resistance Band Face Pull",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "rear delts",
+      "other_muscles": [
+        "traps",
+        "upper back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "56",
+      "asset": "None",
+      "name": "Barbell Upright Row",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "57",
+      "asset": "None",
+      "name": "Dumbbell Upright Row",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "58",
+      "asset": "None",
+      "name": "Cable Upright Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "side delts",
+      "other_muscles": [
+        "traps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "59",
+      "asset": "None",
+      "name": "Barbell Shrug",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "traps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "60",
+      "asset": "None",
+      "name": "Dumbbell Shrug",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "traps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "61",
+      "asset": "None",
+      "name": "Smith Machine Shrug",
+      "equipment_type": "machine",
+      "primary_muscle_group": "traps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "62",
+      "asset": "None",
+      "name": "Machine Shrug",
+      "equipment_type": "machine",
+      "primary_muscle_group": "traps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "63",
+      "asset": "None",
+      "name": "Barbell Row",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "64",
+      "asset": "None",
+      "name": "Smith Machine Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "65",
+      "asset": "None",
+      "name": "Dumbbell Row",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "rear delts",
+        "upper back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "66",
+      "asset": "None",
+      "name": "Machine Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "67",
+      "asset": "None",
+      "name": "Plate Loaded Row",
+      "equipment_type": "plate",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "68",
+      "asset": "None",
+      "name": "Cable Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "69",
+      "asset": "None",
+      "name": "Seated Cable Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "70",
+      "asset": "None",
+      "name": "Single Arm Cable Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "71",
+      "asset": "None",
+      "name": "Chest Supported Dumbbell Row",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "72",
+      "asset": "None",
+      "name": "Chest Supported Machine Row",
+      "equipment_type": "machine",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "73",
+      "asset": "None",
+      "name": "T-Bar Row",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "74",
+      "asset": "None",
+      "name": "Landmine Row",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "75",
+      "asset": "None",
+      "name": "Lat Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "76",
+      "asset": "None",
+      "name": "Wide Grip Lat Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "77",
+      "asset": "None",
+      "name": "Close Grip Lat Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "78",
+      "asset": "None",
+      "name": "Neutral Grip Lat Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "79",
+      "asset": "None",
+      "name": "Single Arm Lat Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "80",
+      "asset": "None",
+      "name": "Machine Lat Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "81",
+      "asset": "None",
+      "name": "Plate Loaded Lat Pulldown",
+      "equipment_type": "plate",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "82",
+      "asset": "None",
+      "name": "Straight Arm Pulldown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "83",
+      "asset": "None",
+      "name": "Dumbbell Pullover",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "chest",
+        "triceps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "84",
+      "asset": "None",
+      "name": "Cable Pullover",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "chest",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "85",
+      "asset": "None",
+      "name": "Pull Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "86",
+      "asset": "None",
+      "name": "Weighted Pull Up",
+      "equipment_type": "other",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms",
+        "core"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "87",
+      "asset": "None",
+      "name": "Assisted Pull Up",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "assisted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "88",
+      "asset": "None",
+      "name": "Chin Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "89",
+      "asset": "None",
+      "name": "Weighted Chin Up",
+      "equipment_type": "other",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "90",
+      "asset": "None",
+      "name": "Assisted Chin Up",
+      "equipment_type": "machine",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "assisted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "91",
+      "asset": "None",
+      "name": "Barbell Deadlift",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "lower back",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "traps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "92",
+      "asset": "None",
+      "name": "Dumbbell Deadlift",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "lower back",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "93",
+      "asset": "None",
+      "name": "Trap Bar Deadlift",
+      "equipment_type": "other",
+      "primary_muscle_group": "legs",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "lower back",
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "94",
+      "asset": "None",
+      "name": "Rack Pull",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "traps",
+        "lower back",
+        "glutes",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "95",
+      "asset": "None",
+      "name": "Barbell Back Squat",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "96",
+      "asset": "None",
+      "name": "Smith Machine Squat",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "97",
+      "asset": "None",
+      "name": "Dumbbell Squat",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "98",
+      "asset": "None",
+      "name": "Goblet Squat",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "99",
+      "asset": "None",
+      "name": "Kettlebell Goblet Squat",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "100",
+      "asset": "None",
+      "name": "Front Barbell Squat",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "101",
+      "asset": "None",
+      "name": "Hack Squat",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "102",
+      "asset": "None",
+      "name": "Plate Loaded Hack Squat",
+      "equipment_type": "plate",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "103",
+      "asset": "None",
+      "name": "Leg Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "104",
+      "asset": "None",
+      "name": "45 Degree Leg Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "105",
+      "asset": "None",
+      "name": "Horizontal Leg Press",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "106",
+      "asset": "None",
+      "name": "Leg Extension",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "107",
+      "asset": "None",
+      "name": "Single Leg Extension",
+      "equipment_type": "machine",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "108",
+      "asset": "None",
+      "name": "Dumbbell Walking Lunge",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "109",
+      "asset": "None",
+      "name": "Barbell Walking Lunge",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "110",
+      "asset": "None",
+      "name": "Bodyweight Walking Lunge",
+      "equipment_type": "none",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "111",
+      "asset": "None",
+      "name": "Dumbbell Reverse Lunge",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "112",
+      "asset": "None",
+      "name": "Barbell Reverse Lunge",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "113",
+      "asset": "None",
+      "name": "Bodyweight Reverse Lunge",
+      "equipment_type": "none",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "114",
+      "asset": "None",
+      "name": "Dumbbell Bulgarian Split Squat",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "115",
+      "asset": "None",
+      "name": "Barbell Bulgarian Split Squat",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "116",
+      "asset": "None",
+      "name": "Bodyweight Bulgarian Split Squat",
+      "equipment_type": "none",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "117",
+      "asset": "None",
+      "name": "Dumbbell Step Up",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "118",
+      "asset": "None",
+      "name": "Bodyweight Step Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "119",
+      "asset": "None",
+      "name": "Barbell Romanian Deadlift",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "120",
+      "asset": "None",
+      "name": "Dumbbell Romanian Deadlift",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "121",
+      "asset": "None",
+      "name": "Kettlebell Romanian Deadlift",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "122",
+      "asset": "None",
+      "name": "Barbell Stiff Leg Deadlift",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "123",
+      "asset": "None",
+      "name": "Dumbbell Stiff Leg Deadlift",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "124",
+      "asset": "None",
+      "name": "Lying Leg Curl",
+      "equipment_type": "machine",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "calves"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "125",
+      "asset": "None",
+      "name": "Seated Leg Curl",
+      "equipment_type": "machine",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "calves"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "126",
+      "asset": "None",
+      "name": "Standing Leg Curl",
+      "equipment_type": "machine",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "calves"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "127",
+      "asset": "None",
+      "name": "Nordic Hamstring Curl",
+      "equipment_type": "none",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "calves"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "128",
+      "asset": "None",
+      "name": "Barbell Good Morning",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "129",
+      "asset": "None",
+      "name": "Smith Machine Good Morning",
+      "equipment_type": "machine",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "lower back"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "130",
+      "asset": "None",
+      "name": "Barbell Hip Thrust",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "131",
+      "asset": "None",
+      "name": "Smith Machine Hip Thrust",
+      "equipment_type": "machine",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "132",
+      "asset": "None",
+      "name": "Dumbbell Hip Thrust",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "133",
+      "asset": "None",
+      "name": "Machine Hip Thrust",
+      "equipment_type": "machine",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "134",
+      "asset": "None",
+      "name": "Glute Bridge",
+      "equipment_type": "none",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "135",
+      "asset": "None",
+      "name": "Plate Glute Bridge",
+      "equipment_type": "plate",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "136",
+      "asset": "None",
+      "name": "Cable Glute Kickback",
+      "equipment_type": "machine",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "137",
+      "asset": "None",
+      "name": "Resistance Band Glute Kickback",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "138",
+      "asset": "None",
+      "name": "Machine Hip Abduction",
+      "equipment_type": "machine",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hip abductors"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "139",
+      "asset": "None",
+      "name": "Cable Hip Abduction",
+      "equipment_type": "machine",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hip abductors"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "140",
+      "asset": "None",
+      "name": "Resistance Band Hip Abduction",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hip abductors"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "141",
+      "asset": "None",
+      "name": "Standing Calf Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "142",
+      "asset": "None",
+      "name": "Seated Calf Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "143",
+      "asset": "None",
+      "name": "Leg Press Calf Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "144",
+      "asset": "None",
+      "name": "Dumbbell Calf Raise",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "145",
+      "asset": "None",
+      "name": "Barbell Calf Raise",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "146",
+      "asset": "None",
+      "name": "Bodyweight Calf Raise",
+      "equipment_type": "none",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "147",
+      "asset": "None",
+      "name": "Single Leg Bodyweight Calf Raise",
+      "equipment_type": "none",
+      "primary_muscle_group": "calves",
+      "other_muscles": [],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "148",
+      "asset": "None",
+      "name": "Barbell Curl",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "149",
+      "asset": "None",
+      "name": "Dumbbell Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "150",
+      "asset": "None",
+      "name": "Cable Curl",
+      "equipment_type": "machine",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "151",
+      "asset": "None",
+      "name": "Machine Bicep Curl",
+      "equipment_type": "machine",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "152",
+      "asset": "None",
+      "name": "Preacher Curl Machine",
+      "equipment_type": "machine",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "153",
+      "asset": "None",
+      "name": "Dumbbell Preacher Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "154",
+      "asset": "None",
+      "name": "EZ Bar Preacher Curl",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "155",
+      "asset": "None",
+      "name": "Incline Dumbbell Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "156",
+      "asset": "None",
+      "name": "Hammer Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "brachialis",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "157",
+      "asset": "None",
+      "name": "Cable Hammer Curl",
+      "equipment_type": "machine",
+      "primary_muscle_group": "brachialis",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "158",
+      "asset": "None",
+      "name": "Concentration Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "159",
+      "asset": "None",
+      "name": "Spider Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "160",
+      "asset": "None",
+      "name": "Barbell Reverse Curl",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "brachioradialis",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "161",
+      "asset": "None",
+      "name": "Dumbbell Reverse Curl",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "brachioradialis",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "162",
+      "asset": "None",
+      "name": "Resistance Band Bicep Curl",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "biceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "163",
+      "asset": "None",
+      "name": "Barbell Skull Crusher",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "164",
+      "asset": "None",
+      "name": "Dumbbell Skull Crusher",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "165",
+      "asset": "None",
+      "name": "Cable Tricep Pushdown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "166",
+      "asset": "None",
+      "name": "Rope Tricep Pushdown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "167",
+      "asset": "None",
+      "name": "Straight Bar Tricep Pushdown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "168",
+      "asset": "None",
+      "name": "Single Arm Cable Pushdown",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "169",
+      "asset": "None",
+      "name": "Overhead Cable Tricep Extension",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "shoulders"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "170",
+      "asset": "None",
+      "name": "Overhead Dumbbell Tricep Extension",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "shoulders"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "171",
+      "asset": "None",
+      "name": "Machine Tricep Extension",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "172",
+      "asset": "None",
+      "name": "Dumbbell Tricep Kickback",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "173",
+      "asset": "None",
+      "name": "Cable Tricep Kickback",
+      "equipment_type": "machine",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "174",
+      "asset": "None",
+      "name": "Bench Dip",
+      "equipment_type": "none",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "chest",
+        "front delts"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "175",
+      "asset": "None",
+      "name": "Weighted Bench Dip",
+      "equipment_type": "plate",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "chest",
+        "front delts"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "176",
+      "asset": "None",
+      "name": "Close Grip Push Up",
+      "equipment_type": "none",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "chest",
+        "front delts"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "177",
+      "asset": "None",
+      "name": "Weighted Close Grip Push Up",
+      "equipment_type": "plate",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "chest",
+        "front delts"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "178",
+      "asset": "None",
+      "name": "Crunch",
+      "equipment_type": "none",
+      "primary_muscle_group": "abs",
+      "other_muscles": [],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "179",
+      "asset": "None",
+      "name": "Cable Crunch",
+      "equipment_type": "machine",
+      "primary_muscle_group": "abs",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "180",
+      "asset": "None",
+      "name": "Machine Ab Crunch",
+      "equipment_type": "machine",
+      "primary_muscle_group": "abs",
+      "other_muscles": [],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "181",
+      "asset": "None",
+      "name": "Weighted Crunch",
+      "equipment_type": "plate",
+      "primary_muscle_group": "abs",
+      "other_muscles": [],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "182",
+      "asset": "None",
+      "name": "Hanging Knee Raise",
+      "equipment_type": "none",
+      "primary_muscle_group": "abs",
+      "other_muscles": [
+        "hip flexors",
+        "forearms"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "183",
+      "asset": "None",
+      "name": "Hanging Leg Raise",
+      "equipment_type": "none",
+      "primary_muscle_group": "abs",
+      "other_muscles": [
+        "hip flexors",
+        "forearms"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "184",
+      "asset": "None",
+      "name": "Captain's Chair Leg Raise",
+      "equipment_type": "machine",
+      "primary_muscle_group": "abs",
+      "other_muscles": [
+        "hip flexors"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "185",
+      "asset": "None",
+      "name": "Ab Wheel Rollout",
+      "equipment_type": "other",
+      "primary_muscle_group": "abs",
+      "other_muscles": [
+        "shoulders",
+        "lats",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "186",
+      "asset": "None",
+      "name": "Plank",
+      "equipment_type": "none",
+      "primary_muscle_group": "core",
+      "other_muscles": [
+        "abs",
+        "shoulders"
+      ],
+      "exercise_type": "duration",
+      "measurement": [
+        "time"
+      ]
+    },
+    {
+      "id": "187",
+      "asset": "None",
+      "name": "Weighted Plank",
+      "equipment_type": "plate",
+      "primary_muscle_group": "core",
+      "other_muscles": [
+        "abs",
+        "shoulders"
+      ],
+      "exercise_type": "duration_and_weight",
+      "measurement": [
+        "time",
+        "kg"
+      ]
+    },
+    {
+      "id": "188",
+      "asset": "None",
+      "name": "Side Plank",
+      "equipment_type": "none",
+      "primary_muscle_group": "obliques",
+      "other_muscles": [
+        "core",
+        "shoulders"
+      ],
+      "exercise_type": "duration",
+      "measurement": [
+        "time"
+      ]
+    },
+    {
+      "id": "189",
+      "asset": "None",
+      "name": "Weighted Side Plank",
+      "equipment_type": "plate",
+      "primary_muscle_group": "obliques",
+      "other_muscles": [
+        "core",
+        "shoulders"
+      ],
+      "exercise_type": "duration_and_weight",
+      "measurement": [
+        "time",
+        "kg"
+      ]
+    },
+    {
+      "id": "190",
+      "asset": "None",
+      "name": "Russian Twist",
+      "equipment_type": "none",
+      "primary_muscle_group": "obliques",
+      "other_muscles": [
+        "abs",
+        "hip flexors"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "191",
+      "asset": "None",
+      "name": "Weighted Russian Twist",
+      "equipment_type": "plate",
+      "primary_muscle_group": "obliques",
+      "other_muscles": [
+        "abs",
+        "hip flexors"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "192",
+      "asset": "None",
+      "name": "Mountain Climber",
+      "equipment_type": "none",
+      "primary_muscle_group": "core",
+      "other_muscles": [
+        "shoulders",
+        "quadriceps"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "193",
+      "asset": "None",
+      "name": "Kettlebell Swing",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings",
+        "core",
+        "shoulders"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "194",
+      "asset": "None",
+      "name": "Kettlebell Goblet Squat",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "195",
+      "asset": "None",
+      "name": "Kettlebell Clean",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "full body",
+      "other_muscles": [
+        "shoulders",
+        "glutes",
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "196",
+      "asset": "None",
+      "name": "Kettlebell Snatch",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "shoulders",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "core",
+        "traps"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "197",
+      "asset": "None",
+      "name": "Kettlebell Clean and Press",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "full body",
+      "other_muscles": [
+        "shoulders",
+        "glutes",
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "198",
+      "asset": "None",
+      "name": "Kettlebell Turkish Get Up",
+      "equipment_type": "kettlebell",
+      "primary_muscle_group": "core",
+      "other_muscles": [
+        "shoulders",
+        "glutes",
+        "legs"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "199",
+      "asset": "None",
+      "name": "Farmer Walk",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "forearms",
+      "other_muscles": [
+        "traps",
+        "core",
+        "shoulders",
+        "legs"
+      ],
+      "exercise_type": "weight_and_distance",
+      "measurement": [
+        "kg",
+        "km"
+      ]
+    },
+    {
+      "id": "200",
+      "asset": "None",
+      "name": "Barbell Farmer Walk",
+      "equipment_type": "barbell",
+      "primary_muscle_group": "forearms",
+      "other_muscles": [
+        "traps",
+        "core",
+        "legs"
+      ],
+      "exercise_type": "weight_and_distance",
+      "measurement": [
+        "kg",
+        "km"
+      ]
+    },
+    {
+      "id": "201",
+      "asset": "None",
+      "name": "Burpee",
+      "equipment_type": "none",
+      "primary_muscle_group": "full body",
+      "other_muscles": [
+        "chest",
+        "shoulders",
+        "quadriceps",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "202",
+      "asset": "None",
+      "name": "Weighted Burpee",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "full body",
+      "other_muscles": [
+        "chest",
+        "shoulders",
+        "legs",
+        "core"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "203",
+      "asset": "None",
+      "name": "Jump Squat",
+      "equipment_type": "none",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "calves",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "204",
+      "asset": "None",
+      "name": "Weighted Jump Squat",
+      "equipment_type": "dumbell",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "calves",
+        "core"
+      ],
+      "exercise_type": "weighted_bodyweight",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "205",
+      "asset": "None",
+      "name": "Box Jump",
+      "equipment_type": "other",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "calves",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "206",
+      "asset": "None",
+      "name": "Jump Rope",
+      "equipment_type": "other",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "calves",
+        "shoulders",
+        "core"
+      ],
+      "exercise_type": "duration",
+      "measurement": [
+        "time"
+      ]
+    },
+    {
+      "id": "207",
+      "asset": "None",
+      "name": "Treadmill Running",
+      "equipment_type": "machine",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "208",
+      "asset": "None",
+      "name": "Treadmill Walking",
+      "equipment_type": "machine",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "209",
+      "asset": "None",
+      "name": "Outdoor Running",
+      "equipment_type": "none",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "210",
+      "asset": "None",
+      "name": "Outdoor Walking",
+      "equipment_type": "none",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "211",
+      "asset": "None",
+      "name": "Stationary Bike",
+      "equipment_type": "machine",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "212",
+      "asset": "None",
+      "name": "Outdoor Cycling",
+      "equipment_type": "none",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "213",
+      "asset": "None",
+      "name": "Rowing Machine",
+      "equipment_type": "machine",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "back",
+        "legs",
+        "shoulders",
+        "core"
+      ],
+      "exercise_type": "distance_and_duration",
+      "measurement": [
+        "time",
+        "km"
+      ]
+    },
+    {
+      "id": "214",
+      "asset": "None",
+      "name": "Elliptical",
+      "equipment_type": "machine",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "hamstrings",
+        "glutes"
+      ],
+      "exercise_type": "duration",
+      "measurement": [
+        "time"
+      ]
+    },
+    {
+      "id": "215",
+      "asset": "None",
+      "name": "Stair Climber",
+      "equipment_type": "machine",
+      "primary_muscle_group": "cardio",
+      "other_muscles": [
+        "quadriceps",
+        "glutes",
+        "calves"
+      ],
+      "exercise_type": "duration",
+      "measurement": [
+        "time"
+      ]
+    },
+    {
+      "id": "216",
+      "asset": "None",
+      "name": "Sled Push",
+      "equipment_type": "other",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "exercise_type": "weight_and_distance",
+      "measurement": [
+        "kg",
+        "km"
+      ]
+    },
+    {
+      "id": "217",
+      "asset": "None",
+      "name": "Sled Drag",
+      "equipment_type": "other",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "quadriceps",
+        "calves"
+      ],
+      "exercise_type": "weight_and_distance",
+      "measurement": [
+        "kg",
+        "km"
+      ]
+    },
+    {
+      "id": "218",
+      "asset": "None",
+      "name": "Resistance Band Chest Press",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "219",
+      "asset": "None",
+      "name": "Resistance Band Chest Fly",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "front delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "220",
+      "asset": "None",
+      "name": "Resistance Band Row",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "221",
+      "asset": "None",
+      "name": "Resistance Band Lat Pulldown",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "lats",
+      "other_muscles": [
+        "biceps",
+        "forearms"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "222",
+      "asset": "None",
+      "name": "Resistance Band Tricep Extension",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "triceps",
+      "other_muscles": [
+        "shoulders"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "223",
+      "asset": "None",
+      "name": "Resistance Band Squat",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "224",
+      "asset": "None",
+      "name": "Resistance Band Leg Curl",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "225",
+      "asset": "None",
+      "name": "Resistance Band Glute Bridge",
+      "equipment_type": "resistance band",
+      "primary_muscle_group": "glutes",
+      "other_muscles": [
+        "hamstrings"
+      ],
+      "exercise_type": "weight_and_reps",
+      "measurement": [
+        "reps",
+        "kg"
+      ]
+    },
+    {
+      "id": "226",
+      "asset": "None",
+      "name": "Suspension Push Up",
+      "equipment_type": "suspension band",
+      "primary_muscle_group": "chest",
+      "other_muscles": [
+        "triceps",
+        "front delts",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "227",
+      "asset": "None",
+      "name": "Suspension Row",
+      "equipment_type": "suspension band",
+      "primary_muscle_group": "upper back",
+      "other_muscles": [
+        "lats",
+        "biceps",
+        "rear delts",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "228",
+      "asset": "None",
+      "name": "Suspension Squat",
+      "equipment_type": "suspension band",
+      "primary_muscle_group": "quadriceps",
+      "other_muscles": [
+        "glutes",
+        "hamstrings",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "229",
+      "asset": "None",
+      "name": "Suspension Hamstring Curl",
+      "equipment_type": "suspension band",
+      "primary_muscle_group": "hamstrings",
+      "other_muscles": [
+        "glutes",
+        "core"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    },
+    {
+      "id": "230",
+      "asset": "None",
+      "name": "Suspension Pike",
+      "equipment_type": "suspension band",
+      "primary_muscle_group": "abs",
+      "other_muscles": [
+        "shoulders",
+        "hip flexors"
+      ],
+      "exercise_type": "bodyweight_reps",
+      "measurement": [
+        "reps"
+      ]
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
