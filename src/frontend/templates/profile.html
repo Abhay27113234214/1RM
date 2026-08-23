@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>1RM ✱ Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/frontend/styles/index.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav-bar" id="navBar">
+  <div class="wrap nav">
+    <a href="index.html" class="logo"><span class="mark">✱</span> 1RM</a>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="#">Discover</a>
+      <a href="profile.html" class="here">Profile</a>
+      <a href="#" class="nav-cta btn-primary">Log out <span class="arr">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ PROFILE HERO ============ -->
+<section class="wrap">
+  <div class="profile-hero">
+    <div class="av-xl">
+      JB
+      <span class="streak-badge">✱ 21</span>
+    </div>
+    <div class="ph-who">
+      <h1>Jonas <em>Berg</em></h1>
+      <div class="ph-handle">@jonaslifts · joined Mar 2026</div>
+      <p class="ph-bio">Powerlifter chasing a 200 kg squat. Chalk over vibes. Show up anyway.</p>
+      <div class="ph-tags">
+        <span class="ph-tag"><b>✱</b> Advanced</span>
+        <span class="ph-tag">Powerlifting</span>
+        <span class="ph-tag">4–5 days / wk</span>
+        <span class="ph-tag">Get stronger</span>
+      </div>
+    </div>
+    <div class="ph-acts">
+      <button class="btn-outline">Edit profile <span class="arr">→</span></button>
+      <button class="btn-primary">Share <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <!-- ============ STAT STRIP ============ -->
+  <div class="stat-strip">
+    <div class="stat">
+      <div class="num">128<span class="sfx"> sessions</span></div>
+      <div class="lbl">Total workouts</div>
+    </div>
+    <div class="stat">
+      <div class="num">21<span class="sfx"> days</span></div>
+      <div class="lbl">Current streak</div>
+    </div>
+    <div class="stat">
+      <div class="num">47<span class="sfx"> days</span></div>
+      <div class="lbl">Longest streak</div>
+    </div>
+    <div class="stat">
+      <div class="num">12<span class="sfx"> PRs</span></div>
+      <div class="lbl">This month</div>
+    </div>
+    <div class="stat">
+      <div class="num">384<span class="sfx">k kg</span></div>
+      <div class="lbl">Total volume</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAIN GRID ============ -->
+<section class="wrap">
+  <div class="prof-grid">
+
+    <!-- ========== MAIN COLUMN ========== -->
+    <div class="prof-main">
+
+      <!-- heatmap -->
+      <div class="panel">
+        <div class="sec-title">
+          Activity · last 16 weeks
+          <span class="extra"><b>32</b> sessions · <b>6</b> rest days</span>
+        </div>
+        <div class="heat" id="heatGrid"></div>
+        <div class="heat-legend">
+          less
+          <i class="l0"></i>
+          <i class="l1"></i>
+          <i class="l2"></i>
+          <i class="l3"></i>
+          <i class="l4"></i>
+          more
+          <span class="gap"></span>
+          <span>hover a square to relive the session</span>
+        </div>
+        <div class="heat-stats">
+          <div class="hs">
+            <div class="hv">48,920<span style="font-size:.55em;font-family:var(--sans);color:var(--muted);margin-left:3px">kg</span></div>
+            <div class="hl">Best week · volume</div>
+          </div>
+          <div class="hs">
+            <div class="hv">6</div>
+            <div class="hl">Best week · sessions</div>
+          </div>
+          <div class="hs">
+            <div class="hv">4.2</div>
+            <div class="hl">Avg sessions / week</div>
+          </div>
+          <div class="hs">
+            <div class="hv">92<span style="font-size:.55em;font-family:var(--sans);color:var(--muted);margin-left:3px">%</span></div>
+            <div class="hl">Consistency</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- personal records -->
+      <div class="panel">
+        <div class="sec-title">
+          Personal records
+          <span class="extra"><b>12</b> new this month</span>
+        </div>
+        <div class="pr-list">
+          <div class="pr-row">
+            <div class="pr-rank">01</div>
+            <div>
+              <div class="pr-name">Back Squat</div>
+              <div class="pr-meta">5 × 5 · last hit Aug 18</div>
+            </div>
+            <div class="pr-weight">120<span class="u">kg</span></div>
+            <div class="pr-when">+10 kg</div>
+          </div>
+          <div class="pr-row">
+            <div class="pr-rank">02</div>
+            <div>
+              <div class="pr-name">Bench Press</div>
+              <div class="pr-meta">5 × 5 · last hit Aug 15</div>
+            </div>
+            <div class="pr-weight">100<span class="u">kg</span></div>
+            <div class="pr-when">+2.5 kg</div>
+          </div>
+          <div class="pr-row">
+            <div class="pr-rank">03</div>
+            <div>
+              <div class="pr-name">Deadlift</div>
+              <div class="pr-meta">3 × 5 · last hit Aug 12</div>
+            </div>
+            <div class="pr-weight">180<span class="u">kg</span></div>
+            <div class="pr-when">+5 kg</div>
+          </div>
+          <div class="pr-row">
+            <div class="pr-rank">04</div>
+            <div>
+              <div class="pr-name">Overhead Press</div>
+              <div class="pr-meta">4 × 6 · last hit Aug 10</div>
+            </div>
+            <div class="pr-weight">65<span class="u">kg</span></div>
+            <div class="pr-when">+2.5 kg</div>
+          </div>
+          <div class="pr-row">
+            <div class="pr-rank">05</div>
+            <div>
+              <div class="pr-name">Barbell Row</div>
+              <div class="pr-meta">4 × 8 · last hit Aug 08</div>
+            </div>
+            <div class="pr-weight">90<span class="u">kg</span></div>
+            <div class="pr-when">+5 kg</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- recent activity -->
+      <div class="panel">
+        <div class="sec-title">
+          Recent activity
+          <span class="extra">last 8 sessions</span>
+        </div>
+        <div class="act-list">
+          <div class="act-row">
+            <div class="act-date"><div class="d">18</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Leg day — everything heavy</div>
+              <div class="s"><b>✱ strength</b> · 5 exercises · 68 min · 8,420 kg</div>
+            </div>
+            <div class="act-tag pr">✱ 2 PRs</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">15</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Push day — bench focus</div>
+              <div class="s"><b>✱ strength</b> · 4 exercises · 54 min · 5,120 kg</div>
+            </div>
+            <div class="act-tag pr">✱ PR</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">13</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Zone 2 recovery</div>
+              <div class="s"><b>✱ cardio</b> · 5K run · 41 min · 6.4 km</div>
+            </div>
+            <div class="act-tag">cardio</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">12</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Pull day — deadlift heavy</div>
+              <div class="s"><b>✱ strength</b> · 5 exercises · 72 min · 9,240 kg</div>
+            </div>
+            <div class="act-tag pr">✱ PR</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">10</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Upper body accessory</div>
+              <div class="s"><b>✱ strength</b> · 6 exercises · 48 min · 3,810 kg</div>
+            </div>
+            <div class="act-tag pr">✱ PR</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">08</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Back & biceps</div>
+              <div class="s"><b>✱ strength</b> · 5 exercises · 58 min · 4,620 kg</div>
+            </div>
+            <div class="act-tag pr">✱ PR</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">06</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Squat technique day</div>
+              <div class="s"><b>✱ strength</b> · 4 exercises · 52 min · 4,180 kg</div>
+            </div>
+            <div class="act-tag">technique</div>
+          </div>
+          <div class="act-row">
+            <div class="act-date"><div class="d">04</div><div class="m">Aug</div></div>
+            <div class="act-body">
+              <div class="t">Long run — 10K</div>
+              <div class="s"><b>✱ cardio</b> · 10K · 54 min · 10.0 km</div>
+            </div>
+            <div class="act-tag">cardio</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========== SIDE COLUMN ========== -->
+    <aside class="prof-side">
+
+      <!-- body stats -->
+      <div class="side-card">
+        <div class="sec-title">Body measurements</div>
+        <div class="meas-grid">
+          <div class="meas-item">
+            <div class="l">Height</div>
+            <div class="v">182<span class="u">cm</span></div>
+          </div>
+          <div class="meas-item">
+            <div class="l">Weight</div>
+            <div class="v">84.5<span class="u">kg</span></div>
+          </div>
+          <div class="meas-item">
+            <div class="l">Body fat</div>
+            <div class="v">14.2<span class="u">%</span></div>
+          </div>
+          <div class="meas-item">
+            <div class="l">Age</div>
+            <div class="v">28</div>
+          </div>
+        </div>
+        <div class="heat-stats" style="margin-top:18px">
+          <div class="hs">
+            <div class="hv">23.9</div>
+            <div class="hl">BMI</div>
+          </div>
+          <div class="hs">
+            <div class="hv">−1.2<span style="font-size:.6em;color:var(--muted)">kg</span></div>
+            <div class="hl">30-day delta</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- goals -->
+      <div class="side-card">
+        <div class="sec-title">Current goals</div>
+        <div class="goal-row">
+          <div class="gl">
+            <div class="gn">Squat 140 kg</div>
+            <div class="gt">Target · Sep 30</div>
+            <div class="prog-bar"><i style="width:86%"></i></div>
+          </div>
+          <div class="gv">120 kg</div>
+        </div>
+        <div class="goal-row">
+          <div class="gl">
+            <div class="gn">Bench 110 kg</div>
+            <div class="gt">Target · Oct 15</div>
+            <div class="prog-bar"><i style="width:91%"></i></div>
+          </div>
+          <div class="gv">100 kg</div>
+        </div>
+        <div class="goal-row">
+          <div class="gl">
+            <div class="gn">Deadlift 200 kg</div>
+            <div class="gt">Target · Nov 01</div>
+            <div class="prog-bar"><i style="width:90%"></i></div>
+          </div>
+          <div class="gv">180 kg</div>
+        </div>
+        <div class="goal-row">
+          <div class="gl">
+            <div class="gn">30-day streak</div>
+            <div class="gt">Keep showing up</div>
+            <div class="prog-bar"><i style="width:70%"></i></div>
+          </div>
+          <div class="gv">21 / 30</div>
+        </div>
+      </div>
+
+      <!-- training split -->
+      <div class="side-card">
+        <div class="sec-title">This week's split</div>
+        <div class="split-grid">
+          <div class="split-item"><span class="k">Push</span><span class="v">2</span></div>
+          <div class="split-item"><span class="k">Pull</span><span class="v">2</span></div>
+          <div class="split-item"><span class="k">Legs</span><span class="v">2</span></div>
+          <div class="split-item"><span class="k">Cardio</span><span class="v">1</span></div>
+        </div>
+        <div class="heat-stats" style="margin-top:16px">
+          <div class="hs">
+            <div class="hv">7</div>
+            <div class="hl">Sessions</div>
+          </div>
+          <div class="hs">
+            <div class="hv">6h 12m</div>
+            <div class="hl">Total time</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- favorites -->
+      <div class="side-card">
+        <div class="sec-title">Favorite lifts</div>
+        <div class="act-list" style="gap:0">
+          <div class="act-row" style="padding:10px 0">
+            <div style="font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);font-size:1.1rem">01</div>
+            <div class="act-body">
+              <div class="t" style="font-size:14px">Back Squat</div>
+              <div class="s">logged 34× · 120 kg PR</div>
+            </div>
+          </div>
+          <div class="act-row" style="padding:10px 0">
+            <div style="font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);font-size:1.1rem">02</div>
+            <div class="act-body">
+              <div class="t" style="font-size:14px">Bench Press</div>
+              <div class="s">logged 31× · 100 kg PR</div>
+            </div>
+          </div>
+          <div class="act-row" style="padding:10px 0">
+            <div style="font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);font-size:1.1rem">03</div>
+            <div class="act-body">
+              <div class="t" style="font-size:14px">Deadlift</div>
+              <div class="s">logged 28× · 180 kg PR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  ✱ 1RM © 2026 — made for the ones who show up.
+</footer>
+
+</body>
+</html>
