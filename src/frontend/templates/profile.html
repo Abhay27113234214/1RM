@@ -1,386 +1,500 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>1RM ✱ Profile</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../src/frontend/styles/index.css">
-<link rel="stylesheet" href="../styles/profile.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1RM ✱ Your profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-400-normal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-500-normal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-700-normal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-600-italic.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-600-normal.css">
+  <link rel="stylesheet" href="../styles/profile.css">
 </head>
+
 <body>
 
-<!-- ============ NAV ============ -->
-<nav class="nav-bar" id="navBar">
-  <div class="wrap nav">
-    <a href="index.html" class="logo"><span class="mark">✱</span> 1RM</a>
-    <div class="nav-links">
+  <div class="toast-zone" id="toastZone"></div>
+
+  <!-- nav -->
+  <nav class="nav-bar" id="navBar">
+    <div class="wrap">
+      <div class="nav">
+        <a href="home.html" class="logo"><span class="mark">✱</span> 1RM</a>
+        <div class="nav-links">
+          <a href="home.html">Home</a>
+          <a href="discover.html">Discover</a>
+          <a href="app.html">The log</a>
+        </div>
+        <div class="nav-acts">
+          <a href="workout.html" class="plus-btn" aria-label="Start workout">+</a>
+          <button class="av-btn" id="avBtn" aria-label="Your profile">
+            <span class="av current_user_initials">AK</span>
+          </button>
+          <button class="burger" id="burgerBtn" aria-label="Menu"><i></i><i></i><i></i></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- drawer -->
+  <div class="drawer-back" id="drawerBack"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <span class="av lg current_user_initials">AK</span>
+      <div class="who">
+        <div class="drawer-name current_user_name">Alex Kowalski</div>
+        <div class="drawer-streak">✱ <b>34-day streak</b> · personal best</div>
+      </div>
+      <button class="drawer-x" id="drawerX">✕</button>
+    </div>
+    <nav class="drawer-nav">
       <a href="home.html">Home</a>
-      <a href="#">Discover</a>
-      <a href="profile.html" class="here">Profile</a>
-      <a href="#" class="nav-cta btn-primary">Log out <span class="arr">→</span></a>
+      <a href="discover.html">Discover</a>
+      <a href="#" class="here">My profile</a>
+      <a href="workout.html">+ Log a session</a>
+    </nav>
+    <a href="workout.html" class="drawer-cta">
+      <span class="dc-plus">+</span>
+      <span>Start workout</span>
+      <span class="arr">→</span>
+    </a>
+    <div class="drawer-foot">
+      <div class="links">
+        <a href="#" data-todo="settings">Settings</a>
+        <a href="#" data-todo="signout">Sign out</a>
+      </div>
+      <div class="copy">✱ 1RM © 2026 — made for the ones who <b>show up.</b></div>
+    </div>
+  </aside>
+
+  <!-- greeting + decorations -->
+  <header class="greet">
+    <div class="wrap greet-inner">
+      <!-- twinkling sparks -->
+      <span class="spark" style="top:36px; left:54%;" aria-hidden="true">✱</span>
+      <span class="spark" style="top:128px; left:72%; animation-delay:1.1s;" aria-hidden="true">✱</span>
+      <span class="spark" style="top:196px; left:60%; animation-delay:2.2s;" aria-hidden="true">✱</span>
+
+      <!-- floating chips (index.css hero pattern) -->
+      <span class="float-chip fc1" aria-hidden="true"><b>+2.5 kg</b> · next bench</span>
+      <span class="float-chip fc2 dark" aria-hidden="true"><b>✱</b> PR · bench <b>102.5 kg</b></span>
+
+      <div class="eyebrow">Your profile</div>
+      <h1 id="greetName">Alex <em>Kowalski</em></h1>
+      <p class="greet-sub">
+        Logging since March 2024. Everything below is yours alone — edit any number
+        and the smart coach recalibrates on the spot.
+      </p>
+      <div class="greet-chips">
+        <span class="gchip"><b>✱</b> 34-day streak</span>
+        <span class="gchip"><b>247</b> sessions</span>
+        <span class="gchip"><b>3</b> this week</span>
+        <span class="gchip"><b>12</b> PRs</span>
+      </div>
+      <div class="greet-date" id="dateLine"></div>
+    </div>
+  </header>
+
+  <!-- layout -->
+  <main class="wrap">
+    <div class="profile">
+
+      <!-- ====== feed column ====== -->
+      <div class="feed-col">
+
+        <!-- month at a glance -->
+        <div class="day-sep reveal">This month</div>
+        <div class="panel-flat reveal">
+          <div class="month-head">
+            <div class="r-h">Your month at a glance</div>
+            <div class="heat-legend">
+              <span>Less</span>
+              <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i>
+              <span>More</span>
+            </div>
+          </div>
+          <p class="month-sub">
+            Four weeks of showing up. Darker means more work — empty means rest,
+            which is part of the plan too. Dashed squares are still to come.
+          </p>
+          <div class="month" id="monthGrid"></div>
+          <div class="month-note">✱ hover a square to relive it</div>
+          <div class="hs-row">
+            <div>
+              <div class="hv" data-count="34">0</div>
+              <div class="hl">longest streak · days</div>
+            </div>
+            <div>
+              <div class="hv" data-count="6">0</div>
+              <div class="hl">best week · sessions</div>
+            </div>
+            <div>
+              <div class="hv" data-count="48920">0</div>
+              <div class="hl">total volume · kg</div>
+            </div>
+            <div>
+              <div class="hv" data-count="24">0</div>
+              <div class="hl">active days</div>
+            </div>
+            <!-- animated volume trend (coach-widget bars) -->
+            <div class="hs hs-bars">
+              <div class="tbar-row" aria-hidden="true">
+                <div class="tbar" style="height:13px; --td:.05s"></div>
+                <div class="tbar" style="height:21px; --td:.15s"></div>
+                <div class="tbar" style="height:17px; --td:.25s"></div>
+                <div class="tbar" style="height:26px; --td:.35s"></div>
+                <div class="tbar" style="height:34px; --td:.45s"></div>
+              </div>
+              <div class="hl">volume · last 4 wk</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- recent sessions -->
+        <div class="day-sep reveal">Today</div>
+        <div class="post-shell reveal">
+          <article class="post" tabindex="0">
+            <div class="p-head">
+              <span class="av sm current_user_initials">AK</span>
+              <div class="p-who">
+                <div class="p-name current_user_name">Alex Kowalski</div>
+                <div class="p-meta"><span>You</span> · <span>2h ago</span></div>
+              </div>
+              <span class="streak">✱ 34-day streak</span>
+            </div>
+            <h3 class="p-title">Push day — everything heavy.</h3>
+            <div class="p-rows">
+              <div class="p-row pr">
+                <span class="nm" style="--c:#FF4A11">Bench Press</span>
+                <span class="mt">5 × 5 · 102.5 kg <span class="pr-tag">PR</span></span>
+              </div>
+              <div class="p-row">
+                <span class="nm" style="--c:#FF4A11">Incline DB Press</span>
+                <span class="mt">4 × 8 · 34 kg</span>
+              </div>
+              <div class="p-row">
+                <span class="nm" style="--c:#FF4A11">Weighted Dips</span>
+                <span class="mt">3 × 10 · +15 kg</span>
+              </div>
+            </div>
+            <div class="p-foot">
+              <span>volume <b>8,420 kg</b></span>
+              <span>time <b>68 min</b></span>
+              <span>effort <b>RIR 2</b></span>
+            </div>
+            <div class="p-acts">
+              <button class="act" data-action="spot"><span class="st">✱</span> Spot · <span
+                  class="spot-n">12</span></button>
+              <button class="act" data-action="comment">Comment · <span>3</span></button>
+              <button class="act share" data-action="share">Share</button>
+            </div>
+            <div class="p-cbox" hidden>
+              <input type="text" placeholder="Say something…">
+              <button class="act" data-action="post-comment">Post</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="day-sep reveal">Yesterday</div>
+        <div class="post-shell reveal">
+          <article class="post" tabindex="0">
+            <div class="p-head">
+              <span class="av sm current_user_initials">AK</span>
+              <div class="p-who">
+                <div class="p-name current_user_name">Alex Kowalski</div>
+                <div class="p-meta"><span>You</span> · <span>6:40 pm</span></div>
+              </div>
+              <span class="streak">✱ 33-day streak</span>
+            </div>
+            <h3 class="p-title">Legs — squat day, no mercy.</h3>
+            <div class="p-rows">
+              <div class="p-row">
+                <span class="nm" style="--c:#1E9E6A">Back Squat</span>
+                <span class="mt">4 × 6 · 120 kg</span>
+              </div>
+              <div class="p-row">
+                <span class="nm" style="--c:#1E9E6A">Romanian Deadlift</span>
+                <span class="mt">3 × 8 · 100 kg</span>
+              </div>
+              <div class="p-row">
+                <span class="nm" style="--c:#1E9E6A">Walking Lunges</span>
+                <span class="mt">3 × 12 · 24 kg</span>
+              </div>
+            </div>
+            <div class="p-foot">
+              <span>volume <b>12,480 kg</b></span>
+              <span>time <b>74 min</b></span>
+              <span>effort <b>RIR 2</b></span>
+            </div>
+            <div class="p-comment"><b>Jonas B. · 1h ago</b>"That last squat set was pure grit. Earned."
+            </div>
+            <div class="p-acts">
+              <button class="act" data-action="spot"><span class="st">✱</span> Spot · <span
+                  class="spot-n">24</span></button>
+              <button class="act" data-action="comment">Comment · <span>1</span></button>
+              <button class="act share" data-action="share">Share</button>
+            </div>
+            <div class="p-cbox" hidden>
+              <input type="text" placeholder="Say something…">
+              <button class="act" data-action="post-comment">Post</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="day-sep reveal">Earlier this week</div>
+        <div class="post-shell reveal">
+          <article class="post" tabindex="0">
+            <div class="p-head">
+              <span class="av sm current_user_initials">AK</span>
+              <div class="p-who">
+                <div class="p-name current_user_name">Alex Kowalski</div>
+                <div class="p-meta"><span>You</span> · <span>Tue · 7:15 am</span></div>
+              </div>
+              <span class="streak">✱ 32-day streak</span>
+            </div>
+            <h3 class="p-title">Zone 2 five — easy like Sunday.</h3>
+            <div class="p-rows">
+              <div class="p-row">
+                <span class="nm" style="--c:#D6486F">5K Run</span>
+                <span class="mt">26:12 · easy</span>
+              </div>
+              <div class="p-row">
+                <span class="nm" style="--c:#D6486F">Jump Rope</span>
+                <span class="mt">5 × 2 min</span>
+              </div>
+            </div>
+            <div class="p-foot">
+              <span>distance <b>6.4 km</b></span>
+              <span>time <b>41 min</b></span>
+              <span>zone <b>2</b></span>
+            </div>
+            <div class="p-acts">
+              <button class="act" data-action="spot"><span class="st">✱</span> Spot · <span
+                  class="spot-n">9</span></button>
+              <button class="act" data-action="comment">Comment · <span>0</span></button>
+              <button class="act share" data-action="share">Share</button>
+            </div>
+            <div class="p-cbox" hidden>
+              <input type="text" placeholder="Say something…">
+              <button class="act" data-action="post-comment">Post</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="load-wrap reveal">
+          <button class="act" id="loadMore">Load older sessions</button>
+        </div>
+
+        <!-- personal bests -->
+        <div class="day-sep reveal">Personal bests</div>
+        <div class="panel-flat pr-panel reveal">
+          <span class="pr-star" aria-hidden="true">✱</span>
+          <div class="r-h">✱ Fresh PRs</div>
+          <div class="pr-row"><span class="w">Bench Press</span><span class="l">Dec 14</span><span class="v">102.5
+              kg</span></div>
+          <div class="pr-row"><span class="w">Back Squat</span><span class="l">Dec 18</span><span class="v">155
+              kg</span></div>
+          <div class="pr-row"><span class="w">Deadlift</span><span class="l">Dec 12</span><span class="v">185
+              kg</span></div>
+          <div class="pr-row"><span class="w">Weighted Pull-up</span><span class="l">Dec 16</span><span class="v">+32
+              kg</span></div>
+          <div class="pr-row"><span class="w">Overhead Press</span><span class="l">Nov 28</span><span class="v">62.5
+              kg</span></div>
+          <button class="btn-quiet" id="prHistory">Full PR history ↓</button>
+        </div>
+      </div>
+
+      <!-- ====== rail ====== -->
+      <aside class="p-rail">
+
+        <div class="panel-flat reveal">
+          <div class="rp-head">
+            <span class="av lg current_user_initials">AK</span>
+            <div class="rp-id">
+              <div class="rp-name current_user_name">Alex Kowalski</div>
+              <div class="rp-handle current_user_username">@alexk_fit</div>
+            </div>
+          </div>
+          <div class="rp-meta">
+            <span><b>✱</b> Pro member</span>
+            <span>Joined Mar 2024</span>
+          </div>
+          <div class="rp-acts">
+            <button class="btn-primary" id="editProfileBtn">Edit profile <span class="arr">→</span></button>
+            <div class="rp-row2">
+              <button class="act" id="exportBtn">Export ↓</button>
+              <button class="act danger" id="signOutBtn">Sign out</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-flat reveal">
+          <div class="r-h">Body measurements</div>
+          <div class="ms-grid">
+            <div class="ms">
+              <div class="hv"><span id="msHeight">182</span><span class="u">cm</span></div>
+              <div class="hl">height</div>
+            </div>
+            <div class="ms">
+              <div class="hv"><span id="msWeight">84.5</span><span class="u">kg</span></div>
+              <div class="hl">weight</div>
+            </div>
+            <div class="ms">
+              <div class="hv"><span id="msFat">14.2</span><span class="u">%</span></div>
+              <div class="hl">body fat</div>
+            </div>
+            <div class="ms">
+              <div class="hv"><span id="msAge">27</span><span class="u">yrs</span></div>
+              <div class="hl">age</div>
+            </div>
+          </div>
+          <div class="ms-foot">Updated 2 days ago · Dec 18</div>
+          <button class="btn-quiet" id="editMeasureBtn">Update numbers</button>
+        </div>
+
+        <div class="panel-flat reveal">
+          <div class="r-h">Goals & preferences</div>
+          <div class="gb">
+            <div class="g-lbl">Main goal</div>
+            <div class="chips" data-group="goal">
+              <button class="chip active">Build muscle</button>
+              <button class="chip">Get stronger</button>
+              <button class="chip">Lose fat</button>
+              <button class="chip">Just move</button>
+            </div>
+          </div>
+          <div class="gb">
+            <div class="g-lbl">Experience</div>
+            <div class="seg" data-group="exp">
+              <button>Beginner</button>
+              <button class="on">Intermediate</button>
+              <button>Advanced</button>
+            </div>
+          </div>
+          <div class="gb">
+            <div class="g-lbl">Training days / week</div>
+            <div class="seg" data-group="days">
+              <button>2-3</button>
+              <button>4-5</button>
+              <button class="on">6-7</button>
+            </div>
+          </div>
+          <div class="gb">
+            <div class="g-lbl">Sex</div>
+            <div class="chips" data-group="sex">
+              <button class="chip">Woman</button>
+              <button class="chip active">Man</button>
+              <button class="chip">Non-binary</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-flat reveal" id="settingsPanel">
+          <div class="r-h">Settings</div>
+          <div class="set-row">
+            <div class="set-info">
+              <div class="set-name">Units · kilograms</div>
+              <div class="set-sub">Off switches everything to pounds</div>
+            </div>
+            <button class="toggle on" data-name="Kilograms" aria-label="Toggle units"></button>
+          </div>
+          <div class="set-row">
+            <div class="set-info">
+              <div class="set-name">Rest timer</div>
+              <div class="set-sub">Auto-starts after every logged set</div>
+            </div>
+            <button class="toggle on" data-name="Rest timer" aria-label="Toggle rest timer"></button>
+          </div>
+          <div class="set-row">
+            <div class="set-info">
+              <div class="set-name">Sound effects</div>
+              <div class="set-sub">Quiet clicks for logs and PRs</div>
+            </div>
+            <button class="toggle" data-name="Sound effects" aria-label="Toggle sounds"></button>
+          </div>
+          <div class="set-row">
+            <div class="set-info">
+              <div class="set-name">Weekly report</div>
+              <div class="set-sub">Your week, every Sunday evening</div>
+            </div>
+            <button class="toggle on" data-name="Weekly report" aria-label="Toggle weekly report"></button>
+          </div>
+          <div class="set-note">✱ Your data lives in this browser. Nothing leaves it.</div>
+        </div>
+
+        <div class="rail-foot reveal">✱ 1RM © 2026 — made for the ones who <b>show up.</b></div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- mantra marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>the rack remembers <b>✱</b> 34 days and counting <b>✱</b> earn the next plate <b>✱</b> rest is
+        training too <b>✱</b> no skipped mondays <b>✱</b> progressive overload <b>✱</b> show up anyway <b>✱</b>
+        trust the process <b>✱</b></span>
+      <span>the rack remembers <b>✱</b> 34 days and counting <b>✱</b> earn the next plate <b>✱</b> rest is
+        training too <b>✱</b> no skipped mondays <b>✱</b> progressive overload <b>✱</b> show up anyway <b>✱</b>
+        trust the process <b>✱</b></span>
     </div>
   </div>
-</nav>
 
-<!-- ============ PROFILE HERO ============ -->
-<section class="wrap">
-  <div class="profile-hero">
-    <div class="av-xl">
-      JB
-      <span class="streak-badge">✱ 21</span>
-    </div>
-    <div class="ph-who">
-      <h1>Jonas <em>Berg</em></h1>
-      <div class="ph-handle">@jonaslifts · joined Mar 2026</div>
-      <p class="ph-bio">Powerlifter chasing a 200 kg squat. Chalk over vibes. Show up anyway.</p>
-      <div class="ph-tags">
-        <span class="ph-tag"><b>✱</b> Advanced</span>
-        <span class="ph-tag">Powerlifting</span>
-        <span class="ph-tag">4–5 days / wk</span>
-        <span class="ph-tag">Get stronger</span>
+  <footer>
+    <div class="wrap"><b>✱</b> 1RM © 2026 — made for the ones who show up.</div>
+  </footer>
+
+  <!-- edit modal -->
+  <div class="modal" id="editModal" aria-hidden="true">
+    <div class="modal-back" data-close></div>
+    <div class="modal-panel">
+      <button class="modal-x" data-close>✕</button>
+      <div class="modal-card">
+        <div class="step-lbl">your profile</div>
+        <h2 class="ob-title">Make it <em>yours.</em></h2>
+        <form id="editForm">
+          <div class="m-grid">
+            <div class="m-field" style="margin-top:0">
+              <label>First name</label>
+              <input type="text" id="efFirst" value="Alex">
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label>Last name</label>
+              <input type="text" id="efLast" value="Kowalski">
+            </div>
+          </div>
+          <div class="m-field">
+            <label>Username</label>
+            <input type="text" id="efUser" value="alexk_fit">
+          </div>
+          <div class="m-field">
+            <label>Email</label>
+            <input type="email" id="efEmail" value="alex@example.com">
+          </div>
+          <div class="m-grid">
+            <div class="m-field" style="margin-top:0">
+              <label>Height · cm</label>
+              <input type="number" id="efHeight" value="182">
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label>Weight · kg</label>
+              <input type="number" step="0.1" id="efWeight" value="84.5">
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label>Body fat · %</label>
+              <input type="number" step="0.1" id="efFat" value="14.2">
+            </div>
+          </div>
+          <button type="submit" class="m-submit">Save changes <span class="arr">→</span></button>
+        </form>
+        <div class="ob-foot">✱ You can update these anytime — the coach recalibrates instantly.</div>
       </div>
-    </div>
-    <div class="ph-acts">
-      <button class="btn-outline">Edit profile <span class="arr">→</span></button>
-      <button class="btn-primary">Share <span class="arr">→</span></button>
     </div>
   </div>
-
-  <!-- ============ STAT STRIP ============ -->
-  <div class="stat-strip">
-    <div class="stat">
-      <div class="num">128<span class="sfx"> sessions</span></div>
-      <div class="lbl">Total workouts</div>
-    </div>
-    <div class="stat">
-      <div class="num">21<span class="sfx"> days</span></div>
-      <div class="lbl">Current streak</div>
-    </div>
-    <div class="stat">
-      <div class="num">47<span class="sfx"> days</span></div>
-      <div class="lbl">Longest streak</div>
-    </div>
-    <div class="stat">
-      <div class="num">12<span class="sfx"> PRs</span></div>
-      <div class="lbl">This month</div>
-    </div>
-    <div class="stat">
-      <div class="num">384<span class="sfx">k kg</span></div>
-      <div class="lbl">Total volume</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ MAIN GRID ============ -->
-<section class="wrap">
-  <div class="prof-grid">
-
-    <!-- ========== MAIN COLUMN ========== -->
-    <div class="prof-main">
-
-      <!-- heatmap -->
-      <div class="panel">
-        <div class="sec-title">
-          Activity · last 16 weeks
-          <span class="extra"><b>32</b> sessions · <b>6</b> rest days</span>
-        </div>
-        <div class="heat" id="heatGrid"></div>
-        <div class="heat-legend">
-          less
-          <i class="l0"></i>
-          <i class="l1"></i>
-          <i class="l2"></i>
-          <i class="l3"></i>
-          <i class="l4"></i>
-          more
-          <span class="gap"></span>
-          <span>hover a square to relive the session</span>
-        </div>
-        <div class="heat-stats">
-          <div class="hs">
-            <div class="hv">48,920<span style="font-size:.55em;font-family:var(--sans);color:var(--muted);margin-left:3px">kg</span></div>
-            <div class="hl">Best week · volume</div>
-          </div>
-          <div class="hs">
-            <div class="hv">6</div>
-            <div class="hl">Best week · sessions</div>
-          </div>
-          <div class="hs">
-            <div class="hv">4.2</div>
-            <div class="hl">Avg sessions / week</div>
-          </div>
-          <div class="hs">
-            <div class="hv">92<span style="font-size:.55em;font-family:var(--sans);color:var(--muted);margin-left:3px">%</span></div>
-            <div class="hl">Consistency</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- personal records -->
-      <div class="panel">
-        <div class="sec-title">
-          Personal records
-          <span class="extra"><b>12</b> new this month</span>
-        </div>
-        <div class="pr-list">
-          <div class="pr-row">
-            <div class="pr-rank">01</div>
-            <div>
-              <div class="pr-name">Back Squat</div>
-              <div class="pr-meta">5 × 5 · last hit Aug 18</div>
-            </div>
-            <div class="pr-weight">120<span class="u">kg</span></div>
-            <div class="pr-when">+10 kg</div>
-          </div>
-          <div class="pr-row">
-            <div class="pr-rank">02</div>
-            <div>
-              <div class="pr-name">Bench Press</div>
-              <div class="pr-meta">5 × 5 · last hit Aug 15</div>
-            </div>
-            <div class="pr-weight">100<span class="u">kg</span></div>
-            <div class="pr-when">+2.5 kg</div>
-          </div>
-          <div class="pr-row">
-            <div class="pr-rank">03</div>
-            <div>
-              <div class="pr-name">Deadlift</div>
-              <div class="pr-meta">3 × 5 · last hit Aug 12</div>
-            </div>
-            <div class="pr-weight">180<span class="u">kg</span></div>
-            <div class="pr-when">+5 kg</div>
-          </div>
-          <div class="pr-row">
-            <div class="pr-rank">04</div>
-            <div>
-              <div class="pr-name">Overhead Press</div>
-              <div class="pr-meta">4 × 6 · last hit Aug 10</div>
-            </div>
-            <div class="pr-weight">65<span class="u">kg</span></div>
-            <div class="pr-when">+2.5 kg</div>
-          </div>
-          <div class="pr-row">
-            <div class="pr-rank">05</div>
-            <div>
-              <div class="pr-name">Barbell Row</div>
-              <div class="pr-meta">4 × 8 · last hit Aug 08</div>
-            </div>
-            <div class="pr-weight">90<span class="u">kg</span></div>
-            <div class="pr-when">+5 kg</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- recent activity -->
-      <div class="panel">
-        <div class="sec-title">
-          Recent activity
-          <span class="extra">last 8 sessions</span>
-        </div>
-        <div class="act-list">
-          <div class="act-row">
-            <div class="act-date"><div class="d">18</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Leg day — everything heavy</div>
-              <div class="s"><b>✱ strength</b> · 5 exercises · 68 min · 8,420 kg</div>
-            </div>
-            <div class="act-tag pr">✱ 2 PRs</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">15</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Push day — bench focus</div>
-              <div class="s"><b>✱ strength</b> · 4 exercises · 54 min · 5,120 kg</div>
-            </div>
-            <div class="act-tag pr">✱ PR</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">13</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Zone 2 recovery</div>
-              <div class="s"><b>✱ cardio</b> · 5K run · 41 min · 6.4 km</div>
-            </div>
-            <div class="act-tag">cardio</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">12</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Pull day — deadlift heavy</div>
-              <div class="s"><b>✱ strength</b> · 5 exercises · 72 min · 9,240 kg</div>
-            </div>
-            <div class="act-tag pr">✱ PR</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">10</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Upper body accessory</div>
-              <div class="s"><b>✱ strength</b> · 6 exercises · 48 min · 3,810 kg</div>
-            </div>
-            <div class="act-tag pr">✱ PR</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">08</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Back & biceps</div>
-              <div class="s"><b>✱ strength</b> · 5 exercises · 58 min · 4,620 kg</div>
-            </div>
-            <div class="act-tag pr">✱ PR</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">06</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Squat technique day</div>
-              <div class="s"><b>✱ strength</b> · 4 exercises · 52 min · 4,180 kg</div>
-            </div>
-            <div class="act-tag">technique</div>
-          </div>
-          <div class="act-row">
-            <div class="act-date"><div class="d">04</div><div class="m">Aug</div></div>
-            <div class="act-body">
-              <div class="t">Long run — 10K</div>
-              <div class="s"><b>✱ cardio</b> · 10K · 54 min · 10.0 km</div>
-            </div>
-            <div class="act-tag">cardio</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========== SIDE COLUMN ========== -->
-    <aside class="prof-side">
-
-      <!-- body stats -->
-      <div class="side-card">
-        <div class="sec-title">Body measurements</div>
-        <div class="meas-grid">
-          <div class="meas-item">
-            <div class="l">Height</div>
-            <div class="v">182<span class="u">cm</span></div>
-          </div>
-          <div class="meas-item">
-            <div class="l">Weight</div>
-            <div class="v">84.5<span class="u">kg</span></div>
-          </div>
-          <div class="meas-item">
-            <div class="l">Body fat</div>
-            <div class="v">14.2<span class="u">%</span></div>
-          </div>
-          <div class="meas-item">
-            <div class="l">Age</div>
-            <div class="v">28</div>
-          </div>
-        </div>
-        <div class="heat-stats" style="margin-top:18px">
-          <div class="hs">
-            <div class="hv">23.9</div>
-            <div class="hl">BMI</div>
-          </div>
-          <div class="hs">
-            <div class="hv">−1.2<span style="font-size:.6em;color:var(--muted)">kg</span></div>
-            <div class="hl">30-day delta</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- goals -->
-      <div class="side-card">
-        <div class="sec-title">Current goals</div>
-        <div class="goal-row">
-          <div class="gl">
-            <div class="gn">Squat 140 kg</div>
-            <div class="gt">Target · Sep 30</div>
-            <div class="prog-bar"><i style="width:86%"></i></div>
-          </div>
-          <div class="gv">120 kg</div>
-        </div>
-        <div class="goal-row">
-          <div class="gl">
-            <div class="gn">Bench 110 kg</div>
-            <div class="gt">Target · Oct 15</div>
-            <div class="prog-bar"><i style="width:91%"></i></div>
-          </div>
-          <div class="gv">100 kg</div>
-        </div>
-        <div class="goal-row">
-          <div class="gl">
-            <div class="gn">Deadlift 200 kg</div>
-            <div class="gt">Target · Nov 01</div>
-            <div class="prog-bar"><i style="width:90%"></i></div>
-          </div>
-          <div class="gv">180 kg</div>
-        </div>
-        <div class="goal-row">
-          <div class="gl">
-            <div class="gn">30-day streak</div>
-            <div class="gt">Keep showing up</div>
-            <div class="prog-bar"><i style="width:70%"></i></div>
-          </div>
-          <div class="gv">21 / 30</div>
-        </div>
-      </div>
-
-      <!-- training split -->
-      <div class="side-card">
-        <div class="sec-title">This week's split</div>
-        <div class="split-grid">
-          <div class="split-item"><span class="k">Push</span><span class="v">2</span></div>
-          <div class="split-item"><span class="k">Pull</span><span class="v">2</span></div>
-          <div class="split-item"><span class="k">Legs</span><span class="v">2</span></div>
-          <div class="split-item"><span class="k">Cardio</span><span class="v">1</span></div>
-        </div>
-        <div class="heat-stats" style="margin-top:16px">
-          <div class="hs">
-            <div class="hv">7</div>
-            <div class="hl">Sessions</div>
-          </div>
-          <div class="hs">
-            <div class="hv">6h 12m</div>
-            <div class="hl">Total time</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- favorites -->
-      <div class="side-card">
-        <div class="sec-title">Favorite lifts</div>
-        <div class="act-list" style="gap:0">
-          <div class="act-row" style="padding:10px 0">
-            <div style="font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);font-size:1.1rem">01</div>
-            <div class="act-body">
-              <div class="t" style="font-size:14px">Back Squat</div>
-              <div class="s">logged 34× · 120 kg PR</div>
-            </div>
-          </div>
-          <div class="act-row" style="padding:10px 0">
-            <div style="font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);font-size:1.1rem">02</div>
-            <div class="act-body">
-              <div class="t" style="font-size:14px">Bench Press</div>
-              <div class="s">logged 31× · 100 kg PR</div>
-            </div>
-          </div>
-          <div class="act-row" style="padding:10px 0">
-            <div style="font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);font-size:1.1rem">03</div>
-            <div class="act-body">
-              <div class="t" style="font-size:14px">Deadlift</div>
-              <div class="s">logged 28× · 180 kg PR</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </aside>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer>
-  ✱ 1RM © 2026 — made for the ones who show up.
-</footer>
 
 </body>
+
 </html>
+
 <script type="module" src="../scripts/profile.js"></script>

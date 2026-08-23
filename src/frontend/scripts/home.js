@@ -186,7 +186,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(
 /* ---------- TODO: profile / settings / sign out ---------- */
 $$('[data-profile]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault(); closeDrawer();
-    // TODO: open the profile page, e.g. location.href = 'profile.html';
+    window.location.href = "profile.html"
 }));
 $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
