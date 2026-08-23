@@ -52,4 +52,6 @@ let register = async (user) => {
 
 let logout = () => {
     localStorage.removeItem('current_user')
+    localStorage.removeItem('current_user_workout')
+    localStorage.removeItem('current_user_workout_incomplete')
 }

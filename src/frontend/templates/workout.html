@@ -211,16 +211,7 @@
                 <button class="ex-del" data-del aria-label="Remove exercise">✕</button>
             </div>
             <div class="ex-last" data-bind="last"></div>
-            <div class="sets">
-                <div class="sets-head"><span>set</span><span>last</span><span>kg</span><span>reps</span><span
-                        class="sh-done">✓</span></div>
-                <div class="set-row">
-                    <span class="s-no">1</span><span class="s-last">—</span>
-                    <input class="s-kg" type="number" inputmode="decimal" placeholder="kg">
-                    <input class="s-reps" type="number" inputmode="numeric" placeholder="reps">
-                    <button class="done-btn" data-done aria-label="Complete set">✓</button>
-                </div>
-            </div>
+            <div class="sets"></div>
             <div class="ex-foot">
                 <button class="add-set" data-addset>+ add set</button>
                 <button class="note-btn" data-note>✱ add note</button>
@@ -230,6 +221,8 @@
             </div>
         </article>
     </template>
+
+    <div id="toastZone" class="toast-zone" aria-live="polite"></div>
 
 </body>
 

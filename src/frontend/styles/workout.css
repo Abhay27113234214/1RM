@@ -1011,3 +1011,183 @@
          transition-duration: .01ms !important
      }
  }
+
+
+ .toast-zone {
+     position: fixed;
+     top: 78px;
+     right: 20px;
+     z-index: 200;
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     pointer-events: none
+ }
+
+ .toast {
+     pointer-events: auto;
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     align-items: flex-start;
+     gap: 12px;
+     min-width: 270px;
+     max-width: 340px;
+     background: var(--ink);
+     color: var(--surface);
+     border-radius: 14px;
+     padding: 14px 38px 16px 16px;
+     box-shadow: 0 14px 38px rgba(25, 23, 19, .3);
+     transform: translateX(calc(100% + 30px));
+     animation: toastIn .5s var(--ease) forwards;
+     /* height collapse for the exit */
+     transition: height .38s var(--ease),
+         margin-top .38s var(--ease),
+         padding .38s var(--ease),
+         opacity .3s ease
+ }
+
+ .toast.bye {
+     animation: toastOut .42s var(--ease) forwards;
+     pointer-events: none
+ }
+
+ @keyframes toastIn {
+     to {
+         transform: none
+     }
+ }
+
+ @keyframes toastOut {
+     0% {
+         opacity: 1;
+         transform: translateX(0)
+     }
+
+     100% {
+         opacity: 0;
+         transform: translateX(calc(100% + 30px)) rotate(3deg)
+     }
+ }
+
+ .t-star {
+     color: var(--accent);
+     font-size: 16px;
+     line-height: 1.3;
+     flex-shrink: 0;
+     animation: spinSlow 6s linear infinite
+ }
+
+ .t-body {
+     display: flex;
+     flex-direction: column;
+     gap: 2px
+ }
+
+ .t-title {
+     font-size: 11px;
+     letter-spacing: .18em;
+     text-transform: uppercase;
+     color: var(--accent)
+ }
+
+ .t-msg {
+     font-size: 13.5px;
+     line-height: 1.45;
+     color: rgba(251, 249, 242, .82)
+ }
+
+ .t-x {
+     position: absolute;
+     top: 8px;
+     right: 10px;
+     background: none;
+     border: none;
+     color: rgba(251, 249, 242, .45);
+     font-size: 11px;
+     cursor: pointer;
+     padding: 4px;
+     transition: color .2s
+ }
+
+ .t-x:hover {
+     color: var(--surface)
+ }
+
+ .t-bar {
+     position: absolute;
+     left: 0;
+     bottom: 0;
+     height: 3px;
+     width: 100%;
+     transform-origin: left;
+     animation: toastBar linear forwards
+ }
+
+ .t-ok .t-bar {
+     background: #1E9E6A
+ }
+
+ .t-ok .t-title {
+     color: #3fbf85
+ }
+
+ .t-err .t-bar {
+     background: var(--accent)
+ }
+
+ @keyframes toastBar {
+     from {
+         transform: scaleX(1)
+     }
+
+     to {
+         transform: scaleX(0)
+     }
+ }
+
+ @media(max-width: 480px) {
+     .toast-zone {
+         top: auto;
+         bottom: 16px;
+         right: 12px;
+         left: 12px
+     }
+
+     .toast {
+         max-width: none;
+         width: 100%
+     }
+ }
+
+
+
+
+ .set-row {
+     --w-kg: 72px;
+     --w-reps: 62px;
+     --w-time: 72px;
+     --w-dist: 72px;
+     display: grid;
+     /* --cols is set per-card by JS based on the type; fallback = the classic kg+reps layout */
+     grid-template-columns: var(--cols, 28px minmax(0, 1fr) var(--w-kg) var(--w-reps) 38px 28px);
+     gap: 7px;
+     align-items: center
+ }
+
+ .s-kg:focus,
+ .s-reps:focus,
+ .s-time:focus,
+ .s-dist:focus {
+     outline: none;
+     border-color: var(--accent)
+ }
+
+ .sets-head,
+ .set-row {
+     --w-kg: 90px;
+     --w-reps: 80px;
+     --w-time: 84px;
+     --w-dist: 84px;
+     gap: 10px
+ }
