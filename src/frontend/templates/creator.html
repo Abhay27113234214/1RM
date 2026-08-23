@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>1RM ✱ Creator</title>
+<link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF4A11'>✱</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600-italic.css">
+<link rel="stylesheet" href="../styles/home.css">
+<link rel="stylesheet" href="../styles/creator.css">
+</head>
+<body>
+
+<!-- ═══════════ nav (same as discover) ═══════════ -->
+<header class="nav-bar" id="navBar">
+    <div class="wrap nav">
+        <a class="logo" href="home.html"><span class="mark">✱</span>1RM</a>
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="discover.html" class="here">Discover</a>
+        </nav>
+        <div class="nav-acts">
+            <a class="plus-btn" href="workout.html" aria-label="Log a session">+</a>
+            <button class="av-btn" data-profile aria-label="My profile"><span class="av current_user_initials">AA</span></button>
+            <button class="burger" id="burgerBtn" aria-label="Menu"><i></i><i></i><i></i></button>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════ slide-in menu (same as discover) ═══════════ -->
+<div class="drawer-back" id="drawerBack"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+        <span class="av lg current_user_initials">AA</span>
+        <div class="who">
+            <div class="p-name current_user_name">Lifter</div>
+            <div class="drawer-streak current_user_username">@lifter</div>
+        </div>
+        <button class="drawer-x" id="drawerX" aria-label="Close menu">✕</button>
+    </div>
+    <nav class="drawer-nav">
+        <a href="home.html">Home</a>
+        <a href="discover.html" class="here">Discover</a>
+        <a href="profile.html">My Profile</a>
+    </nav>
+    <a class="drawer-cta" href="workout.html"><span class="dc-plus">+</span>Log a session<span class="arr">→</span></a>
+    <div class="drawer-foot">
+        <div class="links"><a href="#" data-todo="settings">Settings</a><a href="#" data-todo="signout">Sign out</a></div>
+        <div class="copy"><b>✱</b> 1RM © 2026 — made for the ones who show up.</div>
+    </div>
+</aside>
+
+<main class="wrap">
+
+    <!-- back bar -->
+    <div class="w-top reveal">
+        <a class="back-btn" href="discover.html"><span class="arr">←</span> Back to Discover</a>
+        <span class="w-crumb" id="crumb">session</span>
+    </div>
+
+    <section class="home">
+        <!-- detail column (injected by creator.js) -->
+        <section class="feed-col" id="detailCol"></section>
+        <!-- rail (injected by creator.js) -->
+        <aside class="rail" id="rail"></aside>
+        <div class="rail-dots"></div>
+    </section>
+
+</main>
+
+<footer>
+    <b>✱</b> 1RM © 2026 — made for the ones who show up.
+</footer>
+
+<script type="module" src="../scripts/creator.js"></script>
+</body>
+</html>

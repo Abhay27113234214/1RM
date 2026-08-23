@@ -4,10 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>1RM ✱ Discover</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- home.css first — cards are built ONLY with home-page classes -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF4A11'>✱</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400-italic.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600-italic.css">
 <link rel="stylesheet" href="../styles/home.css" />
 <link rel="stylesheet" href="../styles/discover.css" />
 </head>
@@ -16,7 +20,7 @@
 <!-- ============ NAV ============ -->
 <header class="nav-bar" id="navBar">
   <div class="wrap nav">
-    <a href="home.html" class="logo"><span>1RM</span><span class="mark">✱</span></a>
+    <a href="home.html" class="logo"><span class="mark">✱</span><span>1RM</span></a>
     <nav class="nav-links">
       <a href="home.html">Home</a>
       <a href="discover.html" class="here">Discover</a>
@@ -24,7 +28,7 @@
     <div class="nav-acts">
       <button class="plus-btn" aria-label="New workout">+</button>
       <button class="av-btn" data-profile>
-        <span class="av sm current_user_initials">A</span>
+        <span class="av current_user_initials">A</span>
       </button>
       <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
         <i></i><i></i><i></i>
@@ -45,9 +49,9 @@
     <button class="drawer-x" id="drawerX" aria-label="Close menu">✕</button>
   </div>
   <nav class="drawer-nav">
-    <a href="home.html">Home</a>
-    <a href="discover.html" class="here">Discover</a>
-    <a href="#" data-profile>Profile</a>
+    <a href="home.html" class="here">Home</a>
+    <a href="discover.html">Discover</a>
+    <a href="profile.html" data-profile>My profile</a> <!-- TODO: my profile vaala page bhi banana hai abhi to yrrrrr -->
   </nav>
   <a href="#" class="drawer-cta" data-todo="settings">
     <span class="dc-plus">✱</span>
@@ -66,7 +70,7 @@
 
   <!-- ============ GREETING (same pattern as home) ============ -->
   <section class="greet reveal">
-    <div class="eyebrow">Public profiles only</div>
+    <div class="eyebrow">Discover Feed</div>
     <h1>Discover <em>the open gym</em></h1>
     <p class="greet-sub">
       Follow creators worth copying, see how they train, and collab on a
@@ -164,7 +168,7 @@
         </div>
       </div>
 
-      <div class="rail-foot">✱ <b>1RM</b> — only public profiles appear here.</div>
+      <div class="rail-foot">✱ <b>1RM</b></div>
     </aside>
 
     <div class="rail-dots"></div>
