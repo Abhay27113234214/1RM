@@ -9,14 +9,113 @@ import { logout } from "../../backend/auth.js";
      #loadMore             → pagination
    ============================================================ */
 
+
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 // similar arrow functions for quick dom element selection
 
+function getMessageAndAct() {
+    let params = new URLSearchParams(window.location.search)
+    let message = params.get("message")
+    let source = params.get("from")
+    if (source == "workout") {
+        if (message == "workout_completed") {
+            showToast("Workout Completed")
+            localStorage.removeItem('current_user_workout')
+        }
+    }
+}
+getMessageAndAct()
+
 const current_user = JSON.parse(localStorage.getItem('current_user'))
 if (!current_user) {
-    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&status=error"
+    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
 }
+
+function showToast(message, type = 'ok', duration = 3800) {
+    const zone = $('#toastZone');
+    const isError = type === 'error';
+
+    const t = document.createElement('div');
+    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
+    t.innerHTML =
+        '<span class="t-star">✱</span>' +
+        '<div class="t-body">' +
+        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
+        '<span class="t-msg">' + message + '</span>' +
+        '</div>' +
+        '<button class="t-x" aria-label="Dismiss">✕</button>' +
+        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
+    zone.appendChild(t);
+
+    let gone = false;
+    function dismiss() {
+        if (gone) return;
+        gone = true;
+        clearTimeout(timer);
+
+        t.style.height = t.offsetHeight + 'px';
+
+        requestAnimationFrame(() => {
+            // slide aur fade out vali annimation
+            t.classList.add('bye');
+            t.style.height = '0px';
+            t.style.paddingTop = '0';
+            t.style.paddingBottom = '0';
+            t.style.marginTop = '-10px';
+        });
+
+        t.addEventListener('animationend', () => t.remove());
+        setTimeout(() => t.remove(), 500); // safety k liye 
+    }
+
+    const timer = setTimeout(dismiss, duration);
+    t.querySelector('.t-x').addEventListener('click', dismiss);
+}
+
+
+// this is the resume workout floater
+function checkResumeFloat() {
+    const float = $('#resumeFloat');
+    if (!float) return;
+
+    let active = null;
+    try { active = JSON.parse(localStorage.getItem('current_user_workout')); } catch (e) { }
+
+    // if there is no saved user workout in the local storage then stop 
+    if (!active) {
+        float.hidden = true;
+        float.classList.remove('on');
+        return;
+    }
+
+    // a workout is saved but nothing is logged then remove the saved workout
+    if (!active.exercises || Object.keys(active.exercises).length === 0) {
+        localStorage.removeItem('current_user_workout');
+        float.hidden = true;
+        float.classList.remove('on');
+        return;
+    }
+
+    $('#rfEx').textContent = Object.keys(active.exercises).at(-1);
+    if (!active.startedAt) $('#rfTimeWrap').style.display = 'none';
+
+    float.hidden = false;
+    setTimeout(() => float.classList.add('on'), 350);
+
+    if (active.time) $('#rfTime').textContent = active.time;
+}
+
+// first load
+checkResumeFloat();
+
+// yeh part nahi chal raha, abhi bhi resume workout vaala button reload krne pe hi show ho raha hai
+// re-run whenever this page becomes "current" again  ← the part you were missing
+window.addEventListener('pageshow', checkResumeFloat);            // back/forward cache + reload
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') checkResumeFloat();
+});
+
 
 function dynamic_user_data_replacing() {
     // for the initials 
@@ -41,6 +140,7 @@ function dynamic_user_data_replacing() {
 }
 dynamic_user_data_replacing()
 
+
 /* nav border on scroll */
 const navBar = $('#navBar');
 const onScroll = () => navBar.classList.toggle('scrolled', window.scrollY > 10);
@@ -50,10 +150,17 @@ onScroll();
 /* date line */
 $('#todayLine').innerHTML = '<b>✱</b> ' + new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + ' <span class="live-dot"></span>';
 
-/* ---------- start workout card: only if nothing logged today ---------- */
+// start workout card, but only shown when the user who is logged in has had a workout today 
 // TODO: replace with your real check (your store / API)
-const hasWorkoutToday = false;
-if (hasWorkoutToday) $('#startWorkout').hidden = true;
+let feed = $("#feed")
+const date = new Date().toISOString().split("T")[0];
+const url = `http://localhost:3000/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
+let workout_response = await fetch(url)
+let workouts = await workout_response.json()
+const hasWorkoutToday = workouts.length >= 1;
+if (hasWorkoutToday) {
+    $('#startWorkout').hidden = true;
+}
 
 /* reveal on scroll */
 const io = new IntersectionObserver(es => es.forEach(x => {
@@ -149,42 +256,41 @@ if (railEl) {
     syncDots();
 }
 
+// this is function is for when the user has not completed his/her profile and we are to show him/her an option 
+// to complete it on the home page
 (function () {
-  const banner = $('#profileBanner');
-  if (!banner) return;
+    const banner = $('#profileBanner');
+    if (!banner) return;
 
-  let user = null;
-  try { user = JSON.parse(localStorage.getItem('current_user')); } catch (e) {}
-  if (!user) return;
+    let user = null;
+    try { user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
+    if (!user) return;
 
-  const userKey = user.email || user.username || user.id || 'me';
+    const userKey = user.email || user.username || user.id || 'me';
 
-  if (user.incomplete === true) {
-    banner.hidden = false;
-  }
+    if (user.incomplete === true) {
+        banner.hidden = false;
+    }
 
-  /* ✕ — dismiss, and remember it for this user */
-  $('#profileBannerX').addEventListener('click', () => {
-    hideBanner();
-  });
-
-  /* banner click — open your profile-completion flow */
-  $('#profileBannerLink').addEventListener('click', e => {
-    e.preventDefault();
-    // TODO: route to your measurements/goals setup, e.g.:
-    // location.href = 'profile.html?setup=1';
-  });
-
-  function hideBanner() {
-    /* lock the height, then collapse smoothly so the page doesn't jump */
-    banner.style.height = banner.offsetHeight + 'px';
-    requestAnimationFrame(() => {
-      banner.classList.add('bye');
-      banner.style.height = '0px';
-      banner.style.marginTop = '0';
-      banner.style.paddingTop = '0';
-      banner.style.paddingBottom = '0';
+    $('#profileBannerX').addEventListener('click', () => {
+        hideBanner();
     });
-    setTimeout(() => banner.remove(), 450); /* safety net */
-  }
+
+    $('#profileBannerLink').addEventListener('click', e => {
+        e.preventDefault();
+        // TODO: route to your measurements/goals setup, e.g.:
+        // location.href = 'profile.html?setup=1';
+    });
+
+    function hideBanner() {
+        banner.style.height = banner.offsetHeight + 'px';
+        requestAnimationFrame(() => {
+            banner.classList.add('bye');
+            banner.style.height = '0px';
+            banner.style.marginTop = '0';
+            banner.style.paddingTop = '0';
+            banner.style.paddingBottom = '0';
+        });
+        setTimeout(() => banner.remove(), 450); 
+    }
 })();

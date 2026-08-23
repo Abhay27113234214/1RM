@@ -201,6 +201,43 @@
         </div>
     </div>
 
+    <!-- ═══════════ finish dialog: title / description / photos ═══════════ -->
+<div class="modal" id="finishModal" aria-hidden="true">
+  <div class="modal-back" data-close></div>
+  <div class="modal-panel">
+    <button class="modal-x" data-close aria-label="Close">✕</button>
+    <div class="modal-card">
+      <div class="step-lbl">wrap it up</div>
+      <h3 class="fm-title">Name <em>this one.</em></h3>
+      <p class="fm-sub">A title, a few words, photos if you want — then it goes in the ledger.</p>
+      <div class="fm-stats" id="fmStats"></div>
+
+      <div class="fm-field">
+        <label for="fmTitle">Title</label>
+        <input id="fmTitle" type="text" maxlength="60" placeholder="Leg day — everything heavy.">
+      </div>
+
+      <div class="fm-field">
+        <label for="fmDesc">Description · optional</label>
+        <textarea id="fmDesc" rows="3" maxlength="280" placeholder="How did it feel? Worth remembering?"></textarea>
+      </div>
+
+      <div class="fm-field">
+        <label>Photos · optional</label>
+        <div class="fm-shots" id="fmShots">
+          <label class="fm-add" for="fmPhotos">+<span>add photo</span></label>
+        </div>
+        <input id="fmPhotos" type="file" accept="image/*" multiple hidden>
+      </div>
+
+      <div class="fm-row">
+        <button class="fm-skip" id="fmSkip">Skip — save as is</button>
+        <button class="fm-save" id="fmSave">Save workout <span class="arr">→</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- ═══════════ exercise template — for your JS ═══════════ -->
     <template id="exTpl">
         <article class="ex-card">
@@ -211,16 +248,7 @@
                 <button class="ex-del" data-del aria-label="Remove exercise">✕</button>
             </div>
             <div class="ex-last" data-bind="last"></div>
-            <div class="sets">
-                <div class="sets-head"><span>set</span><span>last</span><span>kg</span><span>reps</span><span
-                        class="sh-done">✓</span></div>
-                <div class="set-row">
-                    <span class="s-no">1</span><span class="s-last">—</span>
-                    <input class="s-kg" type="number" inputmode="decimal" placeholder="kg">
-                    <input class="s-reps" type="number" inputmode="numeric" placeholder="reps">
-                    <button class="done-btn" data-done aria-label="Complete set">✓</button>
-                </div>
-            </div>
+            <div class="sets"></div>
             <div class="ex-foot">
                 <button class="add-set" data-addset>+ add set</button>
                 <button class="note-btn" data-note>✱ add note</button>
@@ -230,6 +258,8 @@
             </div>
         </article>
     </template>
+
+    <div id="toastZone" class="toast-zone" aria-live="polite"></div>
 
 </body>
 

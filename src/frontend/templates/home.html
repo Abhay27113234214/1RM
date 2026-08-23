@@ -29,7 +29,8 @@
             </nav>
             <div class="nav-acts">
                 <a class="plus-btn" href="workout.html" aria-label="Log a session" title="Log a session">+</a>
-                <button class="av-btn" data-profile aria-label="My profile"><span  class="av current_user_initials">JB</span></button> 
+                <button class="av-btn" data-profile aria-label="My profile"><span
+                        class="av current_user_initials">JB</span></button>
                 <button class="burger" id="burgerBtn" aria-label="Menu"><i></i><i></i><i></i></button>
             </div>
         </div>
@@ -64,9 +65,12 @@
             <a href="discover.html">Discover</a>
             <a href="#" data-profile>My profile</a> <!-- TODO: my profile vaala page bhi banana hai abhi to yrrrrr -->
         </nav>
-        <a class="drawer-cta" href="workout.html"><span class="dc-plus">+</span>Log a session<span class="arr">→</span></a>
+        <a class="drawer-cta" href="workout.html"><span class="dc-plus">+</span>Log a session<span
+                class="arr">→</span></a>
         <div class="drawer-foot">
-            <div class="links"><a href="#" data-todo="settings">Settings <!-- TODO: Settings vaala page bhi banana hai yrr --> </a><a href="#" data-todo="signout">Sign out</a></div>
+            <div class="links"><a href="#" data-todo="settings">Settings
+                    <!-- TODO: Settings vaala page bhi banana hai yrr --> </a><a href="#" data-todo="signout">Sign
+                    out</a></div>
             <div class="copy"><b>✱</b> 1RM © 2026 — made for the ones who show up.</div>
         </div>
     </aside>
@@ -387,6 +391,20 @@
             </article>
         </div>
     </template>
+
+    <div id="toastZone" class="toast-zone" aria-live="polite"></div>
+
+    <!-- ═══════════ incomplete-workout floater — JS reveals it when a session is active ═══════════ -->
+    <a class="resume-float" id="resumeFloat" href="workout.html?message=resume_workout&from=home&status=success" hidden aria-label="Resume your workout">
+        <span class="rf-star">✱</span>
+        <span class="rf-body">
+            <span class="rf-lbl">workout in progress <span class="live-dot"></span></span>
+            <span class="rf-msg"><b id="rfEx">Your session</b> isn't finished<span id="rfTimeWrap"> · <span class="rt"
+                        id="rfTime">0:00</span> in</span></span>
+        </span>
+        <span class="rf-go">Resume <span class="arr">→</span></span>
+    </a>
+
 </body>
 
 </html>
