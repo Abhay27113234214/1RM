@@ -438,7 +438,7 @@ $('#loadMore').addEventListener('click', () => {
   // TODO: replace with real pagination
 });
 
-/* ---------- rail → mobile carousel dots (same as home.js) ---------- */
+/* ---------- rail → mobile carousel dots ---------- */
 const railEl = document.querySelector('.home .rail');
 if (railEl) {
   const slides = Array.from(railEl.children).filter(c => !c.classList.contains('rail-foot'));
@@ -458,3 +458,35 @@ if (railEl) {
   window.addEventListener('resize', syncDots);
   syncDots();
 }
+
+/* ============================================================
+Tapping a creator card now opens creator.html
+============================================================ */
+(function () {
+  const feedEl = document.querySelector('#feed');
+  if (!feedEl) return;
+
+  const openCreator = shell => {
+    const id = shell.dataset.id;
+    if (id) window.location.href = 'creator.html?id=' + id;
+  };
+
+  /* click anywhere on a card (except its inner controls) */
+  feedEl.addEventListener('click', e => {
+    const post = e.target.closest('.post');
+    if (!post) return;
+    if (e.target.closest('button, a, input')) return; // Spot/Follow/Collab/Comment/Share keep working
+    const shell = post.closest('.post-shell');
+    if (shell) openCreator(shell);
+  });
+
+  /* keyboard: Enter / Space on a focused card */
+  feedEl.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const post = e.target.closest('.post');
+    if (!post || e.target.closest('button, a, input')) return;
+    e.preventDefault();
+    const shell = post.closest('.post-shell');
+    if (shell) openCreator(shell);
+  });
+})();
