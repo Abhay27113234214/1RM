@@ -473,33 +473,119 @@ document.addEventListener('click', e => {
     // this code above is removing the set from my session data
 });
 
-// finish button 
-$('#finishBtn').addEventListener('click', async () => {
-    // TODO: collect sets + notes, POST the session, set hasWorkoutToday = true, then:
-    if (!workout.exercises) {
-        showToast("Workout Cannot be empty!", "error")
+
+// the finish workout functionality
+const finishModal = $('#finishModal');
+let photoData = []; // data-URL previews; becomes workout.photos on save
+
+// is function se vo dialogue open ho jaata hai 
+$('#finishBtn').addEventListener('click', () => {
+    if (!workout.exercises || !Object.keys(workout.exercises).length) {
+        showToast("Workout Cannot be empty!", "error") // agr koi workout log nahi kiya to 
         return
+    }
+    fillFinishStats();
+    finishModal.classList.add('open');
+    finishModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => $('#fmTitle').focus({ preventScroll: true }), 350);
+});
+
+// dialogue close karne k liye 
+function closeFinish() {
+    finishModal.classList.remove('open');
+    finishModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+finishModal.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeFinish(); }); // agr banda cross vaala button dabaye 
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && finishModal.classList.contains('open')) closeFinish(); }); // agr banda escape key dabaye
+
+// thodi si summary jo finish workout vaale dialogue mein show hoti hai 
+function fillFinishStats() {
+    const doneRows = exList.querySelectorAll('.set-row.done'); // vo saari rows ko select karo jo done hai
+    let vol = 0;
+    doneRows.forEach(r => {
+        vol += (parseFloat(r.querySelector('[data-field="kg"]')?.value) || 0) *
+               (parseFloat(r.querySelector('[data-field="reps"]')?.value) || 0);
+    }); // volume calculate ho rhi hai
+    $('#fmStats').innerHTML =
+        '<span>time <b>' + fmtClock(Date.now() - startedAt) + '</b></span>' +
+        '<span>sets <b>' + doneRows.length + '</b></span>' +
+        '<span>volume <b>' + Math.round(vol).toLocaleString('en-US') + ' kg</b></span>';
+}
+
+// saari photos k preview dikhane vaale function 
+const fmPhotos = $('#fmPhotos');
+fmPhotos.addEventListener('change', () => { // change is an event when the value of an input field changed and the user leaves/commits the field
+    [...fmPhotos.files].forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader(); // FileReader is a API for reading files 
+        reader.onload = () => { photoData.push(reader.result); renderShots(); }; 
+        // reading a file is an asynchronous operation, so reader.onload is like telling js to do something after the reading of the file is finished 
+        // it is like setting a callback before the operation even begins 
+        reader.readAsDataURL(file); 
+        // so after reading the file as a Data URL (which is a string encoded version of the image), the photoData.push() and renderShots() functions 
+        // are called
+    });
+    fmPhotos.value = ''; // allow re-adding the same file later
+});
+
+function renderShots() {
+    const wrap = $('#fmShots');
+    wrap.querySelectorAll('.fm-shot').forEach(el => el.remove());
+    const add = wrap.querySelector('.fm-add');
+    photoData.forEach((src, i) => {
+        const fig = document.createElement('figure');
+        fig.className = 'fm-shot';
+        fig.innerHTML = '<img src="' + src + '" alt="workout photo">' +
+            '<button type="button" data-rm="' + i + '" aria-label="Remove photo">✕</button>';
+        wrap.insertBefore(fig, add);
+    });
+}
+// photos k previews ko hatane k liye aur agr photo remove krni hai to vo vaali functionality
+$('#fmShots').addEventListener('click', e => {
+    const btn = e.target.closest('[data-rm]');
+    if (!btn) return;
+    photoData.splice(+btn.dataset.rm, 1); // photo ko list se remove kr diya 
+    // + to btn.dataset.rm ki value ko number mein convert kr raha hai aur kuch ni 
+    renderShots();
+});
+
+// actual workout save krne vaala function
+async function submitWorkout(withDetails) {
+    const saveBtn = $('#fmSave');
+    saveBtn.disabled = true;
+
+    if (withDetails) {
+        workout['title'] = $('#fmTitle').value.trim();
+        workout['description'] = $('#fmDesc').value.trim();
+        workout['photos'] = photoData; 
+        // abhi k liye hm photos ko as a Data URL hi save kr rahe hai per mera mnn hai k hm unhe assets meing jaake store kare aur 
+        // fir unka jo url hoga vo hm db.json mein store kare 
+        // TODO
     }
     workout['date'] = new Date().toISOString().split("T")[0]
     workout['user_id'] = current_user.id
     workout['total_time'] = fmtClock(Date.now() - startedAt)
     delete workout.pause_time
-    delete workout.start_time 
+    delete workout.start_time
+
     let response = await fetch("http://localhost:3000/workouts", {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(workout)
     })
     if (response.status === 201) {
         localStorage.removeItem('current_user_workout')
-        workout = {} // emptying the workout object so that when the user exits, the workout that is finished is not stored in the local storage 
+        workout = {}
         window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html?message=workout_completed&from=workout"
     } else {
-        console.log("Some error occured")
+        saveBtn.disabled = false;
+        showToast("Could not save the workout. Try again. Too may photos", "error");
     }
-});
+}
+$('#fmSave').addEventListener('click', () => submitWorkout(true));
+$('#fmSkip').addEventListener('click', () => submitWorkout(false));
 
 
 function restore_session() {

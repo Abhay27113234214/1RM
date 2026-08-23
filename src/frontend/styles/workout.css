@@ -1191,3 +1191,318 @@
      --w-dist: 84px;
      gap: 10px
  }
+
+
+
+
+
+ /* ---------- finish dialog ---------- */
+ .modal {
+     position: fixed;
+     inset: 0;
+     z-index: 100;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 24px;
+     visibility: hidden;
+     opacity: 0;
+     transition: opacity .3s var(--ease), visibility 0s .3s
+ }
+
+ .modal.open {
+     visibility: visible;
+     opacity: 1;
+     transition: opacity .3s var(--ease)
+ }
+
+ .modal-back {
+     position: absolute;
+     inset: 0;
+     background: rgba(25, 23, 19, .52);
+     backdrop-filter: blur(5px);
+     -webkit-backdrop-filter: blur(5px)
+ }
+
+ .modal-panel {
+     position: relative;
+     width: min(480px, 100%);
+     transform: translateY(22px) scale(.965);
+     transition: transform .45s var(--ease)
+ }
+
+ .modal.open .modal-panel {
+     transform: none
+ }
+
+ .modal-panel::before {
+     content: '';
+     position: absolute;
+     inset: 0;
+     transform: translate(12px, 12px);
+     background: var(--accent);
+     border-radius: 20px
+ }
+
+ .modal-card {
+     position: relative;
+     background: var(--surface);
+     border: 1px solid var(--line);
+     border-radius: 20px;
+     padding: 28px;
+     max-height: min(84vh, 660px);
+     overflow-y: auto
+ }
+
+ .modal-x {
+     position: absolute;
+     top: -12px;
+     right: -12px;
+     z-index: 3;
+     background: var(--surface);
+     border: 1px solid var(--line);
+     width: 34px;
+     height: 34px;
+     border-radius: 50%;
+     cursor: pointer;
+     font-size: 13px;
+     color: var(--muted);
+     transition: .2s;
+     line-height: 1
+ }
+
+ .modal-x:hover {
+     background: var(--accent);
+     color: #fff;
+     border-color: var(--accent)
+ }
+
+ .fm-title {
+     font-family: var(--serif);
+     font-weight: 600;
+     font-size: 2rem;
+     line-height: 1.1;
+     letter-spacing: -.01em;
+     margin-top: 10px
+ }
+
+ .fm-title em {
+     font-style: italic;
+     color: var(--accent)
+ }
+
+ .fm-sub {
+     font-size: 13px;
+     color: var(--muted);
+     margin-top: 8px
+ }
+
+ .fm-stats {
+     display: flex;
+     gap: 18px;
+     flex-wrap: wrap;
+     margin-top: 14px;
+     padding: 12px 14px;
+     border: 1px solid var(--line);
+     border-radius: 12px;
+     background: var(--bg);
+     font-size: 11px;
+     letter-spacing: .12em;
+     text-transform: uppercase;
+     color: var(--muted)
+ }
+
+ .fm-stats b {
+     color: var(--accent)
+ }
+
+ .fm-field {
+     margin-top: 18px
+ }
+
+ .fm-field label {
+     font-size: 11px;
+     letter-spacing: .15em;
+     text-transform: uppercase;
+     color: var(--muted);
+     display: block;
+     margin-bottom: 6px
+ }
+
+ .fm-field input[type=text],
+ .fm-field textarea {
+     width: 100%;
+     background: transparent;
+     border: none;
+     border-bottom: 1.5px solid var(--line);
+     padding: 8px 0;
+     font-size: 15.5px;
+     font-family: var(--sans);
+     color: var(--ink);
+     transition: border-color .3s;
+     border-radius: 0;
+     resize: vertical
+ }
+
+ .fm-field input:focus,
+ .fm-field textarea:focus {
+     outline: none;
+     border-color: var(--accent)
+ }
+
+ .fm-field textarea {
+     min-height: 64px;
+     line-height: 1.5
+ }
+
+ .fm-field ::placeholder {
+     color: var(--muted);
+     opacity: .7
+ }
+
+ /* photos */
+ .fm-shots {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 8px
+ }
+
+ .fm-shot {
+     position: relative;
+     aspect-ratio: 1;
+     border-radius: 12px;
+     overflow: hidden;
+     border: 1px solid var(--line);
+     margin: 0;
+     animation: popIn .35s var(--ease)
+ }
+
+ .fm-shot img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     display: block
+ }
+
+ .fm-shot button {
+     position: absolute;
+     top: 6px;
+     right: 6px;
+     width: 22px;
+     height: 22px;
+     border-radius: 50%;
+     border: none;
+     background: rgba(25, 23, 19, .7);
+     color: #fff;
+     font-size: 10px;
+     cursor: pointer;
+     transition: .2s
+ }
+
+ .fm-shot button:hover {
+     background: var(--accent)
+ }
+
+ .fm-add {
+     aspect-ratio: 1;
+     border: 1.5px dashed rgba(255, 74, 17, .5);
+     border-radius: 12px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 2px;
+     color: var(--accent);
+     font-size: 20px;
+     cursor: pointer;
+     transition: .25s;
+     user-select: none
+ }
+
+ .fm-add span {
+     font-size: 9px;
+     letter-spacing: .14em;
+     text-transform: uppercase;
+     font-weight: 700
+ }
+
+ .fm-add:hover {
+     background: rgba(255, 74, 17, .06);
+     border-color: var(--accent)
+ }
+
+ /* actions */
+ .fm-row {
+     display: flex;
+     gap: 12px;
+     margin-top: 24px
+ }
+
+ .fm-skip {
+     flex: 1;
+     background: transparent;
+     border: 1px solid var(--line);
+     border-radius: 12px;
+     color: var(--muted);
+     font-weight: 700;
+     font-size: 12px;
+     letter-spacing: .1em;
+     text-transform: uppercase;
+     cursor: pointer;
+     transition: .25s
+ }
+
+ .fm-skip:hover {
+     border-color: var(--ink);
+     color: var(--ink)
+ }
+
+ .fm-save {
+     flex: 1.4;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     gap: 9px;
+     background: var(--ink);
+     color: var(--surface);
+     border: none;
+     padding: 14px;
+     border-radius: 12px;
+     font-weight: 700;
+     font-size: 13px;
+     letter-spacing: .12em;
+     text-transform: uppercase;
+     cursor: pointer;
+     transition: background .25s, transform .15s
+ }
+
+ .fm-save:hover {
+     background: var(--accent)
+ }
+
+ .fm-save:active {
+     transform: scale(.98)
+ }
+
+ .fm-save[disabled] {
+     opacity: .6;
+     pointer-events: none
+ }
+
+ .fm-save .arr {
+     transition: transform .25s var(--ease)
+ }
+
+ .fm-save:hover .arr {
+     transform: translateX(4px)
+ }
+
+ @media(max-width: 480px) {
+     .modal-card {
+         padding: 22px
+     }
+
+     .fm-row {
+         flex-direction: column
+     }
+ }
