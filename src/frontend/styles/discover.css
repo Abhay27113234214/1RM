@@ -1,0 +1,68 @@
+/* fix the missing '*' selector from home.css so resets always apply */
+*,*::before,*::after{margin:0;box-sizing:border-box}
+
+/* ---------- verified badge on p-name ---------- */
+.vbadge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:15px;height:15px;margin-left:6px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  font:700 8px/1 var(--sans);font-style:normal;vertical-align:2px;
+}
+
+/* ---------- dark POST button inside the comment box (like home) ---------- */
+.p-cbox .act.post-btn{
+  background:var(--ink);border-color:var(--ink);color:var(--surface);
+}
+.p-cbox .act.post-btn:hover{background:var(--accent);border-color:var(--accent)}
+
+/* ---------- empty state ---------- */
+.d-empty{
+  text-align:center;padding:70px 20px;color:var(--muted);
+  border:1px dashed var(--line);border-radius:20px;background:var(--surface);
+}
+.d-empty b{
+  display:block;margin-bottom:6px;
+  font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:1.5rem;color:var(--ink);
+}
+.d-empty b span{color:var(--accent)}
+
+/* ---------- load-more finished ---------- */
+.btn-quiet.done{pointer-events:none;opacity:.55;border-color:var(--line);color:var(--muted)}
+
+/* ---------- toasts (same markup as index.js) ---------- */
+.toast-zone{
+  position:fixed;top:78px;right:18px;z-index:120;
+  display:grid;gap:10px;width:min(360px,calc(100vw - 36px));
+}
+.toast{
+  position:relative;overflow:hidden;
+  display:flex;gap:11px;align-items:flex-start;
+  background:var(--ink);color:var(--surface);
+  border-radius:14px;padding:14px 14px 16px 16px;
+  box-shadow:0 14px 30px rgba(25,23,19,.22);
+  animation:tIn .45s var(--ease);
+  transition:height .35s var(--ease),opacity .3s,transform .3s,margin-top .35s,padding .35s;
+}
+.toast.t-err{background:#5C1404}
+.toast .t-star{color:var(--accent);font-size:15px;margin-top:1px;flex-shrink:0;animation:pbSpin 8s linear infinite}
+.toast .t-body{flex:1;min-width:0}
+.toast .t-title{
+  display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:2px;
+}
+.toast .t-msg{font-size:13px;line-height:1.45;color:rgba(251,249,242,.85)}
+.toast .t-x{border:none;background:none;color:rgba(251,249,242,.55);cursor:pointer;font-size:11px;padding:2px;flex-shrink:0}
+.toast .t-x:hover{color:#fff}
+.toast .t-bar{
+  position:absolute;left:0;bottom:0;height:3px;width:100%;
+  background:var(--accent);transform-origin:left;animation:tBar linear forwards;
+}
+.toast.bye{opacity:0;transform:translateY(-8px)}
+@keyframes tIn{from{opacity:0;transform:translateY(-12px)}}
+@keyframes tBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+/* ---------- responsive ---------- */
+@media(max-width:720px){
+  .toast-zone{top:auto;bottom:18px;left:18px;right:18px;width:auto}
+}

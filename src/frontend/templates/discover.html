@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>1RM ✱ Discover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- home.css first — cards are built ONLY with home-page classes -->
+<link rel="stylesheet" href="../styles/home.css" />
+<link rel="stylesheet" href="../styles/discover.css" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav-bar" id="navBar">
+  <div class="wrap nav">
+    <a href="home.html" class="logo"><span>1RM</span><span class="mark">✱</span></a>
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="discover.html" class="here">Discover</a>
+    </nav>
+    <div class="nav-acts">
+      <button class="plus-btn" aria-label="New workout">+</button>
+      <button class="av-btn" data-profile>
+        <span class="av sm current_user_initials">A</span>
+      </button>
+      <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ DRAWER ============ -->
+<div class="drawer-back" id="drawerBack"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <span class="av lg current_user_initials">A</span>
+    <div class="who">
+      <div class="p-name current_user_name">Lifter</div>
+      <div class="drawer-streak current_user_username">@lifter</div>
+    </div>
+    <button class="drawer-x" id="drawerX" aria-label="Close menu">✕</button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="home.html">Home</a>
+    <a href="discover.html" class="here">Discover</a>
+    <a href="#" data-profile>Profile</a>
+  </nav>
+  <a href="#" class="drawer-cta" data-todo="settings">
+    <span class="dc-plus">✱</span>
+    <span>Settings &amp; sign out</span>
+    <span class="arr">→</span>
+  </a>
+  <div class="drawer-foot">
+    <div class="links">
+      <a href="#">About</a><a href="#">Privacy</a><a href="#" data-todo="signout">Sign out</a>
+    </div>
+    <div class="copy">© 2026 <b>1RM</b> · Built for lifters</div>
+  </div>
+</aside>
+
+<main class="wrap">
+
+  <!-- ============ GREETING (same pattern as home) ============ -->
+  <section class="greet reveal">
+    <div class="eyebrow">Public profiles only</div>
+    <h1>Discover <em>the open gym</em></h1>
+    <p class="greet-sub">
+      Follow creators worth copying, see how they train, and collab on a
+      session. Every profile here is public.
+    </p>
+    <div class="greet-chips">
+      <span class="gchip"><b>✱</b> 128 creators online</span>
+      <span class="gchip"><b>342</b> new this week</span>
+      <span class="gchip">Trending: <b>Push day</b></span>
+    </div>
+    <div class="greet-date" id="todayLine"><b>✱</b> Loading date…</div>
+  </section>
+
+  <!-- ============ SAME LAYOUT AS HOME ============ -->
+  <section class="home">
+
+    <div class="feed-col">
+      <div id="feed">
+        <!-- creator cards injected by discover.js -->
+      </div>
+      <div class="load-wrap">
+        <button class="btn-quiet" id="loadMore">Load more creators ✱</button>
+      </div>
+    </div>
+
+    <!-- ============ RAIL (same cards as home) ============ -->
+    <aside class="rail">
+
+      <div class="panel-flat reveal">
+        <div class="r-h">Trending creators</div>
+        <div class="pr-row">
+          <span class="w">Coach Elena Voss</span>
+          <span class="l">powerlifting</span>
+          <span class="v">+2.4k</span>
+        </div>
+        <div class="pr-row">
+          <span class="w">Sana Fit</span>
+          <span class="l">home workouts</span>
+          <span class="v">+1.8k</span>
+        </div>
+        <div class="pr-row">
+          <span class="w">Marcus Iron</span>
+          <span class="l">bench specialist</span>
+          <span class="v">+1.2k</span>
+        </div>
+      </div>
+
+      <div class="panel-flat reveal">
+        <div class="r-h">Suggested for you</div>
+        <div class="f-row">
+          <span class="av sm">MI</span>
+          <div class="f-id">
+            <div class="f-nm">Marcus Iron</div>
+            <div class="f-hd">@marcusiron · 86.5k</div>
+          </div>
+          <button class="f-btn" data-action="follow" data-follow-id="@marcusiron">Follow</button>
+        </div>
+        <div class="f-row">
+          <span class="av sm">AS</span>
+          <div class="f-id">
+            <div class="f-nm">Ava Strong</div>
+            <div class="f-hd">@avastrong · 18.9k</div>
+          </div>
+          <button class="f-btn" data-action="follow" data-follow-id="@avastrong">Follow</button>
+        </div>
+        <div class="f-row">
+          <span class="av sm">LP</span>
+          <div class="f-id">
+            <div class="f-nm">Leo Park</div>
+            <div class="f-hd">@leopark · 12.4k</div>
+          </div>
+          <button class="f-btn" data-action="follow" data-follow-id="@leopark">Follow</button>
+        </div>
+        <div class="f-row">
+          <span class="av sm">NO</span>
+          <div class="f-id">
+            <div class="f-nm">Nia Okafor</div>
+            <div class="f-hd">@niaokafor · 22k</div>
+          </div>
+          <button class="f-btn" data-action="follow" data-follow-id="@niaokafor">Follow</button>
+        </div>
+      </div>
+
+      <div class="panel-flat reveal">
+        <div class="r-h">Community pulse</div>
+        <div class="hs-row">
+          <div>
+            <div class="hv">1,284</div>
+            <div class="hl">public creators</div>
+          </div>
+          <div>
+            <div class="hv">96</div>
+            <div class="hl">collabs today</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-foot">✱ <b>1RM</b> — only public profiles appear here.</div>
+    </aside>
+
+    <div class="rail-dots"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">© 2026 <b>1RM</b> · Built for lifters, by lifters ✱</div>
+</footer>
+
+<script type="module" src="../scripts/discover.js"></script>
+</body>
+</html>
