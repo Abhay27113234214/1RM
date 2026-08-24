@@ -557,18 +557,24 @@ async function submitWorkout(withDetails) {
     saveBtn.disabled = true;
 
     if (withDetails) {
-        workout['title'] = $('#fmTitle').value.trim();
+        workout['title'] = $('#fmTitle').value.trim() || "Grinded";
         workout['description'] = $('#fmDesc').value.trim();
-        workout['photos'] = photoData; 
+        workout['photos'] = photoData
         // abhi k liye hm photos ko as a Data URL hi save kr rahe hai per mera mnn hai k hm unhe assets meing jaake store kare aur 
         // fir unka jo url hoga vo hm db.json mein store kare 
         // TODO
+    } else {  
+        workout['title'] = "Grinded"
+        workout['photos'] = []
     }
     workout['date'] = new Date().toISOString().split("T")[0]
     workout['user_id'] = current_user.id
     workout['total_time'] = fmtClock(Date.now() - startedAt)
+    workout['total_volume'] = $('#ssVol').textContent
+    workout['spots'] = []
+    workout['comments'] = []
     delete workout.pause_time
-    delete workout.start_time
+    // delete workout.start_time
 
     let response = await fetch("http://localhost:3000/workouts", {
         method: 'POST',

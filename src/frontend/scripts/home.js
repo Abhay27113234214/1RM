@@ -141,18 +141,15 @@ function dynamic_user_data_replacing() {
 dynamic_user_data_replacing()
 
 
-/* nav border on scroll */
+
 const navBar = $('#navBar');
 const onScroll = () => navBar.classList.toggle('scrolled', window.scrollY > 10);
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
-/* date line */
 $('#todayLine').innerHTML = '<b>✱</b> ' + new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + ' <span class="live-dot"></span>';
 
 // start workout card, but only shown when the user who is logged in has had a workout today 
-// TODO: replace with your real check (your store / API)
-let feed = $("#feed")
 const date = new Date().toISOString().split("T")[0];
 const url = `http://localhost:3000/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
 let workout_response = await fetch(url)
@@ -168,7 +165,6 @@ const io = new IntersectionObserver(es => es.forEach(x => {
 }), { threshold: .1 });
 $$('.reveal').forEach(el => io.observe(el));
 
-/* ---------- slide-in menu ---------- */
 const drawer = $('#drawer'), drawerBack = $('#drawerBack'), burger = $('#burgerBtn');
 function openDrawer() {
     drawer.classList.add('open'); drawerBack.classList.add('open'); burger.classList.add('open');
@@ -183,7 +179,7 @@ drawerBack.addEventListener('click', closeDrawer);
 $('#drawerX').addEventListener('click', closeDrawer);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
-/* ---------- TODO: profile / settings / sign out ---------- */
+// profile, sign in, sign out
 $$('[data-profile]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault(); closeDrawer();
     window.location.href = "profile.html"
@@ -192,45 +188,82 @@ $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
     let action = el.dataset.todo
     if (action === "settings") {
-
+        // yrr yeh vaala page ni banaya TODO
     } else if (action === "signout") {
         logout()
         window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=logged_out&status=success"
     }
 }));
 
-/* ---------- TODO: clicking a workout card opens its page ---------- */
-$$('.post').forEach(p => {
-    const open = () => {
-        // TODO: open this workout's detail page, e.g.:
-        // location.href = 'workout.html?id=' + p.closest('.post-shell').dataset.id;
-    };
-    p.addEventListener('click', e => {
-        if (e.target.closest('button, a, input')) return; /* inner controls handle themselves */
-        open();
-    });
-    p.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
-    });
-});
+document.addEventListener('click', async e => {
 
-/* ---------- visual-only: spot / follow / comment ---------- */
-document.addEventListener('click', e => {
+    // spot krna check krna, agr current user ne workout ko spot kiya hua hai to uski id spots vaali array mein honi chahiye
     const spot = e.target.closest('[data-action="spot"]');
     if (spot) {
-        const on = spot.classList.toggle('on');
-        const n = spot.querySelector('[data-count]');
-        if (n) n.textContent = (+n.textContent) + (on ? 1 : -1);
+        const shell = spot.closest('.post-shell');
+        const w = await getWorkout(shell.dataset.id);
+        let spots = w.spots || [];
+        const has = spots.includes(current_user.id);
+        spots = has ? spots.filter(uid => uid !== current_user.id) // agr current user ne pehle bhi like kiya hua hai to ab uss like ko remove krdo 
+                    : [...spots, current_user.id]; // aur agr usne like nahi kiya hua to usse add krdo 
+        const updated = await patchWorkout(w.id, { spots });
+        spot.classList.toggle('on', !has);
+        spot.querySelector('[data-count]').textContent = updated.spots.length;
+        return;
     }
-    const follow = e.target.closest('[data-action="follow"]');
-    if (follow) {
-        const on = follow.classList.toggle('on');
-        follow.textContent = on ? 'Following ✱' : 'Follow';
-    }
+
     const cmt = e.target.closest('[data-action="comment"]');
     if (cmt) {
         const box = cmt.closest('.post').querySelector('.p-cbox');
         if (box) { box.hidden = !box.hidden; if (!box.hidden) box.querySelector('input').focus(); }
+        return;
+    }
+
+    const send = e.target.closest('[data-action="send"]');
+    if (send) {
+        const post = send.closest('.post');
+        const shell = post.closest('.post-shell');
+        const input = post.querySelector('.p-cbox input');
+        const text = input.value.trim();
+        if (!text) { input.focus(); return; }
+
+        send.disabled = true;
+        const w = await getWorkout(shell.dataset.id);
+        const comments = w.comments || [];
+        let initials = ""
+        current_user.name.trim().split(" ").forEach((spl) => initials += spl[0].toUpperCase())
+        comments.push({
+            i: initials,
+            n: current_user.name,
+            h: current_user.username,
+            x: text,
+            t: Date.now()
+        });
+        const updated = await patchWorkout(w.id, { comments });
+        send.disabled = false;
+
+        // naya comment dikhao, count badhao, box band karo
+        const lastC = updated.comments[updated.comments.length - 1];
+        const html = `<b>${esc(lastC.n)} · ${get_proper_time_from_start(lastC.t)} ago</b>“${esc(lastC.x)}”`;
+        let pComment = post.querySelector('.p-comment');
+        if (pComment) pComment.innerHTML = html;
+        else {
+            pComment = document.createElement('div');
+            pComment.className = 'p-comment';
+            pComment.innerHTML = html;
+            post.querySelector('.p-cbox').before(pComment);
+        }
+        post.querySelector('[data-ccount]').textContent = updated.comments.length;
+        input.value = '';
+        post.querySelector('.p-cbox').hidden = true;
+        return;
+    }
+
+    // bhai follow vaali functionality ni hoti merese
+    const follow = e.target.closest('[data-action="follow"]');
+    if (follow) {
+        const on = follow.classList.toggle('on');
+        follow.textContent = on ? 'Following ✱' : 'Follow';
     }
 });
 
@@ -291,6 +324,184 @@ if (railEl) {
             banner.style.paddingTop = '0';
             banner.style.paddingBottom = '0';
         });
-        setTimeout(() => banner.remove(), 450); 
+        setTimeout(() => banner.remove(), 450);
     }
 })();
+
+
+// function to get the proper time 
+let get_proper_time_from_start = (oldTIme) => {
+    const elapsed = Date.now() - oldTIme;
+    const days = Math.floor(elapsed / 86400000);
+    const hours = Math.floor((elapsed % 86400000) / 3600000);
+    const minutes = Math.floor((elapsed % 3600000) / 60000);
+    let result = "";
+    if (days > 0) result += `${days}d `;
+    if (hours > 0) result += `${hours}h `;
+    if (minutes > 0) result += `${minutes}m`;
+    return result.trim()
+}
+
+
+const trimNum = v => String(+(+v).toFixed(1));
+
+const dotColorFor = (name) => {
+    const n = (name || '').toLowerCase();
+    if (/(squat|deadlift|lunge|calf|leg)/.test(n)) return '#1E9E6A';
+    if (/(row|pull|lat|curl)/.test(n)) return '#3B6FE0';
+    if (/(plank|crunch|raise|twist|ab)/.test(n)) return '#D89B0B';
+    if (/(run|cycle|swim|jump|walk|rope)/.test(n)) return '#D6486F';
+    return '#FF4A11';
+};
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const summarizeSet = (set) => {
+    const kg = parseFloat(set.kg) || 0;
+    const reps = parseFloat(set.reps) || 0;
+    const time = set.time || '';
+    const dist = parseFloat(set.distance) || 0;
+    if (kg && reps) return reps + ' × ' + trimNum(kg) + ' kg';
+    if (time && kg) return time + ' · ' + trimNum(kg) + ' kg';
+    if (dist && time) return trimNum(dist) + ' m · ' + time;
+    if (kg && dist) return trimNum(kg) + ' kg · ' + trimNum(dist) + ' m';
+    if (time) return time;
+    if (dist) return trimNum(dist) + ' m';
+    if (reps) return reps + ' reps';
+    return '—';
+};
+
+let renderWorkoutInPostCard = (element) => {
+    const exercises = element.exercises || {};
+    return Object.entries(exercises).map(([name, ex]) => {
+        const sets = Object.values(ex.sets || {});
+        const count = sets.length;
+        const last = sets[count - 1] || {};
+        return `
+            <div class="p-row" style="--c:${dotColorFor(name)}">
+                <span class="nm">${name}</span>
+                <span class="mt">${count} set${count !== 1 ? 's' : ''} · ${summarizeSet(last)}</span>
+            </div>`;
+    }).join('');
+};
+
+let format_total_time = (t) => {
+    if (!t) return '—';
+    const p = String(t).split(':').map(Number);
+    let h = 0, m = 0, s = 0;
+    if (p.length === 3) { h = p[0]; m = p[1]; s = p[2]; }
+    else if (p.length === 2) { m = p[0]; s = p[1]; }
+    else { s = p[0]; }
+    if (s >= 30) m += 1;
+    if (h > 0) return `${h}h ${m}m`;
+    if (m > 0) return `${m} min`;
+    return `${s}s`;
+};
+
+async function getWorkout(id) {
+    return (await fetch('http://localhost:3000/workouts/' + id)).json();
+}
+async function patchWorkout(id, changes) {
+    return (await fetch('http://localhost:3000/workouts/' + id, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(changes)
+    })).json();
+}
+
+let feed = $('#feed')
+let myToday = $('#myToday')
+
+let buildPostCard = async (element) => {
+    let user_response = await fetch(`http://localhost:3000/users/${element.user_id}`)
+    let user = await user_response.json()
+    let user_initials = ''
+    let photo = (element.photos && element.photos.length >= 1) ? element.photos[0] : "../assets/default_workout_image.png"
+    user.name.trim().split(" ").forEach((spl) => user_initials += spl[0].toUpperCase())
+    const spots = element.spots || [];
+    const comments = element.comments || [];
+    const spotted = spots.includes(current_user.id);
+    const lastC = comments[comments.length - 1];
+    return `
+        <div class="post-shell" data-id="${element.id}">
+            <article class="post" tabindex="0" role="button" aria-label="Open ${user.name}'s workout">
+                <div class="p-head">
+                    <span class="av" style="background:#FF4A11">${user_initials}</span>
+                    <div class="p-who">
+                        <div class="p-name">${user.name}</div>
+                        <div class="p-meta"><span>@${user.username}</span><span>·</span><span>${get_proper_time_from_start(element.start_time)} ago</span></div>
+                    </div>
+                </div>
+                <h3 class="p-title">${element.title}</h3>
+                <div class="p-img">
+                    <img src="${photo}" alt="workout photo" loading="lazy">
+                    <span class="img-tag"><b>✱</b> strength</span>
+                </div>
+                <div class="p-rows">${renderWorkoutInPostCard(element)}</div>
+                <div class="p-foot"><span>volume <b>${element.total_volume} kg</b></span><span>time <b>${format_total_time(element.total_time)}</b></span></div>
+                <div class="p-acts">
+                    <button class="act ${spotted ? 'on' : ''}" data-action="spot"><span class="st">✱</span>Spot · <span data-count>${spots.length}</span></button>
+                    <button class="act" data-action="comment">Comment · <span data-ccount>${comments.length}</span></button>
+                    <button class="act share" data-action="share">Share</button>
+                </div>
+                ${lastC ? `<div class="p-comment"><b>${esc(lastC.n)} · ${get_proper_time_from_start(lastC.t)} ago</b>“${esc(lastC.x)}”</div>` : ''}
+                <div class="p-cbox" hidden>
+                    <input type="text" placeholder="Say something nice…">
+                    <button class="btn-primary" data-action="send">Post</button>
+                </div>
+            </article>
+        </div>
+    `
+}
+let renderPosts = async () => {
+    let workouts_response = await fetch("http://localhost:3000/workouts?_sort=-date")
+    let workouts = await workouts_response.json()
+    const today = new Date().toISOString().split("T")[0]
+
+    // meri aaj ki workouts -> date ke neeche vaala section
+    const mineToday = workouts.filter(w => w.user_id == current_user.id && w.date === today)
+    // feed > sirf baaki log (meri workouts upar already dikhi hain)
+    const feedList = workouts.filter(w => w.user_id != current_user.id)
+
+    if (mineToday.length && myToday) {
+        myToday.innerHTML = '<div class="my-today-lbl">your sessions today</div>'
+        for (const element of mineToday) {
+            myToday.innerHTML += await buildPostCard(element)
+        }
+    }
+
+    for (const element of feedList) {
+        feed.innerHTML += await buildPostCard(element)
+    }
+}
+renderPosts()
+
+
+const OPEN_DELAY = 250;      // ms — jitna delay chahiye yahan badlo
+let openingPost = false;     // double-click pe do baar navigate na ho
+
+function openPost(post) {
+    const id = post.closest('.post-shell')?.dataset.id;
+    if (!id || openingPost) return;
+    openingPost = true;
+    post.closest('.post-shell').classList.add('opening');   // pressed look
+    setTimeout(() => {
+        window.location.href = 'post.html?id=' + id;
+    }, OPEN_DELAY);
+}
+
+document.addEventListener('click', e => {
+    const post = e.target.closest('.post');
+    if (!post) return;
+    if (e.target.closest('button, a, input')) return;  // spot/comment/share apna kaam karein
+    // agr unko chodh k kahi aur click hua to post vaala page khul jaayega
+    openPost(post);
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return; // agr user ab space ya enter dabaye to post vaala page na khul jaaye kyunki vo shyd comment likh raha hai
+    const post = e.target.closest('.post');
+    if (!post) return;
+    if (e.target.closest('input, textarea, button, a')) return;
+    e.preventDefault();
+    openPost(post);
+});

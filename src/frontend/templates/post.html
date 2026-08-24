@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1RM ✱ Session</title>
+    <!-- new type system: Archivo (sans) · Instrument Serif (display italic) · JetBrains Mono (numbers) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/archivo@latest/latin-400-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/archivo@latest/latin-500-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/archivo@latest/latin-600-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/archivo@latest/latin-700-normal.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/fontsource/fonts/instrument-serif@latest/latin-400-normal.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/fontsource/fonts/instrument-serif@latest/latin-400-italic.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-700-normal.css">
+    <link rel="stylesheet" href="../styles/post.css">
+</head>
+
+<body>
+
+    <div class="toast-zone" id="toastZone"></div>
+
+    <!-- nav -->
+    <nav class="nav-bar" id="navBar">
+        <div class="wrap">
+            <div class="nav">
+                <a href="home.html" class="logo"><span class="mark">✱</span> 1RM</a>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="discover.html">Discover</a>
+                </div>
+                <div class="nav-acts">
+                    <a href="workout.html" class="plus-btn" aria-label="Start workout">+</a>
+                    <button class="av-btn" aria-label="Your profile" onclick="location.href='profile.html'">
+                        <span class="av current_user_initials">AK</span>
+                    </button>
+                    <button class="burger" id="burgerBtn" aria-label="Menu"><i></i><i></i><i></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- drawer -->
+    <div class="drawer-back" id="drawerBack"></div>
+    <aside class="drawer" id="drawer" aria-hidden="true">
+        <div class="drawer-head">
+            <span class="av lg current_user_initials">AK</span>
+            <div class="who">
+                <div class="drawer-name current_user_name">Alex Kowalski</div>
+                <div class="drawer-streak">✱ <b>34-day streak</b> · personal best</div>
+            </div>
+            <button class="drawer-x" id="drawerX">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="home.html">Home</a>
+            <a href="discover.html">Discover</a>
+            <a href="profile.html">My profile</a>
+            <a href="workout.html">+ Log a session</a>
+        </nav>
+        <a href="workout.html" class="drawer-cta">
+            <span class="dc-plus">+</span>
+            <span>Start workout</span>
+            <span class="arr">→</span>
+        </a>
+        <div class="drawer-foot">
+            <div class="links">
+                <a href="profile.html">Settings</a>
+                <a href="#" data-todo="signout">Sign out</a>
+            </div>
+            <div class="copy">✱ 1RM © 2026 — made for the ones who <b>show up.</b></div>
+        </div>
+    </aside>
+
+    <main class="wrap narrow">
+
+        <!-- back row -->
+        <div class="back-row reveal">
+            <a href="home.html" class="back-link"><span class="arr">←</span> back to the feed</a>
+            <span class="post-when"><b>✱</b> <span id="postWhen">loading…</span></span>
+        </div>
+
+        <!-- main card -->
+        <div class="post-shell reveal">
+            <article class="post">
+                <div class="p-head">
+                    <span class="av lg" id="authorAv">✱</span>
+                    <div class="p-who">
+                        <div class="p-name"><span id="authorName">…</span><span class="p-handle"
+                                id="authorHandle"></span></div>
+                        <div class="p-meta" id="authorMeta"></div>
+                    </div>
+                </div>
+
+                <h1 class="wk-title" id="postTitle"></h1>
+                <p class="wk-desc" id="postDesc"></p>
+
+                <div class="p-img" id="postImgWrap" hidden>
+                    <img id="postImg" src="" alt="Session photo">
+                    <span class="img-tag" id="imgTag"><b>✱</b> session</span>
+                </div>
+                <div class="p-thumbs" id="postThumbs" hidden></div>
+
+                <div class="wk-tags" id="postTags"></div>
+
+                <div class="p-foot">
+                    <span>volume <b id="footVolume">—</b></span>
+                    <span>time <b id="footTime">—</b></span>
+                    <span>exercises <b id="footEx">—</b></span>
+                </div>
+            </article>
+        </div>
+
+        <!-- actions -->
+        <div class="act-row reveal">
+            <button class="act" id="spotBtn"><span class="st">✱</span> Spot · <span id="spotCount">0</span></button>
+            <button class="act" id="followBtn">Follow</button>
+            <button class="act share" id="shareBtn">Share</button>
+            <div class="spotters" aria-hidden="true">
+                <span class="av">JB</span><span class="av">PS</span><span class="av">TR</span>
+                <span class="sp-n" id="spottedBy">spotted this</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- sub-nav tabs -->
+    <div class="tab-bar" id="tabBar">
+        <div class="wrap narrow">
+            <div class="tabs">
+                <button class="tab on" data-tab="workout"><span class="tb-star">✱</span> Workout</button>
+                <button class="tab" data-tab="comments">Comments · <span id="cmtCount">0</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== workout panel (default) ====== -->
+    <section class="tab-panel" id="panel-workout">
+        <div class="wrap narrow">
+
+            <!-- totals strip -->
+            <div class="panel-flat reveal">
+                <div class="wk-stats">
+                    <div>
+                        <div class="hv"><span id="statVolume">—</span><span class="u" id="statVolumeUnit"> kg</span>
+                        </div>
+                        <div class="hl">total volume</div>
+                    </div>
+                    <div>
+                        <div class="hv" id="statTime">—</div>
+                        <div class="hl">total time</div>
+                    </div>
+                    <div>
+                        <div class="hv" id="statEx">—</div>
+                        <div class="hl">exercises</div>
+                    </div>
+                    <div>
+                        <div class="hv" id="statSets">—</div>
+                        <div class="hl">working sets</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- exercises + data breakdown -->
+            <div class="wk-split">
+                <div class="ex-list" id="exList"></div>
+
+                <aside class="wk-side">
+                    <div class="panel-flat reveal">
+                        <div class="r-h">Where the volume went</div>
+                        <div id="volBars"></div>
+                        <div class="side-note">Share of lifted kilograms per exercise. Bodyweight & cardio work is
+                            counted in sets, not kilos.</div>
+                    </div>
+                    <div class="panel-flat reveal">
+                        <div class="r-h">Estimated maxes</div>
+                        <div id="estList"></div>
+                        <div class="side-note">Epley estimate from your heaviest working set — the number the app is
+                            named after.</div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== comments panel ====== -->
+    <section class="tab-panel" id="panel-comments" hidden>
+        <div class="wrap narrow">
+            <div class="panel-flat">
+                <div class="r-h">Add your voice</div>
+                <div class="cmt-form">
+                    <span class="av sm current_user_initials">AK</span>
+                    <input type="text" id="cmtInput" placeholder="Say something kind — or useful…">
+                    <button class="btn-primary" id="cmtPost">Post <span class="arr">→</span></button>
+                </div>
+            </div>
+            <div class="cmt-list" id="cmtList"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap"><b>✱</b> 1RM © 2026 — made for the ones who show up.</div>
+    </footer>
+
+    <script type="module" src="../scripts/post.js"></script>
+</body>
+
+</html>
