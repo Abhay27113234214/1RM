@@ -49,7 +49,7 @@
         </div>
 
         <!-- ══ JS hook: render today's exercises into #exList (template: #exTpl) ══ -->
-         <!-- TODO: pehle to hr ek exercise type ka apne tarah ka template hona chahiye hai  -->
+        <!-- TODO: pehle to hr ek exercise type ka apne tarah ka template hona chahiye hai  -->
         <div id="exList">
 
             <!-- <article class="ex-card" style="--c:#FF4A11">
@@ -202,41 +202,42 @@
     </div>
 
     <!-- ═══════════ finish dialog: title / description / photos ═══════════ -->
-<div class="modal" id="finishModal" aria-hidden="true">
-  <div class="modal-back" data-close></div>
-  <div class="modal-panel">
-    <button class="modal-x" data-close aria-label="Close">✕</button>
-    <div class="modal-card">
-      <div class="step-lbl">wrap it up</div>
-      <h3 class="fm-title">Name <em>this one.</em></h3>
-      <p class="fm-sub">A title, a few words, photos if you want — then it goes in the ledger.</p>
-      <div class="fm-stats" id="fmStats"></div>
+    <div class="modal" id="finishModal" aria-hidden="true">
+        <div class="modal-back" data-close></div>
+        <div class="modal-panel">
+            <button class="modal-x" data-close aria-label="Close">✕</button>
+            <div class="modal-card">
+                <div class="step-lbl">wrap it up</div>
+                <h3 class="fm-title">Name <em>this one.</em></h3>
+                <p class="fm-sub">A title, a few words, photos if you want — then it goes in the ledger.</p>
+                <div class="fm-stats" id="fmStats"></div>
 
-      <div class="fm-field">
-        <label for="fmTitle">Title</label>
-        <input id="fmTitle" type="text" maxlength="60" placeholder="Leg day — everything heavy.">
-      </div>
+                <div class="fm-field">
+                    <label for="fmTitle">Title</label>
+                    <input id="fmTitle" type="text" maxlength="60" placeholder="Leg day — everything heavy.">
+                </div>
 
-      <div class="fm-field">
-        <label for="fmDesc">Description · optional</label>
-        <textarea id="fmDesc" rows="3" maxlength="280" placeholder="How did it feel? Worth remembering?"></textarea>
-      </div>
+                <div class="fm-field">
+                    <label for="fmDesc">Description · optional</label>
+                    <textarea id="fmDesc" rows="3" maxlength="280"
+                        placeholder="How did it feel? Worth remembering?"></textarea>
+                </div>
 
-      <div class="fm-field">
-        <label>Photos · optional</label>
-        <div class="fm-shots" id="fmShots">
-          <label class="fm-add" for="fmPhotos">+<span>add photo</span></label>
+                <div class="fm-field">
+                    <label>Photos · optional</label>
+                    <div class="fm-shots" id="fmShots">
+                        <label class="fm-add" for="fmPhotos">+<span>add photo</span></label>
+                    </div>
+                    <input id="fmPhotos" type="file" accept="image/*" multiple hidden>
+                </div>
+
+                <div class="fm-row">
+                    <button class="fm-skip" id="fmSkip">Skip — save as is</button>
+                    <button class="fm-save" id="fmSave">Save workout <span class="arr">→</span></button>
+                </div>
+            </div>
         </div>
-        <input id="fmPhotos" type="file" accept="image/*" multiple hidden>
-      </div>
-
-      <div class="fm-row">
-        <button class="fm-skip" id="fmSkip">Skip — save as is</button>
-        <button class="fm-save" id="fmSave">Save workout <span class="arr">→</span></button>
-      </div>
     </div>
-  </div>
-</div>
 
     <!-- ═══════════ exercise template — for your JS ═══════════ -->
     <template id="exTpl">
@@ -260,6 +261,82 @@
     </template>
 
     <div id="toastZone" class="toast-zone" aria-live="polite"></div>
+
+
+
+    <div class="modal" id="createExModal" aria-hidden="true">
+        <div class="modal-back" data-close></div>
+        <div class="modal-panel">
+            <button class="modal-x" data-close aria-label="Close">✕</button>
+            <div class="modal-card">
+                <div class="step-lbl">new exercise</div>
+                <h3 class="fm-title">Build your <em>own.</em></h3>
+                <p class="fm-sub">Name it, tag it, pick how it's measured — it lands straight in your library.</p>
+
+                <div class="fm-field">
+                    <label for="cxName">Name</label>
+                    <input id="cxName" type="text" placeholder="Cable Chest Press" maxlength="60">
+                </div>
+
+                <div class="fm-field">
+                    <label>Equipment</label>
+                    <div class="cx-chips" data-group="equipment">
+                        <button type="button" data-val="None" class="on">None</button>
+                        <button type="button" data-val="barbell">barbell</button>
+                        <button type="button" data-val="dumbbell">dumbbell</button>
+                        <button type="button" data-val="machine">machine</button>
+                        <button type="button" data-val="cable">cable</button>
+                        <button type="button" data-val="bodyweight">bodyweight</button>
+                        <button type="button" data-val="kettlebell">kettlebell</button>
+                        <button type="button" data-val="band">band</button>
+                    </div>
+                </div>
+
+                <div class="fm-field">
+                    <label>Primary muscle group</label>
+                    <div class="cx-chips" data-group="muscle">
+                        <button type="button" data-val="chest">chest</button>
+                        <button type="button" data-val="back">back</button>
+                        <button type="button" data-val="legs">legs</button>
+                        <button type="button" data-val="glutes">glutes</button>
+                        <button type="button" data-val="shoulders">shoulders</button>
+                        <button type="button" data-val="arms">arms</button>
+                        <button type="button" data-val="core">core</button>
+                        <button type="button" data-val="full body">full body</button>
+                    </div>
+                </div>
+
+                <div class="fm-field">
+                    <label for="cxOther">Other muscles <span class="cx-opt">· optional, Enter to add</span></label>
+                    <div class="cx-tags" id="cxTags"></div>
+                    <input id="cxOther" type="text" placeholder="triceps, front delts…">
+                </div>
+
+                <div class="fm-field">
+                    <label>Exercise type</label>
+                    <div class="cx-chips cx-types" data-group="type">
+                        <button type="button" data-val="weight_and_reps" class="on">weight × reps</button>
+                        <button type="button" data-val="bodyweight_reps">bodyweight reps</button>
+                        <button type="button" data-val="weighted_bodyweight">weighted bodyweight</button>
+                        <button type="button" data-val="assisted_bodyweight">assisted bodyweight</button>
+                        <button type="button" data-val="duration">duration</button>
+                        <button type="button" data-val="duration_and_weight">duration × weight</button>
+                        <button type="button" data-val="distance_and_duration">distance × duration</button>
+                        <button type="button" data-val="weight_and_distance">weight × distance</button>
+                    </div>
+                </div>
+
+                <div class="fm-field">
+                    <label>Measured in</label>
+                    <div class="cx-measure" id="cxMeasure"></div>
+                </div>
+
+                <div class="fm-row">
+                    <button class="fm-save" id="cxSave">Save exercise <span class="arr">→</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 

@@ -1,6 +1,5 @@
 import { logout } from "../../backend/auth.js"
 
-import { logout } from "../../backend/auth.js"
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -128,8 +127,8 @@ $$('[data-count]').forEach(el => cio.observe(el));
 
 const dayKey = (d) => {
     return d.getFullYear() + '-' + // getFullYear returns a string like 2026
-    String(d.getMonth() + 1).padStart(2, '0') + '-' + // .getMonth is 0 based so +1, padStart adds a zero if the string is shorted than 2 characters
-    String(d.getDate()).padStart(2, '0'); // getDate gets today's date 
+        String(d.getMonth() + 1).padStart(2, '0') + '-' + // .getMonth is 0 based so +1, padStart adds a zero if the string is shorted than 2 characters
+        String(d.getDate()).padStart(2, '0'); // getDate gets today's date 
 }
 // to yeh jo uper vaala function hai yeh aaj ki date nikal k deta hai jaise maine json-server mein store ki hui hai 
 
@@ -178,21 +177,17 @@ function tooltipFor(entry, label) {
         (entry.volume > 0 ? ' · ' + vol + ' kg' : ' · bodyweight / cardio');
 }
 
+let myWorkouts = [];
+try {
+    const res = await fetch('http://localhost:3000/workouts?user_id:eq=' + current_user.id);
+    myWorkouts = await res.json();
+} catch (e) { myWorkouts = []; }
+
 async function buildMonth() {
     const grid = $('#monthGrid');
     if (!grid) return;
     grid.innerHTML = '';
-
-    const me = JSON.parse(localStorage.getItem('current_user'));
-    if (!me) return;
-
-    /* ---- fetch my workouts, bucket by day ---- */
-    let mine = [];
-    try {
-        const res = await fetch('http://localhost:3000/workouts?user_id:eq=' + me.id);
-        mine = await res.json();
-    } catch (e) { mine = []; }
-    const byDay = groupWorkoutsByDay(mine); // maine jitne bhi workouts aaj tk kare hai unko group karo date k base peb
+    const byDay = groupWorkoutsByDay(myWorkouts);   // ← shared data, no second fetch
 
     // yeh uper vaala saara weeks ka header dikhane k liye
     const corner = document.createElement('span');
@@ -207,9 +202,9 @@ async function buildMonth() {
     });
 
     // month boudaries
-    const today    = new Date(); today.setHours(0, 0, 0, 0); 
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);       // jo bhi mahina aur saal chl raha hai vo lo aur uske pehle din pe jao  
-    const lastDay  = new Date(today.getFullYear(), today.getMonth() + 1, 0);   // jo bhi mahin achl raha hai uske pehle din pe jao
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);   // jo bhi mahin achl raha hai uske pehle din pe jao
 
     // grid Monday se shuru ho k Sunday pe khatam (4, 5 ya 6 rows — month pe depend karta hai)
     const gridStart = new Date(firstDay);
@@ -232,8 +227,8 @@ async function buildMonth() {
             const date = new Date(rowStart);
             date.setDate(rowStart.getDate() + d);
 
-            const cell  = document.createElement('div');
-            const dstr  = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const cell = document.createElement('div');
+            const dstr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             const inMonth = date >= firstDay && date <= lastDay;
 
             if (!inMonth) {
@@ -246,8 +241,8 @@ async function buildMonth() {
                 cell.dataset.tip = dstr + ' · coming up';
             } else {
                 // real data — 1st se aaj tak
-                const entry   = byDay[dayKey(date)];
-                const level   = intensityFor(entry);
+                const entry = byDay[dayKey(date)];
+                const level = intensityFor(entry);
                 const isToday = date.getTime() === today.getTime();
                 cell.className = 'm-cell l' + level + (isToday ? ' today' : '');
                 cell.dataset.tip = tooltipFor(entry, dstr);
@@ -256,7 +251,6 @@ async function buildMonth() {
         }
     }
 }
-buildMonth();
 
 /* ---------- goals chips / segs ---------- */
 $$('[data-group]').forEach(group => {
@@ -382,4 +376,215 @@ $('#editForm').addEventListener('submit', e => {
     closeModal();
     showToast('Profile updated ✱ the coach recalibrated.');
     /* TODO: persist via backend (addMeasurements-style call) */
+});
+
+
+
+/* ---------- helpers (same as home.js) ---------- */
+const trimNum = v => String(+(+v).toFixed(1));
+const dotColorFor = (name) => {
+    const n = (name || '').toLowerCase();
+    if (/(squat|deadlift|lunge|calf|leg)/.test(n)) return '#1E9E6A';
+    if (/(row|pull|lat|curl)/.test(n)) return '#3B6FE0';
+    if (/(plank|crunch|raise|twist|ab)/.test(n)) return '#D89B0B';
+    if (/(run|cycle|swim|jump|walk|rope)/.test(n)) return '#D6486F';
+    return '#FF4A11';
+};
+const summarizeSet = (set) => {
+    const kg = Array.isArray(set) ? parseFloat(set[0]) || 0 : parseFloat(set.kg) || 0;
+    const reps = Array.isArray(set) ? parseFloat(set[1]) || 0 : parseFloat(set.reps) || 0;
+    const time = Array.isArray(set) ? '' : (set.time || '');
+    const dist = Array.isArray(set) ? 0 : (parseFloat(set.distance) || 0);
+    if (kg && reps) return reps + ' × ' + trimNum(kg) + ' kg';
+    if (time && kg) return time + ' · ' + trimNum(kg) + ' kg';
+    if (dist && time) return trimNum(dist) + ' m · ' + time;
+    if (kg && dist) return trimNum(kg) + ' kg · ' + trimNum(dist) + ' m';
+    if (time) return time;
+    if (dist) return trimNum(dist) + ' m';
+    if (reps) return reps + ' reps';
+    return '—';
+};
+let renderWorkoutInPostCard = (element) => {
+    const exercises = element.exercises || {};
+    return Object.entries(exercises).map(([name, ex]) => {
+        const sets = Object.values(ex.sets || {});
+        const count = sets.length;
+        const last = sets[count - 1] || {};
+        return `<div class="p-row" style="--c:${dotColorFor(name)}"> <span class="nm">${escHtml(name)}</span> <span class="mt">${count} set${count !== 1 ? 's' : ''} · ${summarizeSet(last)}</span> </div>`;
+    }).join('');
+};
+let format_total_time = (t) => {
+    if (!t) return '—';
+    const p = String(t).split(':').map(Number);
+    let h = 0, m = 0, s = 0;
+    if (p.length === 3) { h = p[0]; m = p[1]; s = p[2]; }
+    else if (p.length === 2) { m = p[0]; s = p[1]; }
+    else { s = p[0]; }
+    if (s >= 30) m += 1;
+    if (h > 0) return `${h}h ${m}m`;
+    if (m > 0) return `${m} min`;
+    return `${s}s`;
+};
+let get_proper_time_from_start = (oldTime) => {
+    const elapsed = Date.now() - oldTime;
+    const days = Math.floor(elapsed / 86400000);
+    const hours = Math.floor((elapsed % 86400000) / 3600000);
+    const minutes = Math.floor((elapsed % 3600000) / 60000);
+    let result = '';
+    if (days > 0) result += `${days}d `;
+    if (hours > 0) result += `${hours}h `;
+    if (minutes > 0) result += `${minutes}m`;
+    return result.trim();
+};
+const dayLabel = (dateStr) => {
+    const d = new Date(dateStr + 'T00:00:00');
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const diff = Math.round((t - d) / 86400000);
+    if (diff === 0) return 'Today';
+    if (diff === 1) return 'Yesterday';
+    return d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+};
+
+/* ---------- my post card (author is always current_user) ---------- */
+let buildPostCard = (element) => {
+    let user_initials = '';
+    current_user.name.trim().split(/\s+/).forEach(spl => user_initials += spl[0].toUpperCase());
+    const photo = (element.photos && element.photos.length >= 1) ? element.photos[0] : '../assets/default_workout_image.png';
+    const spots = element.spots || [];
+    const comments = element.comments || [];
+    const spotted = spots.includes(current_user.id);
+    const lastC = comments[comments.length - 1];
+    return `
+    <div class="post-shell" data-id="${element.id}">
+        <article class="post" tabindex="0" role="button" aria-label="Open ${escHtml(current_user.name)}'s workout">
+            <div class="p-head">
+                <span class="av" style="background:#FF4A11">${user_initials}</span>
+                <div class="p-who">
+                    <div class="p-name">${escHtml(current_user.name)}</div>
+                    <div class="p-meta"><span>@${escHtml(current_user.username)}</span><span>·</span><span>${get_proper_time_from_start(element.start_time)} ago</span></div>
+                </div>
+            </div>
+            <h3 class="p-title">${escHtml(element.title || 'Session')}</h3>
+            <div class="p-img">
+                <img src="${photo}" alt="workout photo" loading="lazy">
+                <span class="img-tag"><b>✱</b> strength</span>
+            </div>
+            <div class="p-rows">${renderWorkoutInPostCard(element)}</div>
+            <div class="p-foot"><span>volume <b>${fmtInt(volumeOfWorkout(element))} kg</b></span><span>time <b>${format_total_time(element.total_time)}</b></span></div>
+            <div class="p-acts">
+                <button class="act ${spotted ? 'on' : ''}" data-action="spot"><span class="st">✱</span>Spot · <span class="spot-n">${spots.length}</span></button>
+                <button class="act" data-action="comment">Comment · <span>${comments.length}</span></button>
+                <button class="act share" data-action="share">Share</button>
+            </div>
+            ${lastC ? `<div class="p-comment"><b>${escHtml(lastC.n)} · ${get_proper_time_from_start(lastC.t)} ago</b>“${escHtml(lastC.x)}”</div>` : ''}
+            <div class="p-cbox" hidden>
+                <input type="text" placeholder="Say something nice…">
+                <button class="btn-primary" data-action="post-comment">Post</button>
+            </div>
+        </article>
+    </div>`;
+};
+
+/* ---------- render ONLY my posts, grouped by day ---------- */
+let renderMyPosts = () => {
+    const feed = $('#myFeed');
+    if (!feed) return;
+    feed.innerHTML = '';
+    const sorted = [...myWorkouts].sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.start_time || 0) - (a.start_time || 0));
+    if (!sorted.length) { feed.innerHTML = '<div class="day-sep">nothing logged yet</div>'; return; }
+    let lastLabel = null;
+    sorted.forEach(element => {
+        const label = dayLabel(element.date);
+        if (label !== lastLabel) { feed.innerHTML += `<div class="day-sep">${label}</div>`; lastLabel = label; }
+        feed.innerHTML += buildPostCard(element);
+    });
+};
+
+/* ---------- hs-row stats: longest streak / best week / total volume / active days ---------- */
+function renderStats() {
+    const byDay = groupWorkoutsByDay(myWorkouts);
+    const keys = Object.keys(byDay).sort();
+    // longest streak (consecutive days)
+    let longest = 0, run = 0, prev = null;
+    keys.forEach(k => {
+        const d = new Date(k + 'T00:00:00');
+        run = (prev && (d - prev) === 86400000) ? run + 1 : 1;
+        if (run > longest) longest = run;
+        prev = d;
+    });
+    // best week (Monday-start) by session count
+    const weeks = {};
+    myWorkouts.forEach(w => {
+        if (!w.date) return;
+        const d = new Date(w.date + 'T00:00:00');
+        const monday = new Date(d); monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+        const wk = dayKey(monday);
+        weeks[wk] = (weeks[wk] || 0) + 1;
+    });
+    const bestWeek = Math.max(0, ...Object.values(weeks));
+    const totalVol = myWorkouts.reduce((a, w) => a + volumeOfWorkout(w), 0);
+
+    const hvs = document.querySelectorAll('.hs-row .hv');   // order: streak / best week / volume / active days
+    if (hvs[0]) hvs[0].textContent = longest;
+    if (hvs[1]) hvs[1].textContent = bestWeek;
+    if (hvs[2]) hvs[2].textContent = fmtInt(totalVol);
+    if (hvs[3]) hvs[3].textContent = keys.length;
+}
+
+/* ---------- volume · last 4 wk bars ---------- */
+function renderWeekBars() {
+    const row = document.querySelector('.tbar-row');
+    if (!row) return;
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const thisMonday = new Date(now); thisMonday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    const vols = [0, 0, 0, 0];
+    myWorkouts.forEach(w => {
+        if (!w.date) return;
+        const d = new Date(w.date + 'T00:00:00');
+        const monday = new Date(d); monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+        const diff = Math.round((thisMonday - monday) / (7 * 86400000));
+        if (diff >= 0 && diff < 4) vols[3 - diff] += volumeOfWorkout(w);
+    });
+    const max = Math.max(...vols, 1);
+    row.innerHTML = vols.map((v, i) =>
+        `<i class="tbar" style="height:${Math.max(8, Math.round(v / max * 100))}%; --td:${i * .12}s"></i>`
+    ).join('');
+}
+
+buildMonth();
+renderStats();
+renderWeekBars();
+renderMyPosts();
+
+
+
+const OPEN_DELAY = 250;      // ms — press animation dikhne k liye
+let openingPost = false;     // double-click pe do baar navigate na ho
+
+function openPost(post) {
+    const id = post.closest('.post-shell')?.dataset.id;
+    if (!id || openingPost) return;
+    openingPost = true;
+    post.closest('.post-shell').classList.add('opening');   // pressed look
+    setTimeout(() => {
+        window.location.href = 'post.html?id=' + id;
+    }, OPEN_DELAY);
+}
+
+/* delegation: har post pe kaam karega, chahe renderMyPosts ne baad mein dala ho */
+document.addEventListener('click', e => {
+    const post = e.target.closest('.post');
+    if (!post) return;
+    if (e.target.closest('button, a, input')) return;   // spot/comment/share apna kaam karein
+    openPost(post);
+});
+
+/* keyboard: .post pe tabindex=0 hai, to Enter/Space bhi kholna chahiye */
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const post = e.target.closest('.post');
+    if (!post) return;
+    if (e.target.closest('input, textarea, button, a')) return;  // comment likhte waqt page na khule
+    e.preventDefault();
+    openPost(post);
 });

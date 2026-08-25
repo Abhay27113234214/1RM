@@ -167,7 +167,7 @@ const startedAt = Date.now() - bankedTime;
 $('#ssTime').textContent = fmtClock(bankedTime);
 
 
-setInterval(() => { $('#ssTime').textContent = fmtClock(Date.now() - startedAt); }, 1000); 
+setInterval(() => { $('#ssTime').textContent = fmtClock(Date.now() - startedAt); }, 1000);
 // this fmtClock function is calculating the total time for which the workout has been going on
 // yahan per setInterval isi liye use kiya hai kyunki har second baad time ko update bhi to krna padega na 
 
@@ -225,7 +225,7 @@ document.addEventListener('click', e => { // listen for every click on the docum
         if (!workout['exercises']) workout['exercises'] = {}
         if (!workout['exercises'][ex_name]) workout['exercises'][ex_name] = {}
         if (!workout['exercises'][ex_name]['sets']) workout['exercises'][ex_name]['sets'] = {}
-        
+
         if (on) {
             const card = row.closest('.ex-card');
             const name = card.querySelector('.ex-name').textContent;
@@ -305,7 +305,7 @@ async function fetch_exercises() {
     for (let i = 0; i < exercises.length; i++) {
         SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
             .toString(16)
-            .padStart(6, "0"),  exercises[i].exercise_type])
+            .padStart(6, "0"), exercises[i].exercise_type])
     }
 }
 
@@ -357,9 +357,7 @@ suggList.addEventListener('click', e => {
     if (first) first.focus();
 });
 
-/* "create your own" is a plain link → create-exercise.html (see TODO in the HTML) */
 
-/* ---------- rest timer dock ---------- */
 const restDock = $('#restDock'), rdPick = $('#rdPick'), rdLive = $('#rdLive'), rdDone = $('#rdDone');
 let restSec = 90, restTotal = 90, restEnd = 0, restTick = null, hideTimer = null;
 const fmtRest = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
@@ -413,7 +411,7 @@ $('#rdSkip').addEventListener('click', finishRest);
 $('#rdClose').addEventListener('click', closeDock);
 $('#restBtn').addEventListener('click', () => openDock());
 
-/* ---------- remove sets (auto-wired ✕ on every row) ---------- */
+
 function ensureDel(row) {
     if (row.querySelector('[data-delset]')) return;
     const b = document.createElement('button');
@@ -508,7 +506,7 @@ function fillFinishStats() {
     let vol = 0;
     doneRows.forEach(r => {
         vol += (parseFloat(r.querySelector('[data-field="kg"]')?.value) || 0) *
-               (parseFloat(r.querySelector('[data-field="reps"]')?.value) || 0);
+            (parseFloat(r.querySelector('[data-field="reps"]')?.value) || 0);
     }); // volume calculate ho rhi hai
     $('#fmStats').innerHTML =
         '<span>time <b>' + fmtClock(Date.now() - startedAt) + '</b></span>' +
@@ -522,10 +520,10 @@ fmPhotos.addEventListener('change', () => { // change is an event when the value
     [...fmPhotos.files].forEach(file => {
         if (!file.type.startsWith('image/')) return;
         const reader = new FileReader(); // FileReader is a API for reading files 
-        reader.onload = () => { photoData.push(reader.result); renderShots(); }; 
+        reader.onload = () => { photoData.push(reader.result); renderShots(); };
         // reading a file is an asynchronous operation, so reader.onload is like telling js to do something after the reading of the file is finished 
         // it is like setting a callback before the operation even begins 
-        reader.readAsDataURL(file); 
+        reader.readAsDataURL(file);
         // so after reading the file as a Data URL (which is a string encoded version of the image), the photoData.push() and renderShots() functions 
         // are called
     });
@@ -565,7 +563,7 @@ async function submitWorkout(withDetails) {
         // abhi k liye hm photos ko as a Data URL hi save kr rahe hai per mera mnn hai k hm unhe assets meing jaake store kare aur 
         // fir unka jo url hoga vo hm db.json mein store kare 
         // TODO
-    } else {  
+    } else {
         workout['title'] = "Grinded"
         workout['photos'] = ["../assets/default_workout_image.png"]
     }
@@ -600,7 +598,7 @@ function restore_session() {
     let params = new URLSearchParams(window.location.search)
     let message = params.get("message")
     let from = params.get("from")
-    
+
     if (from == 'home' && message == "resume_workout") {
         let workout = JSON.parse(localStorage.getItem("current_user_workout"))
         if (!workout || !workout.exercises) return
@@ -612,35 +610,35 @@ function restore_session() {
             tpl.querySelector('[data-bind="name"]').textContent = ex_name
             tpl.querySelector('[data-bind="eq"]').textContent = type
             tpl.querySelector('[data-bind="last"]').textContent = 'resuming your session ✱'
-            
+
             // buildSets creates the header + one empty row
             buildSets(tpl)
-            
+
             // Remove the empty row created by buildSets
             const sets = tpl.querySelector('.sets')
             const emptyRow = sets.querySelector('.set-row')
             if (emptyRow) emptyRow.remove()
-            
+
             // Now add the saved sets
             if (ex_data.sets) {
                 Object.entries(ex_data.sets).forEach(([set_num, set_vals]) => {
                     // Create a new empty row for this exercise type
                     const row = makeSetRow(tpl, null)
-                    
+
                     // Fill in the saved values
                     Object.entries(set_vals).forEach(([field, value]) => {
                         const input = row.querySelector(`[data-field="${field}"]`)
                         if (input) input.value = value
                     })
-                    
+
                     // Mark as completed (since it was saved, it was done)
                     row.classList.add('done')
                     row.querySelector('[data-done]').classList.add('on')
-                    
+
                     sets.appendChild(row)
                 })
             }
-            
+
             // Restore notes if they exist
             if (ex_data.notes) {
                 const noteBox = tpl.querySelector('.note-box')
@@ -649,10 +647,127 @@ function restore_session() {
                 noteBox.classList.add('open')
                 tpl.querySelector('[data-note]').classList.add('has')
             }
-            
+
             exList.appendChild(tpl)
         })
-        
+
         updateStats()
     }
 }
+
+
+const createExModal = $('#createExModal');
+const cxState = { equipment: 'None', muscle: null, type: 'weight_and_reps', other: [] };
+
+function openCreateEx() {
+    createExModal.classList.add('open');
+    createExModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    syncMeasure();
+    setTimeout(() => $('#cxName').focus({ preventScroll: true }), 350);
+}
+function closeCreateEx() {
+    createExModal.classList.remove('open');
+    createExModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+createExModal.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeCreateEx(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && createExModal.classList.contains('open')) closeCreateEx(); });
+
+// "create your own" link ab page change nahi karta, dialog kholta hai
+$('.create-ex').addEventListener('click', e => {
+    e.preventDefault();
+    openCreateEx();
+});
+
+// single-select chip groups (equipment / muscle / type)
+$$('.cx-chips').forEach(group => {
+    group.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        group.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        const g = group.dataset.group;
+        if (g === 'equipment') cxState.equipment = btn.dataset.val;
+        if (g === 'muscle') cxState.muscle = btn.dataset.val;
+        if (g === 'type') { cxState.type = btn.dataset.val; syncMeasure(); }
+    });
+});
+
+// "measured in" chips = TYPE_FIELDS mapping, type badlo to live update
+function syncMeasure() {
+    $('#cxMeasure').innerHTML = fieldsFor(cxState.type).map(f => '<span>' + f + '</span>').join('');
+}
+
+// other-muscles tag input (Enter ya comma se add)
+const cxOther = $('#cxOther');
+function renderCxTags() {
+    $('#cxTags').innerHTML = cxState.other.map((m, i) =>
+        '<span class="cx-tag">' + m + '<button type="button" data-rm="' + i + '" aria-label="Remove">✕</button></span>').join('');
+}
+cxOther.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ',') return;
+    e.preventDefault();
+    const v = cxOther.value.trim().replace(/,+$/, '');
+    if (v && !cxState.other.includes(v)) { cxState.other.push(v); renderCxTags(); }
+    cxOther.value = '';
+});
+$('#cxTags').addEventListener('click', e => {
+    const btn = e.target.closest('[data-rm]');
+    if (!btn) return;
+    cxState.other.splice(+btn.dataset.rm, 1);
+    renderCxTags();
+});
+
+// naya exercise session mein add karne ka wahi logic jo sugg click use karta hai
+function addExerciseCard(name, type, color) {
+    const tpl = $('#exTpl').content.cloneNode(true).querySelector('.ex-card');
+    tpl.style.setProperty('--c', color);
+    tpl.dataset.type = type;
+    tpl.querySelector('[data-bind="name"]').textContent = name;
+    tpl.querySelector('[data-bind="eq"]').textContent = type;
+    tpl.querySelector('[data-bind="last"]').textContent = 'first time logging this one ✱';
+    buildSets(tpl);
+    exList.appendChild(tpl);
+    updateStats();
+    tpl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// save → POST /exercises → library + search + session, teeno mein
+$('#cxSave').addEventListener('click', async () => {
+    const name = $('#cxName').value.trim();
+    if (!name) { showToast('Give the exercise a name ✱', 'error'); $('#cxName').focus(); return; }
+    if (!cxState.muscle) { showToast('Pick a primary muscle group ✱', 'error'); return; }
+
+    const saveBtn = $('#cxSave');
+    saveBtn.disabled = true;
+    const res = await fetch('http://localhost:3000/exercises', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            asset: 'None',
+            name,
+            equipment_type: cxState.equipment,
+            primary_muscle_group: cxState.muscle,
+            other_muscles: cxState.other,
+            exercise_type: cxState.type,
+            measurement: fieldsFor(cxState.type)   // ['kg','reps'] wagaira — db shape se match
+        })
+    });
+    saveBtn.disabled = false;
+
+    if (res.status === 201) {
+        const created = await res.json();
+        const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        SUGG.push([created.name, created.exercise_type, color, created.exercise_type]); // search mein turant
+        closeCreateEx();
+        showToast('“' + created.name + '” added to your library ✱');
+        // reset for next time
+        $('#cxName').value = '';
+        cxState.other = []; renderCxTags(); cxOther.value = '';
+        // aur seedha session mein bhi add
+        addExerciseCard(created.name, created.exercise_type, color);
+    } else {
+        showToast('Could not save the exercise. Try again.', 'error');
+    }
+});

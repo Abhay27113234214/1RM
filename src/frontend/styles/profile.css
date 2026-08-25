@@ -2184,3 +2184,71 @@ footer b {
         transition-duration: .01ms !important;
     }
 }
+
+
+.p-img {
+    position: relative;
+    margin-top: 16px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    aspect-ratio: 16/9;
+    background: var(--bg);
+}
+
+.p-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .9s var(--ease);
+    filter: saturate(.95);
+}
+
+.post-shell:hover .p-img img {
+    transform: scale(1.05);
+}
+
+.img-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    background: rgba(25, 23, 19, .82);
+    color: var(--surface);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 99px;
+}
+
+.img-tag b {
+    color: var(--accent);
+    font-weight: 400;
+}
+
+/* ---------- cards clickable + pressed look while opening ---------- */
+.post {
+    cursor: pointer;
+}
+
+.post-shell.opening::before {
+    opacity: 1;
+    transform: translate(5px, 5px);
+    transition-duration: .12s;
+}
+
+.post-shell.opening .post {
+    transform: translate(-1px, -1px);
+    border-color: var(--ink);
+    transition-duration: .12s;
+}
+
+@media(max-width: 480px) {
+    .p-img {
+        aspect-ratio: 4/3;
+    }
+}
+
+

@@ -1506,3 +1506,96 @@
          flex-direction: column
      }
  }
+
+
+ .cx-chips {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px
+ }
+
+ .cx-chips button {
+     padding: 7px 14px;
+     border: 1px solid var(--line);
+     border-radius: 99px;
+     background: transparent;
+     font-size: 12.5px;
+     font-weight: 600;
+     color: var(--muted);
+     cursor: pointer;
+     transition: .2s;
+     text-transform: capitalize;
+ }
+
+ .cx-chips button:hover {
+     border-color: var(--ink);
+     color: var(--ink)
+ }
+
+ .cx-chips button.on {
+     background: var(--ink);
+     color: var(--surface);
+     border-color: var(--ink)
+ }
+
+ .cx-types button {
+     font-size: 11.5px
+ }
+
+ .cx-opt {
+     color: var(--muted);
+     font-weight: 500;
+     letter-spacing: .05em;
+     text-transform: none
+ }
+
+ .cx-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 6px;
+     margin-bottom: 8px
+ }
+
+ .cx-tags:empty {
+     margin-bottom: 0
+ }
+
+ .cx-tag {
+     display: inline-flex;
+     align-items: center;
+     gap: 6px;
+     background: rgba(255, 74, 17, .08);
+     border: 1px solid rgba(255, 74, 17, .35);
+     color: var(--accent);
+     border-radius: 99px;
+     padding: 5px 10px;
+     font-size: 12px;
+     font-weight: 700;
+ }
+
+ .cx-tag button {
+     background: none;
+     border: none;
+     color: inherit;
+     cursor: pointer;
+     font-size: 10px;
+     padding: 0
+ }
+
+ .cx-measure {
+     display: flex;
+     gap: 8px;
+     flex-wrap: wrap
+ }
+
+ .cx-measure span {
+     font-family: var(--serif);
+     font-style: italic;
+     font-weight: 600;
+     font-size: 14px;
+     color: var(--accent);
+     background: var(--bg);
+     border: 1px dashed rgba(255, 74, 17, .5);
+     border-radius: 99px;
+     padding: 6px 14px;
+ }

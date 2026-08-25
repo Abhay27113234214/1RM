@@ -82,12 +82,6 @@
         Logging since March 2024. Everything below is yours alone — edit any number
         and the smart coach recalibrates on the spot.
       </p>
-      <div class="greet-chips">
-        <span class="gchip"><b>✱</b> 34-day streak</span>
-        <span class="gchip"><b>247</b> sessions</span>
-        <span class="gchip"><b>3</b> this week</span>
-        <span class="gchip"><b>12</b> PRs</span>
-      </div>
       <div class="greet-date" id="dateLine"></div>
     </div>
   </header>
@@ -118,29 +112,29 @@
           <div class="month-note">✱ hover a square to relive it</div>
           <div class="hs-row">
             <div>
-              <div class="hv" data-count="34">0</div>
+              <div class="hv">0</div>
               <div class="hl">longest streak · days</div>
             </div>
             <div>
-              <div class="hv" data-count="6">0</div>
+              <div class="hv" >0</div>
               <div class="hl">best week · sessions</div>
             </div>
             <div>
-              <div class="hv" data-count="48920">0</div>
+              <div class="hv" >0</div>
               <div class="hl">total volume · kg</div>
             </div>
             <div>
-              <div class="hv" data-count="24">0</div>
+              <div class="hv">0</div>
               <div class="hl">active days</div>
             </div>
             <!-- animated volume trend (coach-widget bars) -->
             <div class="hs hs-bars">
               <div class="tbar-row" aria-hidden="true">
-                <div class="tbar" style="height:13px; --td:.05s"></div>
-                <div class="tbar" style="height:21px; --td:.15s"></div>
-                <div class="tbar" style="height:17px; --td:.25s"></div>
-                <div class="tbar" style="height:26px; --td:.35s"></div>
-                <div class="tbar" style="height:34px; --td:.45s"></div>
+                <div class="tbar"></div>
+                <div class="tbar"></div>
+                <div class="tbar"></div>
+                <div class="tbar"></div>
+                <div class="tbar"></div>
               </div>
               <div class="hl">volume · last 4 wk</div>
             </div>
@@ -148,134 +142,8 @@
         </div>
 
         <!-- recent sessions -->
-        <div class="day-sep reveal">Today</div>
-        <div class="post-shell reveal">
-          <article class="post" tabindex="0">
-            <div class="p-head">
-              <span class="av sm current_user_initials">AK</span>
-              <div class="p-who">
-                <div class="p-name current_user_name">Alex Kowalski</div>
-                <div class="p-meta"><span>You</span> · <span>2h ago</span></div>
-              </div>
-              <span class="streak">✱ 34-day streak</span>
-            </div>
-            <h3 class="p-title">Push day — everything heavy.</h3>
-            <div class="p-rows">
-              <div class="p-row pr">
-                <span class="nm" style="--c:#FF4A11">Bench Press</span>
-                <span class="mt">5 × 5 · 102.5 kg <span class="pr-tag">PR</span></span>
-              </div>
-              <div class="p-row">
-                <span class="nm" style="--c:#FF4A11">Incline DB Press</span>
-                <span class="mt">4 × 8 · 34 kg</span>
-              </div>
-              <div class="p-row">
-                <span class="nm" style="--c:#FF4A11">Weighted Dips</span>
-                <span class="mt">3 × 10 · +15 kg</span>
-              </div>
-            </div>
-            <div class="p-foot">
-              <span>volume <b>8,420 kg</b></span>
-              <span>time <b>68 min</b></span>
-              <span>effort <b>RIR 2</b></span>
-            </div>
-            <div class="p-acts">
-              <button class="act" data-action="spot"><span class="st">✱</span> Spot · <span
-                  class="spot-n">12</span></button>
-              <button class="act" data-action="comment">Comment · <span>3</span></button>
-              <button class="act share" data-action="share">Share</button>
-            </div>
-            <div class="p-cbox" hidden>
-              <input type="text" placeholder="Say something…">
-              <button class="act" data-action="post-comment">Post</button>
-            </div>
-          </article>
-        </div>
+        <div id="myFeed">
 
-        <div class="day-sep reveal">Yesterday</div>
-        <div class="post-shell reveal">
-          <article class="post" tabindex="0">
-            <div class="p-head">
-              <span class="av sm current_user_initials">AK</span>
-              <div class="p-who">
-                <div class="p-name current_user_name">Alex Kowalski</div>
-                <div class="p-meta"><span>You</span> · <span>6:40 pm</span></div>
-              </div>
-              <span class="streak">✱ 33-day streak</span>
-            </div>
-            <h3 class="p-title">Legs — squat day, no mercy.</h3>
-            <div class="p-rows">
-              <div class="p-row">
-                <span class="nm" style="--c:#1E9E6A">Back Squat</span>
-                <span class="mt">4 × 6 · 120 kg</span>
-              </div>
-              <div class="p-row">
-                <span class="nm" style="--c:#1E9E6A">Romanian Deadlift</span>
-                <span class="mt">3 × 8 · 100 kg</span>
-              </div>
-              <div class="p-row">
-                <span class="nm" style="--c:#1E9E6A">Walking Lunges</span>
-                <span class="mt">3 × 12 · 24 kg</span>
-              </div>
-            </div>
-            <div class="p-foot">
-              <span>volume <b>12,480 kg</b></span>
-              <span>time <b>74 min</b></span>
-              <span>effort <b>RIR 2</b></span>
-            </div>
-            <div class="p-comment"><b>Jonas B. · 1h ago</b>"That last squat set was pure grit. Earned."
-            </div>
-            <div class="p-acts">
-              <button class="act" data-action="spot"><span class="st">✱</span> Spot · <span
-                  class="spot-n">24</span></button>
-              <button class="act" data-action="comment">Comment · <span>1</span></button>
-              <button class="act share" data-action="share">Share</button>
-            </div>
-            <div class="p-cbox" hidden>
-              <input type="text" placeholder="Say something…">
-              <button class="act" data-action="post-comment">Post</button>
-            </div>
-          </article>
-        </div>
-
-        <div class="day-sep reveal">Earlier this week</div>
-        <div class="post-shell reveal">
-          <article class="post" tabindex="0">
-            <div class="p-head">
-              <span class="av sm current_user_initials">AK</span>
-              <div class="p-who">
-                <div class="p-name current_user_name">Alex Kowalski</div>
-                <div class="p-meta"><span>You</span> · <span>Tue · 7:15 am</span></div>
-              </div>
-              <span class="streak">✱ 32-day streak</span>
-            </div>
-            <h3 class="p-title">Zone 2 five — easy like Sunday.</h3>
-            <div class="p-rows">
-              <div class="p-row">
-                <span class="nm" style="--c:#D6486F">5K Run</span>
-                <span class="mt">26:12 · easy</span>
-              </div>
-              <div class="p-row">
-                <span class="nm" style="--c:#D6486F">Jump Rope</span>
-                <span class="mt">5 × 2 min</span>
-              </div>
-            </div>
-            <div class="p-foot">
-              <span>distance <b>6.4 km</b></span>
-              <span>time <b>41 min</b></span>
-              <span>zone <b>2</b></span>
-            </div>
-            <div class="p-acts">
-              <button class="act" data-action="spot"><span class="st">✱</span> Spot · <span
-                  class="spot-n">9</span></button>
-              <button class="act" data-action="comment">Comment · <span>0</span></button>
-              <button class="act share" data-action="share">Share</button>
-            </div>
-            <div class="p-cbox" hidden>
-              <input type="text" placeholder="Say something…">
-              <button class="act" data-action="post-comment">Post</button>
-            </div>
-          </article>
         </div>
 
         <div class="load-wrap reveal">
