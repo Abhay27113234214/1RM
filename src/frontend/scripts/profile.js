@@ -1,8 +1,5 @@
+import { logout } from "../../backend/auth.js"
 
-/* ============================================================
-   Profile glue — same patterns as home.js / index.js.
-   TODOs mark your backend hooks.
-============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
@@ -12,10 +9,12 @@ const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
 /* ---------- current user (home.js pattern + demo fallback) ---------- */
 let current_user = null;
 try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
-/* TODO: for strict auth remove this fallback and redirect like home.js */
-if (!current_user || !current_user.name) {
-    current_user = { name: 'Alex Kowalski', username: 'alexk_fit', email: 'alex@example.com' };
+if (!current_user) {
+    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
 }
+
+
+
 function applyUser() {
     const name = current_user.name.trim();
     let initials = '';
@@ -35,7 +34,6 @@ function applyUser() {
 }
 applyUser();
 
-/* ---------- toast (home.js) ---------- */
 function showToast(message, type = 'ok', duration = 3800) {
     const zone = $('#toastZone');
     const isError = type === 'error';
@@ -70,18 +68,15 @@ function showToast(message, type = 'ok', duration = 3800) {
     t.querySelector('.t-x').addEventListener('click', dismiss);
 }
 
-/* ---------- nav border ---------- */
 const navBar = $('#navBar');
 const onScroll = () => navBar.classList.toggle('scrolled', window.scrollY > 10);
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
-/* ---------- date line ---------- */
 $('#dateLine').innerHTML = '<b>✱</b> ' +
     new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) +
     ' <span class="live-dot"></span>';
 
-/* ---------- drawer ---------- */
 const drawer = $('#drawer'), drawerBack = $('#drawerBack'), burger = $('#burgerBtn');
 function openDrawer() {
     drawer.classList.add('open'); drawerBack.classList.add('open'); burger.classList.add('open');
@@ -105,13 +100,11 @@ $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     }
 }));
 
-/* ---------- reveal ---------- */
 const io = new IntersectionObserver(es => es.forEach(x => {
     if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); }
 }), { threshold: .1 });
 $$('.reveal').forEach(el => io.observe(el));
 
-/* ---------- counters ---------- */
 const fmtInt = n => Math.round(n).toLocaleString('en-US');
 const cio = new IntersectionObserver(es => es.forEach(x => {
     if (!x.isIntersecting) return;
@@ -128,67 +121,140 @@ const cio = new IntersectionObserver(es => es.forEach(x => {
 }), { threshold: .5 });
 $$('[data-count]').forEach(el => cio.observe(el));
 
-/* ---------- month calendar: real weeks, Mon→Sun, 4 rows ---------- */
-(function buildMonth() {
-    const grid = $('#monthGrid');
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    const mondayIdx = (today.getDay() + 6) % 7;
-    const start = new Date(today);
-    start.setDate(today.getDate() - mondayIdx - 21);
 
+// ab yeh jo hai yeh month functionality hai, k aapne pichle 4 hafto mein total kitna weight uthaya vagera vagera 
+
+const dayKey = (d) => {
+    return d.getFullYear() + '-' + // getFullYear returns a string like 2026
+        String(d.getMonth() + 1).padStart(2, '0') + '-' + // .getMonth is 0 based so +1, padStart adds a zero if the string is shorted than 2 characters
+        String(d.getDate()).padStart(2, '0'); // getDate gets today's date 
+}
+// to yeh jo uper vaala function hai yeh aaj ki date nikal k deta hai jaise maine json-server mein store ki hui hai 
+
+// yeh function to hr ek workout ki volume calculate krne k liye hai bsss
+function volumeOfWorkout(workout) {
+    let total = 0;
+    Object.values(workout.exercises || {}).forEach(ex => {
+        Object.values(ex.sets || {}).forEach(set => {
+            // purani rows [kg, reps] arrays hain, nayi rows {kg, reps} objects to isi liye yeh terinary operator lagana pad raha hai
+            const kg = Array.isArray(set) ? parseFloat(set[0]) || 0 : parseFloat(set.kg) || 0;
+            const reps = Array.isArray(set) ? parseFloat(set[1]) || 0 : parseFloat(set.reps) || 0;
+            total += kg * reps;
+        });
+    });
+    return total;
+}
+
+// ek din mein mai ek se zayada sessions ya workouts bhi to kr sakta hoon
+function groupWorkoutsByDay(workouts) {
+    const byDay = {};
+    workouts.forEach(w => {
+        if (!w.date) return;
+        if (!byDay[w.date]) byDay[w.date] = { sessions: 0, volume: 0 };
+        byDay[w.date].sessions++;
+        byDay[w.date].volume += volumeOfWorkout(w);
+    });
+    return byDay;
+}
+
+// yeh to vo heatmap k liye, konsa cell kitna dark hoga
+// ek din ki jitni zayada volume uske corresponding cell utna hi zayada dark
+function intensityFor(entry) {
+    if (!entry) return 0;
+    if (entry.sessions >= 2) return 4;      // two-a-day
+    if (entry.volume >= 9000) return 4;     // huge day
+    if (entry.volume >= 6000) return 3;     // big day
+    if (entry.volume >= 2500) return 2;     // normal day
+    return 1;                               // light / cardio only
+}
+
+// hover krne pe jo text aata hai kisi cell pe 
+function tooltipFor(entry, label) {
+    if (!entry) return label + ' · rest day';
+    const vol = Math.round(entry.volume).toLocaleString('en-US');
+    return label + ' · ' + entry.sessions + ' session' + (entry.sessions > 1 ? 's' : '') +
+        (entry.volume > 0 ? ' · ' + vol + ' kg' : ' · bodyweight / cardio');
+}
+
+async function buildMonth() {
+    const grid = $('#monthGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const me = JSON.parse(localStorage.getItem('current_user'));
+    if (!me) return;
+
+    /* ---- fetch my workouts, bucket by day ---- */
+    let mine = [];
+    try {
+        const res = await fetch('http://localhost:3000/workouts?user_id:eq=' + me.id);
+        mine = await res.json();
+    } catch (e) { mine = []; }
+    const byDay = groupWorkoutsByDay(mine); // maine jitne bhi workouts aaj tk kare hai unko group karo date k base peb
+
+    // yeh uper vaala saara weeks ka header dikhane k liye
     const corner = document.createElement('span');
-    corner.className = 'm-corner'; corner.textContent = 'wk';
+    corner.className = 'm-corner';
+    corner.textContent = 'wk';
     grid.appendChild(corner);
-    ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(d => {
+    ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(letter => {
         const s = document.createElement('span');
-        s.className = 'm-dow'; s.textContent = d;
+        s.className = 'm-dow';
+        s.textContent = letter;
         grid.appendChild(s);
     });
 
-    let mseed = 23;
-    const mrnd = () => { mseed = (mseed * 1103515245 + 12345) % 2147483648; return mseed / 2147483648; };
+    // month boudaries
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);       // jo bhi mahina aur saal chl raha hai vo lo aur uske pehle din pe jao  
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);   // jo bhi mahin achl raha hai uske pehle din pe jao
 
-    for (let w = 0; w < 4; w++) {
-        const rowStart = new Date(start);
-        rowStart.setDate(start.getDate() + w * 7);
-        const lbl = document.createElement('span');
-        lbl.className = 'm-lbl';
-        lbl.textContent = rowStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        grid.appendChild(lbl);
+    // grid Monday se shuru ho k Sunday pe khatam (4, 5 ya 6 rows — month pe depend karta hai)
+    const gridStart = new Date(firstDay);
+    gridStart.setDate(firstDay.getDate() - ((firstDay.getDay() + 6) % 7));
+    const gridEnd = new Date(lastDay);
+    gridEnd.setDate(lastDay.getDate() + (6 - ((lastDay.getDay() + 6) % 7)));
+
+    const head = grid.closest('.panel-flat')?.querySelector('.r-h');
+    if (head) head.textContent = 'consistency · ' + firstDay.toLocaleDateString('en-US', { month: 'long' });
+
+
+    for (let rowStart = new Date(gridStart); rowStart <= gridEnd; rowStart.setDate(rowStart.getDate() + 7)) { // hm date object pe iterate bhi kr sakte hai
+        // hm iterate karenge hafte by hafte aur poori grid generate karenge 
+        const label = document.createElement('span');
+        label.className = 'm-lbl';
+        label.textContent = rowStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        grid.appendChild(label);
 
         for (let d = 0; d < 7; d++) {
             const date = new Date(rowStart);
             date.setDate(rowStart.getDate() + d);
-            const diff = Math.round((today - date) / 86400000);
-            const dstr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            const cell = document.createElement('div');
 
-            if (diff < 0) {
+            const cell = document.createElement('div');
+            const dstr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const inMonth = date >= firstDay && date <= lastDay;
+
+            if (!inMonth) {
+                // pichle/agle month ka din — sirf grid ko poora karne k liye, faded
+                cell.className = 'm-cell future';
+                cell.dataset.tip = dstr + (date < firstDay ? ' · last month' : ' · next month');
+            } else if (date > today) {
+                // abhi aane vaala din
                 cell.className = 'm-cell future';
                 cell.dataset.tip = dstr + ' · coming up';
             } else {
-                const dow = date.getDay();
-                let level;
-                if (diff === 0) level = 4;
-                else if (diff <= 6) level = diff % 2 ? 2 : 3;
-                else if (dow === 0) level = mrnd() < .3 ? 1 : 0;
-                else level = mrnd() < .62
-                    ? Math.min(4, 1 + Math.floor(mrnd() * 3) + (mrnd() < .14 ? 1 : 0))
-                    : 0;
-                cell.className = 'm-cell l' + level + (diff === 0 ? ' today' : '');
-                if (level === 0) {
-                    cell.dataset.tip = dstr + ' · rest day';
-                } else {
-                    const sessions = level > 2 ? 2 : 1;
-                    const vol = sessions * (24 + Math.floor(mrnd() * 22)) * 100;
-                    cell.dataset.tip = dstr + ' · ' + sessions +
-                        (sessions > 1 ? ' sessions' : ' session') + ' · ' + vol.toLocaleString('en-US') + ' kg';
-                }
+                // real data — 1st se aaj tak
+                const entry = byDay[dayKey(date)];
+                const level = intensityFor(entry);
+                const isToday = date.getTime() === today.getTime();
+                cell.className = 'm-cell l' + level + (isToday ? ' today' : '');
+                cell.dataset.tip = tooltipFor(entry, dstr);
             }
             grid.appendChild(cell);
         }
     }
-})();
+}
+buildMonth();
 
 /* ---------- goals chips / segs ---------- */
 $$('[data-group]').forEach(group => {
@@ -256,7 +322,7 @@ $('#exportBtn').addEventListener('click', () => {
 });
 function signOut() {
     showToast('Signed out ✱ see you at the rack.');
-    /* TODO: call logout() from backend/auth.js like home.js */
+    logout()
     setTimeout(() => {
         window.location.href = 'index.html?message=logged_out&status=success';
     }, 1200);
