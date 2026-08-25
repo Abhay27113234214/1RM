@@ -1,3 +1,4 @@
+import { logout } from "../../backend/auth.js"
 
 import { logout } from "../../backend/auth.js"
 
