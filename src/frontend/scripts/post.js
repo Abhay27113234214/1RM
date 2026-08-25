@@ -229,7 +229,7 @@ function renderWorkout(wk, author) {
     /* spots */
     let spots = wk.spots !== undefined ? wk.spots : []; 
     $('#spotCount').textContent = spots.length;
-    $('#spottedBy').textContent = '+ ' + Math.max(spots - 3, 0) + ' spotted this';
+    $('#spottedBy').textContent = '+ ' + Math.max(spots.length - 3, 0) + ' spotted this';
     if (author.self) $('#followBtn').style.display = 'none';
 
     /* exercise blocks */

@@ -146,6 +146,8 @@ const fmtClock = ms => {
 };
 // yeh vaala function na vo jo Date.now() vaale format se time ko human readable format mein daal raha hai
 
+const localDateKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
 let workout = JSON.parse(localStorage.getItem("current_user_workout")) // this is the object which will be edited when the user is doing his workout 
 if (workout) {
     restore_session()
@@ -565,9 +567,9 @@ async function submitWorkout(withDetails) {
         // TODO
     } else {  
         workout['title'] = "Grinded"
-        workout['photos'] = []
+        workout['photos'] = ["../assets/default_workout_image.png"]
     }
-    workout['date'] = new Date().toISOString().split("T")[0]
+    workout['date'] = localDateKey()
     workout['user_id'] = current_user.id
     workout['total_time'] = fmtClock(Date.now() - startedAt)
     workout['total_volume'] = $('#ssVol').textContent

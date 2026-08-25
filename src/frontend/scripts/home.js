@@ -32,6 +32,9 @@ if (!current_user) {
     window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
 }
 
+const localDateKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
+
 function showToast(message, type = 'ok', duration = 3800) {
     const zone = $('#toastZone');
     const isError = type === 'error';
@@ -150,7 +153,7 @@ onScroll();
 $('#todayLine').innerHTML = '<b>✱</b> ' + new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + ' <span class="live-dot"></span>';
 
 // start workout card, but only shown when the user who is logged in has had a workout today 
-const date = new Date().toISOString().split("T")[0];
+const date = localDateKey()
 const url = `http://localhost:3000/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
 let workout_response = await fetch(url)
 let workouts = await workout_response.json()
@@ -455,7 +458,7 @@ let buildPostCard = async (element) => {
 let renderPosts = async () => {
     let workouts_response = await fetch("http://localhost:3000/workouts?_sort=-date")
     let workouts = await workouts_response.json()
-    const today = new Date().toISOString().split("T")[0]
+    const today = localDateKey()
 
     // meri aaj ki workouts -> date ke neeche vaala section
     const mineToday = workouts.filter(w => w.user_id == current_user.id && w.date === today)
@@ -505,3 +508,67 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     openPost(post);
 });
+
+
+function workoutVolume(w) {
+    let v = 0;
+    Object.values(w.exercises || {}).forEach(ex => {
+        Object.values(ex.sets || {}).forEach(s => {
+            const kg = Array.isArray(s) ? parseFloat(s[0]) || 0 : parseFloat(s.kg) || 0;
+            const reps = Array.isArray(s) ? parseFloat(s[1]) || 0 : parseFloat(s.reps) || 0;
+            v += kg * reps;
+        });
+    });
+    return v;
+}
+
+(async function renderWeek() {
+    const wkEl = document.querySelector('.home .rail .wk');
+    if (!wkEl) return;
+    const cells = Array.from(wkEl.children);           // the 7 <i> cells (M..S)
+    if (cells.length !== 7) return;
+
+    // meri saari workouts lao
+    const res = await fetch(`http://localhost:3000/workouts?user_id:eq=${current_user.id}`);
+    const mine = await res.json();
+
+    // current week: Monday-start (labels M T W T F S S k mutabiq)
+    const now = new Date();
+    const todayIdx = (now.getDay() + 6) % 7;           // 0 = Monday
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - todayIdx);
+
+    const perDay = Array(7).fill(0);
+    let weekSessions = 0, weekVol = 0;
+
+    mine.forEach(w => {
+        for (let i = 0; i < 7; i++) {
+            const d = new Date(monday);
+            d.setDate(monday.getDate() + i);
+            d.setHours(12, 0, 0, 0);                  // noon → timezone safe
+            if (w.date === d.toISOString().split('T')[0]) {
+                perDay[i]++;
+                weekSessions++;
+                weekVol += workoutVolume(w);
+            }
+        }
+    });
+
+    // cells paint karo: 0 = rest, 1 = l2, 2+ = l4, aaj = outline
+    cells.forEach((c, i) => {
+        c.className = '';
+        if (perDay[i] === 1) c.classList.add('l2');
+        if (perDay[i] >= 2) c.classList.add('l4');
+        if (i === todayIdx) c.classList.add('today');
+    });
+
+    // neeche vaale numbers
+    const panel = wkEl.closest('.panel-flat');
+    const hvs = panel.querySelectorAll('.hv');
+    const hls = panel.querySelectorAll('.hl');
+    const goal = parseInt((current_user.trainingDays || '').split('-')[1]) || 5; // onboarding se ("4-5" → 5)
+    if (hvs[0]) hvs[0].textContent = weekSessions;
+    if (hls[0]) hls[0].textContent = '/ ' + goal + ' sessions';
+    if (hvs[1]) hvs[1].textContent = Math.round(weekVol).toLocaleString('en-US');
+    if (hls[1]) hls[1].textContent = 'kg volume';
+})();
