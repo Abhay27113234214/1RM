@@ -383,7 +383,7 @@ spotBtn.addEventListener('click', () => {
     spotCount.textContent = (+spotCount.textContent) + (on ? 1 : -1);
     if (on) {
         showToast("Spotted")
-        wk['spots'].psuh(current_user.id)
+        wk['spots'].push(current_user.id)
     } else {
         const index = wk['spots'].indexOf(current_user.id)
         if (index > -1) {
