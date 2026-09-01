@@ -2,3 +2,6 @@ db.json
 tests/
 package*.*
 node_modules/
+
+# Local Netlify folder
+.netlify
