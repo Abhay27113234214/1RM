@@ -27,7 +27,7 @@ function getMessageAndAct() {
 }
 getMessageAndAct()
 
-const current_user = JSON.parse(localStorage.getItem('current_user'))
+const current_user = JSON.parse(localStorage.getItem('current_user')) // starting mein hi current user ko store kr liya 
 if (!current_user) {
     window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
 }
