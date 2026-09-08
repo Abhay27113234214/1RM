@@ -15,7 +15,7 @@ const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
 
-const API = 'http://localhost:3000';
+const API = 'https://onerm-4tup.onrender.com';
 
 let current_user = null;
 try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
