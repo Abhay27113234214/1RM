@@ -179,7 +179,7 @@ function tooltipFor(entry, label) {
 
 let myWorkouts = [];
 try {
-    const res = await fetch('http://localhost:3000/workouts?user_id:eq=' + current_user.id);
+    const res = await fetch('https://onerm-4tup.onrender.com/workouts?user_id:eq=' + current_user.id);
     myWorkouts = await res.json();
 } catch (e) { myWorkouts = []; }
 

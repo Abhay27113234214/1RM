@@ -2,7 +2,7 @@ export { addMeasurements };
 
 let addMeasurements = async (measurements) => {
     const current_user = JSON.parse(localStorage.getItem('current_user'))
-    let curr_user_db_response = await fetch(`http://localhost:3000/users?email:eq=${current_user.email}`)
+    let curr_user_db_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${current_user.email}`)
     let curr_user_db = await curr_user_db_response.json()
     let modified_user = curr_user_db[0]
     modified_user['incomplete'] = false
@@ -16,7 +16,7 @@ let addMeasurements = async (measurements) => {
         weight: measurements.weight,
         body_fat: measurements.bodyFat
     }
-    let response = await fetch(`http://localhost:3000/users/${modified_user.id}`, {
+    let response = await fetch(`https://onerm-4tup.onrender.com/users/${modified_user.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

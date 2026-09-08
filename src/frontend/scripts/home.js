@@ -154,7 +154,7 @@ $('#todayLine').innerHTML = '<b>✱</b> ' + new Date().toLocaleDateString('en-US
 
 // start workout card, but only shown when the user who is logged in has had a workout today 
 const date = localDateKey()
-const url = `http://localhost:3000/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
+const url = `https://onerm-4tup.onrender.com/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
 let workout_response = await fetch(url)
 let workouts = await workout_response.json()
 const hasWorkoutToday = workouts.length >= 1;
@@ -401,10 +401,10 @@ let format_total_time = (t) => {
 };
 
 async function getWorkout(id) {
-    return (await fetch('http://localhost:3000/workouts/' + id)).json();
+    return (await fetch('https://onerm-4tup.onrender.com/workouts/' + id)).json();
 }
 async function patchWorkout(id, changes) {
-    return (await fetch('http://localhost:3000/workouts/' + id, {
+    return (await fetch('https://onerm-4tup.onrender.com/workouts/' + id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(changes)
@@ -415,7 +415,7 @@ let feed = $('#feed')
 let myToday = $('#myToday')
 
 let buildPostCard = async (element) => {
-    let user_response = await fetch(`http://localhost:3000/users/${element.user_id}`)
+    let user_response = await fetch(`https://onerm-4tup.onrender.com/users/${element.user_id}`)
     let user = await user_response.json()
     let user_initials = ''
     let photo = (element.photos && element.photos.length >= 1) ? element.photos[0] : "../assets/default_workout_image.png"
@@ -456,7 +456,7 @@ let buildPostCard = async (element) => {
     `
 }
 let renderPosts = async () => {
-    let workouts_response = await fetch("http://localhost:3000/workouts?_sort=-date")
+    let workouts_response = await fetch("https://onerm-4tup.onrender.com/workouts?_sort=-date")
     let workouts = await workouts_response.json()
     const today = localDateKey()
 
@@ -529,7 +529,7 @@ function workoutVolume(w) {
     if (cells.length !== 7) return;
 
     // meri saari workouts lao
-    const res = await fetch(`http://localhost:3000/workouts?user_id:eq=${current_user.id}`);
+    const res = await fetch(`https://onerm-4tup.onrender.com/workouts?user_id:eq=${current_user.id}`);
     const mine = await res.json();
 
     // current week: Monday-start (labels M T W T F S S k mutabiq)

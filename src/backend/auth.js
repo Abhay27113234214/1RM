@@ -1,7 +1,7 @@
 export { login, register, logout };
 
 let login = async (email, password) => {
-    let user_response = await fetch(`http://localhost:3000/users?email:eq=${email}`)
+    let user_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${email}`)
     let users = await user_response.json()
     if (users.length < 1) {
         return {
@@ -21,7 +21,7 @@ let login = async (email, password) => {
 }
 
 let register = async (user) => {
-    let user_response = await fetch(`http://localhost:3000/users?email:eq=${user.email}`)
+    let user_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${user.email}`)
     let user_in_db = await user_response.json()
     if (user_in_db.length >= 1) {
         return {
@@ -30,7 +30,7 @@ let register = async (user) => {
         }
     }
     user['incomplete'] = true
-    let create_user_response = await fetch(`http://localhost:3000/users`, {
+    let create_user_response = await fetch(`https://onerm-4tup.onrender.com/users`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

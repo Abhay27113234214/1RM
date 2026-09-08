@@ -2,8 +2,8 @@ import { logout } from "../../backend/auth.js";
 /* ============================================================
    Workout-detail glue — dynamic, same patterns as home.js.
    Loads the workout via ?id= from your json-server:
-       GET http://localhost:3000/workouts?id=<id>
-       GET http://localhost:3000/users?id=<user_id>   (author)
+       GET https://onerm-4tup.onrender.com/workouts?id=<id>
+       GET https://onerm-4tup.onrender.com/users?id=<user_id>   (author)
 ============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -463,7 +463,7 @@ $('#cmtInput').addEventListener('keydown', e => { if (e.key === 'Enter') postCom
 // workout ko save krne k litye agr koi workout vaale page se ht jaata hai to workout 
 // apne aap save ho jaaye comments aur spot k sath
 window.addEventListener("pagehide", async function() {
-    let workout_save_response = await fetch(`http://localhost:3000/workouts/${wk.id}`, {
+    let workout_save_response = await fetch(`https://onerm-4tup.onrender.com/workouts/${wk.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

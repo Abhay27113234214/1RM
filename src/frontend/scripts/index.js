@@ -1,5 +1,5 @@
 let login = async (email, password) => {
-    let user_response = await fetch(`http://localhost:3000/users?email:eq=${email}`)
+    let user_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${email}`)
     let users = await user_response.json()
     if (users.length < 1) {
         return {
@@ -19,7 +19,7 @@ let login = async (email, password) => {
 }
 
 let register = async (user) => {
-    let user_response = await fetch(`http://localhost:3000/users?email:eq=${user.email}`)
+    let user_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${user.email}`)
     let user_in_db = await user_response.json()
     if (user_in_db.length >= 1) {
         return {
@@ -28,7 +28,7 @@ let register = async (user) => {
         }
     }
     user['incomplete'] = true
-    let create_user_response = await fetch(`http://localhost:3000/users`, {
+    let create_user_response = await fetch(`https://onerm-4tup.onrender.com/users`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ let logout = () => {
 
 let addMeasurements = async (measurements) => {
     const current_user = JSON.parse(localStorage.getItem('current_user'))
-    let curr_user_db_response = await fetch(`http://localhost:3000/users?email:eq=${current_user.email}`)
+    let curr_user_db_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${current_user.email}`)
     let curr_user_db = await curr_user_db_response.json()
     let modified_user = curr_user_db[0]
     modified_user['incomplete'] = false
@@ -71,7 +71,7 @@ let addMeasurements = async (measurements) => {
         weight: measurements.weight,
         body_fat: measurements.bodyFat
     }
-    let response = await fetch(`http://localhost:3000/users/${modified_user.id}`, {
+    let response = await fetch(`https://onerm-4tup.onrender.com/users/${modified_user.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

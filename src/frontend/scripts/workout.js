@@ -300,7 +300,7 @@ let SUGG = [
 ];
 
 async function fetch_exercises() {
-    let response = await fetch("http://localhost:3000/exercises")
+    let response = await fetch("https://onerm-4tup.onrender.com/exercises")
     let exercises = await response.json()
     for (let i = 0; i < exercises.length; i++) {
         SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
@@ -576,7 +576,7 @@ async function submitWorkout(withDetails) {
     delete workout.pause_time
     // delete workout.start_time
 
-    let response = await fetch("http://localhost:3000/workouts", {
+    let response = await fetch("https://onerm-4tup.onrender.com/workouts", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(workout)
@@ -741,7 +741,7 @@ $('#cxSave').addEventListener('click', async () => {
 
     const saveBtn = $('#cxSave');
     saveBtn.disabled = true;
-    const res = await fetch('http://localhost:3000/exercises', {
+    const res = await fetch('https://onerm-4tup.onrender.com/exercises', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
