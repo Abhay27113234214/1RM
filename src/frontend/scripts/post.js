@@ -1,4 +1,8 @@
-import { logout } from "../../backend/auth.js";
+let logout = () => {
+    localStorage.removeItem('current_user')
+    localStorage.removeItem('current_user_workout')
+    localStorage.removeItem('current_user_workout_incomplete')
+}
 /* ============================================================
    Workout-detail glue — dynamic, same patterns as home.js.
    Loads the workout via ?id= from your json-server:

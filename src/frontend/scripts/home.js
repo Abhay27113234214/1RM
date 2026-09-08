@@ -1,4 +1,8 @@
-import { logout } from "../../backend/auth.js";
+let logout = () => {
+    localStorage.removeItem('current_user')
+    localStorage.removeItem('current_user_workout')
+    localStorage.removeItem('current_user_workout_incomplete')
+}
 /* ============================================================
    Visual-only glue. YOUR logic plugs into the TODOs:
      hasWorkoutToday       → hide #startWorkout when true

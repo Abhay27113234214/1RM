@@ -1,4 +1,8 @@
-import { logout } from "../../backend/auth.js"
+let logout = () => {
+    localStorage.removeItem('current_user')
+    localStorage.removeItem('current_user_workout')
+    localStorage.removeItem('current_user_workout_incomplete')
+}
 
 
 const $ = s => document.querySelector(s);

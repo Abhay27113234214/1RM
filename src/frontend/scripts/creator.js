@@ -1,10 +1,17 @@
-import { logout } from "../../backend/auth.js";
 /* ============================================================
 Creator profile / journey page — self-contained.
 IDs match discover.js cards (c1–c10).
 Sections: identity → journey → split → go-to exercises →
 latest session → diet → comments.
 ============================================================ */
+
+let logout = () => {
+    localStorage.removeItem('current_user')
+    localStorage.removeItem('current_user_workout')
+    localStorage.removeItem('current_user_workout_incomplete')
+}
+
+
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
