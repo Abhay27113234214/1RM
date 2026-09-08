@@ -87,7 +87,7 @@ $$('.set-row').forEach(row => {
 
 const current_user = JSON.parse(localStorage.getItem('current_user'))
 if (!current_user) {
-    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=workout&status=error"
+    window.location.href = "/templates/index.html?message=not_logged_in&from=workout&status=error"
 }
 
 
@@ -584,7 +584,7 @@ async function submitWorkout(withDetails) {
     if (response.status === 201) {
         localStorage.removeItem('current_user_workout')
         workout = {}
-        window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html?message=workout_completed&from=workout"
+        window.location.href = "/templates/home.html?message=workout_completed&from=workout"
     } else {
         saveBtn.disabled = false;
         showToast("Could not save the workout. Try again. Too may photos", "error");

@@ -316,7 +316,7 @@ signinForm.addEventListener('submit', async e => {
     if (result.success) {
         showToast('User Logged in successfully!!')
         await sleep(4000)
-        window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
+        window.location.href = "/templates/home.html"
         // closeDialog() // shyd yeh baad mein remove karna pade 
     } else {
         if (result.reason === 'user_not_found') {
@@ -387,7 +387,7 @@ $('#obSave').addEventListener('click', async () => {
     if (result.success) {
         showToast('Measurements and goals aligned!')
         await sleep(4000)
-        window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
+        window.location.href = "/templates/home.html"
     } else {
         showToast('There was an error. Try again later', 'error')
     }
@@ -399,7 +399,7 @@ $('#obSkip').addEventListener('click', async () => {
     // hai bhai zaroorat
     showToast('No worries, You can fill them later on!')
     await sleep(4000)
-    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
+    window.location.href = "/templates/home.html"
     closeDialog();
 });
 

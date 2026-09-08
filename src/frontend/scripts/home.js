@@ -29,7 +29,7 @@ getMessageAndAct()
 
 const current_user = JSON.parse(localStorage.getItem('current_user')) // starting mein hi current user ko store kr liya 
 if (!current_user) {
-    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
+    window.location.href = "/?message=not_logged_in&from=home&status=error"
 }
 
 const localDateKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
@@ -185,7 +185,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(
 // profile, sign in, sign out
 $$('[data-profile]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault(); closeDrawer();
-    window.location.href = "profile.html"
+    window.location.href = "/templates/profile.html"
 }));
 $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
@@ -194,7 +194,7 @@ $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
         // yrr yeh vaala page ni banaya TODO
     } else if (action === "signout") {
         logout()
-        window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=logged_out&status=success"
+        window.location.href = "/?message=logged_out&status=success"
     }
 }));
 
@@ -488,7 +488,7 @@ function openPost(post) {
     openingPost = true;
     post.closest('.post-shell').classList.add('opening');   // pressed look
     setTimeout(() => {
-        window.location.href = 'post.html?id=' + id;
+        window.location.href = '/templates/post.html?id=' + id;
     }, OPEN_DELAY);
 }
 

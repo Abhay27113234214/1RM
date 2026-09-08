@@ -11,7 +11,7 @@ const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
 let current_user = null;
 try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
 if (!current_user) {
-    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
+    window.location.href = "/templates/index.html?message=not_logged_in&from=home&status=error"
 }
 
 
@@ -320,7 +320,7 @@ function signOut() {
     showToast('Signed out ✱ see you at the rack.');
     logout()
     setTimeout(() => {
-        window.location.href = 'index.html?message=logged_out&status=success';
+        window.location.href = '/templates/index.html?message=logged_out&status=success';
     }, 1200);
 }
 $('#signOutBtn').addEventListener('click', signOut);
@@ -567,7 +567,7 @@ function openPost(post) {
     openingPost = true;
     post.closest('.post-shell').classList.add('opening');   // pressed look
     setTimeout(() => {
-        window.location.href = 'post.html?id=' + id;
+        window.location.href = '/templates/post.html?id=' + id;
     }, OPEN_DELAY);
 }
 

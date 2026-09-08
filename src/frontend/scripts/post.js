@@ -16,7 +16,7 @@ const API = 'http://localhost:3000';
 let current_user = null;
 try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
 if (!current_user) {
-    window.location.href = "http://127.0.0.1:5500/src/frontend/templates/index.html?message=not_logged_in&from=home&status=error"
+    window.location.href = "/?message=not_logged_in&from=home&status=error"
 }
 
 const wk = await loadWorkout()
@@ -326,10 +326,10 @@ async function loadWorkout() {
             const wk = Array.isArray(data) ? data[0] : data;
             if (wk && wk.exercises) return wk;
             showToast('Session not found.', 'error');
-            window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html?message=session_not_found&status=error"
+            window.location.href = "/templates/home.html?message=session_not_found&status=error"
         } catch (e) {
             showToast('Some Error occured. Try again after some time', 'error');
-            window.location.href = "http://127.0.0.1:5500/src/frontend/templates/home.html"
+            window.location.href = "/templates/home.html"
         }
     }
 }
