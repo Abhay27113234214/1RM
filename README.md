@@ -1,5 +1,7 @@
 # 1RM ✱ The Minimal Workout Log
 
+Live Demo: https://1rm27.netlify.app/
+
 **Track every set. Log every session. Never lose your numbers.**
 
 1RM is a lightweight strength-training log built with plain HTML, CSS, and JavaScript on the frontend, and a [json-server](https://github.com/typicode/json-server) REST API on the backend. Sign up, pick exercises from a built-in catalogue of 200+ movements, log your sets and reps, and browse your training history — no frameworks, no build step, no bloat.
