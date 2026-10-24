@@ -87,7 +87,7 @@ $$('.set-row').forEach(row => {
 
 const current_user = JSON.parse(localStorage.getItem('current_user'))
 if (!current_user) {
-    window.location.href = "/templates/index.html?message=not_logged_in&from=workout&status=error"
+    window.location.href = "index.html?message=not_logged_in&from=workout&status=error"
 }
 
 
@@ -300,7 +300,7 @@ let SUGG = [
 ];
 
 async function fetch_exercises() {
-    let response = await fetch("https://onerm-4tup.onrender.com/exercises")
+    let response = await fetch("http://localhost:3000/exercises")
     let exercises = await response.json()
     for (let i = 0; i < exercises.length; i++) {
         SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
@@ -576,7 +576,7 @@ async function submitWorkout(withDetails) {
     delete workout.pause_time
     // delete workout.start_time
 
-    let response = await fetch("https://onerm-4tup.onrender.com/workouts", {
+    let response = await fetch("http://localhost:3000/workouts", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(workout)
@@ -584,7 +584,7 @@ async function submitWorkout(withDetails) {
     if (response.status === 201) {
         localStorage.removeItem('current_user_workout')
         workout = {}
-        window.location.href = "/templates/home.html?message=workout_completed&from=workout"
+        window.location.href = "home.html?message=workout_completed&from=workout"
     } else {
         saveBtn.disabled = false;
         showToast("Could not save the workout. Try again. Too may photos", "error");
@@ -741,7 +741,7 @@ $('#cxSave').addEventListener('click', async () => {
 
     const saveBtn = $('#cxSave');
     saveBtn.disabled = true;
-    const res = await fetch('https://onerm-4tup.onrender.com/exercises', {
+    const res = await fetch('http://localhost:3000/exercises', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

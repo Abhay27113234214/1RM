@@ -11,7 +11,7 @@ const $$ = s => Array.from(document.querySelectorAll(s));
 /* ---------- auth guard (same as home) ---------- */
 const current_user = JSON.parse(localStorage.getItem('current_user'));
 if (!current_user) {
-  window.location.href = "/?message=not_logged_in&status=error";
+  window.location.href = "index.html?message=not_logged_in&status=error";
 }
 
 /* ---------- dynamic user data (same as home) ---------- */
@@ -110,7 +110,7 @@ $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     // TODO: open settings
   } else if (action === "signout") {
     logout();
-    window.location.href = "/?message=logged_out&status=success";
+    window.location.href = "index.html?message=logged_out&status=success";
   }
 }));
 
@@ -473,7 +473,7 @@ Tapping a creator card now opens creator.html
 
   const openCreator = shell => {
     const id = shell.dataset.id;
-    if (id) window.location.href = '/templates/creator.html?id=' + id;
+    if (id) window.location.href = 'creator.html?id=' + id;
   };
 
   /* click anywhere on a card (except its inner controls) */
