@@ -6,6 +6,11 @@
      create exercise      → #createExBtn (links to create-exercise.html)
      notes                → textarea per exercise
    ============================================================ */
+// Backend API base URL (MVC API integration)
+// Local development toggle:
+const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "https://onerm-workout-api.onrender.com/api";
+
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const exList = $('#exList');
@@ -300,12 +305,20 @@ let SUGG = [
 ];
 
 async function fetch_exercises() {
-    let response = await fetch("https://onerm-4tup.onrender.com/exercises")
-    let exercises = await response.json()
-    for (let i = 0; i < exercises.length; i++) {
-        SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
-            .toString(16)
-            .padStart(6, "0"), exercises[i].exercise_type])
+    try {
+        let response = await fetch(`${API_BASE}/exercises`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        let exercises = await response.json();
+        for (let i = 0; i < exercises.length; i++) {
+            SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
+                .toString(16)
+                .padStart(6, "0"), exercises[i].exercise_type]);
+        }
+    } catch (err) {
+        console.error("fetch_exercises failed:", err);
+        showToast("Could not load exercise list. Check backend connection.", "error");
     }
 }
 
@@ -576,18 +589,30 @@ async function submitWorkout(withDetails) {
     delete workout.pause_time
     // delete workout.start_time
 
-    let response = await fetch("https://onerm-4tup.onrender.com/workouts", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(workout)
-    })
-    if (response.status === 201) {
-        localStorage.removeItem('current_user_workout')
-        workout = {}
-        window.location.href = "/templates/home.html?message=workout_completed&from=workout"
-    } else {
+    try {
+        let response = await fetch(`${API_BASE}/workouts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(workout)
+        });
+        if (response.status === 201) {
+            localStorage.removeItem('current_user_workout');
+            workout = {};
+            window.location.href = "/templates/home.html?message=workout_completed&from=workout";
+        } else if (response.status === 413) {
+            saveBtn.disabled = false;
+            showToast("Workout photos are too large (>10MB). Please remove some photos.", "error");
+        } else {
+            saveBtn.disabled = false;
+            let errorData;
+            try { errorData = await response.json(); } catch (_) {}
+            const msg = errorData?.message || "Could not save the workout. Try again.";
+            showToast(msg, "error");
+        }
+    } catch (err) {
+        console.error("submitWorkout failed:", err);
         saveBtn.disabled = false;
-        showToast("Could not save the workout. Try again. Too may photos", "error");
+        showToast("Network error: Could not reach backend server. Try again.", "error");
     }
 }
 $('#fmSave').addEventListener('click', () => submitWorkout(true));
@@ -741,33 +766,42 @@ $('#cxSave').addEventListener('click', async () => {
 
     const saveBtn = $('#cxSave');
     saveBtn.disabled = true;
-    const res = await fetch('https://onerm-4tup.onrender.com/exercises', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            asset: 'None',
-            name,
-            equipment_type: cxState.equipment,
-            primary_muscle_group: cxState.muscle,
-            other_muscles: cxState.other,
-            exercise_type: cxState.type,
-            measurement: fieldsFor(cxState.type)   // ['kg','reps'] wagaira — db shape se match
-        })
-    });
-    saveBtn.disabled = false;
+    try {
+        const res = await fetch(`${API_BASE}/exercises`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                asset: 'None',
+                name,
+                equipment_type: cxState.equipment,
+                primary_muscle_group: cxState.muscle,
+                other_muscles: cxState.other,
+                exercise_type: cxState.type,
+                measurement: fieldsFor(cxState.type)   // ['kg','reps'] wagaira — db shape se match
+            })
+        });
+        saveBtn.disabled = false;
 
-    if (res.status === 201) {
-        const created = await res.json();
-        const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-        SUGG.push([created.name, created.exercise_type, color, created.exercise_type]); // search mein turant
-        closeCreateEx();
-        showToast('“' + created.name + '” added to your library ✱');
-        // reset for next time
-        $('#cxName').value = '';
-        cxState.other = []; renderCxTags(); cxOther.value = '';
-        // aur seedha session mein bhi add
-        addExerciseCard(created.name, created.exercise_type, color);
-    } else {
-        showToast('Could not save the exercise. Try again.', 'error');
+        if (res.status === 201) {
+            const created = await res.json();
+            const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+            SUGG.push([created.name, created.exercise_type, color, created.exercise_type]); // search mein turant
+            closeCreateEx();
+            showToast('“' + created.name + '” added to your library ✱');
+            // reset for next time
+            $('#cxName').value = '';
+            cxState.other = []; renderCxTags(); cxOther.value = '';
+            // aur seedha session mein bhi add
+            addExerciseCard(created.name, created.exercise_type, color);
+        } else {
+            let errorData;
+            try { errorData = await res.json(); } catch (_) {}
+            const msg = errorData?.message || 'Could not save the exercise. Try again.';
+            showToast(msg, 'error');
+        }
+    } catch (err) {
+        console.error("Create custom exercise failed:", err);
+        saveBtn.disabled = false;
+        showToast('Network error: Could not reach backend server.', 'error');
     }
 });

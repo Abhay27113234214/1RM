@@ -1,0 +1,336 @@
+{
+  "info": {
+    "_postman_id": "1rm-workout-api-evaluation",
+    "name": "1RM Workout & Exercise API",
+    "description": "Evaluation Collection for 1RM Continuous Evaluation (Backend). Includes all CRUD endpoints, query filters, and validation error cases with expected HTTP status codes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Local dev URL (http://localhost:5000) or deployed Render URL (https://<your-app>.onrender.com)"
+    },
+    {
+      "key": "exerciseId",
+      "value": "REPLACE_WITH_VALID_EXERCISE_OBJECT_ID",
+      "type": "string"
+    },
+    {
+      "key": "workoutId",
+      "value": "REPLACE_WITH_VALID_WORKOUT_OBJECT_ID",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health & Diagnostics",
+      "item": [
+        {
+          "name": "Health Check [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Expected status: 200 OK. Returns API status, timestamp, and database connectivity."
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Exercises API",
+      "item": [
+        {
+          "name": "GET All Exercises [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises"]
+            },
+            "description": "Expected status: 200 OK. Returns all 232 seeded exercises sorted alphabetically."
+          }
+        },
+        {
+          "name": "GET Filtered Exercises by Muscle & Equipment [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises?muscle=chest&equipment=barbell",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises"],
+              "query": [
+                { "key": "muscle", "value": "chest" },
+                { "key": "equipment", "value": "barbell" }
+              ]
+            },
+            "description": "Expected status: 200 OK. Returns exercises filtered by primary_muscle_group and equipment_type."
+          }
+        },
+        {
+          "name": "GET Search Exercises by Query [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises?q=bench",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises"],
+              "query": [
+                { "key": "q", "value": "bench" }
+              ]
+            },
+            "description": "Expected status: 200 OK. Searches exercises matching the substring 'bench'."
+          }
+        },
+        {
+          "name": "GET Single Exercise by ID [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises/{{exerciseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises", "{{exerciseId}}"]
+            },
+            "description": "Expected status: 200 OK if ID exists, or 404 Not Found if invalid/missing."
+          }
+        },
+        {
+          "name": "POST Create Custom Exercise (Valid) [Expected: 201 Created]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Incline Cable Flyes (Custom Demo)\",\n  \"primary_muscle_group\": \"chest\",\n  \"equipment_type\": \"cable\",\n  \"other_muscles\": [\"shoulders\"],\n  \"exercise_type\": \"weight_and_reps\",\n  \"measurement\": [\"kg\", \"reps\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises"]
+            },
+            "description": "Expected status: 201 Created. Validates fields and returns the created exercise with its generated id."
+          }
+        },
+        {
+          "name": "POST Create Exercise - FAIL Validation (Missing Fields) [Expected: 400 Bad Request]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipment_type\": \"dumbbell\",\n  \"exercise_type\": \"weight_and_reps\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises"]
+            },
+            "description": "Expected status: 400 Bad Request. Fails because 'name' and 'primary_muscle_group' are missing."
+          }
+        },
+        {
+          "name": "POST Create Exercise - FAIL Validation (Duplicate Name) [Expected: 400 Bad Request]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Barbell Bench Press\",\n  \"primary_muscle_group\": \"chest\",\n  \"exercise_type\": \"weight_and_reps\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises"]
+            },
+            "description": "Expected status: 400 Bad Request. Fails because 'Barbell Bench Press' already exists in the database."
+          }
+        },
+        {
+          "name": "PUT Update Exercise [Expected: 200 OK]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipment_type\": \"machine\",\n  \"other_muscles\": [\"triceps\", \"delts\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises/{{exerciseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises", "{{exerciseId}}"]
+            },
+            "description": "Expected status: 200 OK. Updates the specified exercise attributes."
+          }
+        },
+        {
+          "name": "DELETE Exercise [Expected: 200 OK]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises/{{exerciseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "exercises", "{{exerciseId}}"]
+            },
+            "description": "Expected status: 200 OK. Deletes the specified exercise."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Workouts API",
+      "item": [
+        {
+          "name": "GET All Workouts [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts"]
+            },
+            "description": "Expected status: 200 OK. Returns workouts ordered newest first."
+          }
+        },
+        {
+          "name": "GET Workouts by User ID & Date [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts?user_id=uzRzsAftMcU&date=2026-08-25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts"],
+              "query": [
+                { "key": "user_id", "value": "uzRzsAftMcU" },
+                { "key": "date", "value": "2026-08-25" }
+              ]
+            },
+            "description": "Expected status: 200 OK. Filters workouts for the specific user and date."
+          }
+        },
+        {
+          "name": "GET Single Workout by ID [Expected: 200 OK]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts/{{workoutId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts", "{{workoutId}}"]
+            },
+            "description": "Expected status: 200 OK if found, or 404 Not Found."
+          }
+        },
+        {
+          "name": "POST Create Workout (Valid) [Expected: 201 Created]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"uzRzsAftMcU\",\n  \"date\": \"2026-10-25\",\n  \"title\": \"Push Day Grinded\",\n  \"description\": \"Solid progressive overload session\",\n  \"start_time\": 1787606981905,\n  \"total_time\": \"42:15\",\n  \"total_volume\": \"15,400\",\n  \"photos\": [\"../assets/default_workout_image.png\"],\n  \"spots\": [],\n  \"comments\": [],\n  \"exercises\": {\n    \"Barbell Bench Press\": {\n      \"type\": \"weight_and_reps\",\n      \"sets\": {\n        \"1\": { \"kg\": \"100\", \"reps\": \"10\" },\n        \"2\": { \"kg\": \"105\", \"reps\": \"8\" }\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts"]
+            },
+            "description": "Expected status: 201 Created. Validates non-empty user_id, date, exercises and sets."
+          }
+        },
+        {
+          "name": "POST Create Workout - FAIL Validation (Missing Exercises) [Expected: 400 Bad Request]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"uzRzsAftMcU\",\n  \"date\": \"2026-10-25\",\n  \"title\": \"Empty Workout\",\n  \"exercises\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts"]
+            },
+            "description": "Expected status: 400 Bad Request. Fails validation because 'exercises' has no exercises or sets."
+          }
+        },
+        {
+          "name": "POST Create Workout - FAIL Validation (Missing user_id) [Expected: 400 Bad Request]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-10-25\",\n  \"title\": \"Workout without user\",\n  \"exercises\": {\n    \"Barbell Bench Press\": {\n      \"type\": \"weight_and_reps\",\n      \"sets\": { \"1\": { \"kg\": \"50\", \"reps\": \"10\" } }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts"]
+            },
+            "description": "Expected status: 400 Bad Request. Fails validation because 'user_id' is missing."
+          }
+        },
+        {
+          "name": "PUT Update Workout [Expected: 200 OK]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Workout Title\",\n  \"description\": \"Added extra cooldown set\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts/{{workoutId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts", "{{workoutId}}"]
+            },
+            "description": "Expected status: 200 OK. Updates fields on the specified workout."
+          }
+        },
+        {
+          "name": "DELETE Workout [Expected: 200 OK]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workouts/{{workoutId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "workouts", "{{workoutId}}"]
+            },
+            "description": "Expected status: 200 OK. Deletes the specified workout."
+          }
+        }
+      ]
+    }
+  ]
+}
