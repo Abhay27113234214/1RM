@@ -1,59 +1,4 @@
-let login = async (email, password) => {
-    let user_response = await fetch(`http://localhost:3000/users?email:eq=${email}`)
-    let users = await user_response.json()
-    if (users.length < 1) {
-        return {
-            success: false,
-            reason: "user_not_found"
-        }
-    }
-    let user = users[0]
-    if (user.password != password) {
-        return {
-            success: false,
-            reason: "invalid_password"
-        }
-    }
-    localStorage.setItem("current_user", JSON.stringify(user))
-    return {success: true}
-}
-
-let register = async (user) => {
-    let user_response = await fetch(`http://localhost:3000/users?email:eq=${user.email}`)
-    let user_in_db = await user_response.json()
-    if (user_in_db.length >= 1) {
-        return {
-            success: false,
-            reason: "user_already_exists"
-        }
-    }
-    user['incomplete'] = true
-    let create_user_response = await fetch(`http://localhost:3000/users`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    })
-    if (create_user_response.status) {
-        localStorage.setItem("current_user", JSON.stringify(user))
-        return {
-            success: true
-        }
-    } else {
-        return{
-            success: false,
-            reason: "some_error_occurred"
-        }
-    }
-}
-
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
-
+import { register, login, logout } from "./utils/authUtils.js"
 
 let addMeasurements = async (measurements) => {
     const current_user = JSON.parse(localStorage.getItem('current_user'))
@@ -333,9 +278,6 @@ signinForm.addEventListener('submit', async e => {
 // create account → Continue → measurements dialog (no validation, per request) 
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // TODO: your account-creation logic here
-    // (name: #suName, email: #suEmail, password: #suPass).
-    // The transition to the measurements dialog below happens regardless.
     let name = document.getElementById("suName").value
     let username = document.getElementById("suUsername").value
     let email = document.getElementById("suEmail").value

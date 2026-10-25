@@ -21,7 +21,9 @@
       "user_id": "uzRzsAftMcU",
       "total_time": "0:13",
       "total_volume": "50,000",
-      "spots": [],
+      "spots": [
+        "7KgBcEjY-P0"
+      ],
       "comments": [],
       "id": "J5pnIbe5zbk"
     },
@@ -283,6 +285,14 @@
       "password": "123456",
       "incomplete": true,
       "id": "T2KjNFfHFlY"
+    },
+    {
+      "name": "mara",
+      "username": "mara",
+      "email": "mara@gmail.com",
+      "password": "123456",
+      "incomplete": true,
+      "id": "sS89tbP"
     }
   ],
   "exercises": [
