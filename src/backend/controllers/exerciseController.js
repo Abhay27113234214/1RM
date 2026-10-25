@@ -1,6 +1,6 @@
 /**
  * exerciseController.js
- * Controller layer for Exercises (MVC: Controller)
+ * Controller layer for Exercises (MVC: Controller - CommonJS)
  * 
  * Handles:
  *   - getExercises: filter by ?muscle=, ?equipment=, ?q=
@@ -10,8 +10,8 @@
  *   - deleteExercise: deletes exercise by ID
  */
 
-import mongoose from 'mongoose';
-import Exercise from '../models/exerciseModel.js';
+const mongoose = require('mongoose');
+const Exercise = require('../models/exerciseModel');
 
 /**
  * GET /api/exercises
@@ -20,7 +20,7 @@ import Exercise from '../models/exerciseModel.js';
  *   - equipment: filter by equipment_type (case-insensitive)
  *   - q: search exercise name
  */
-export const getExercises = async (req, res, next) => {
+const getExercises = async (req, res, next) => {
   try {
     const { muscle, equipment, q } = req.query;
     const filter = {};
@@ -46,7 +46,7 @@ export const getExercises = async (req, res, next) => {
  * GET /api/exercises/:id
  * Retrieve a single exercise by ID
  */
-export const getExerciseById = async (req, res, next) => {
+const getExerciseById = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -70,7 +70,7 @@ export const getExerciseById = async (req, res, next) => {
  * Validates: name, primary_muscle_group, exercise_type, duplicate name check.
  * Returns 201 with the created exercise.
  */
-export const createExercise = async (req, res, next) => {
+const createExercise = async (req, res, next) => {
   try {
     const {
       name,
@@ -133,7 +133,7 @@ export const createExercise = async (req, res, next) => {
  * PUT /api/exercises/:id
  * Update an existing exercise
  */
-export const updateExercise = async (req, res, next) => {
+const updateExercise = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -159,7 +159,7 @@ export const updateExercise = async (req, res, next) => {
  * DELETE /api/exercises/:id
  * Delete an exercise
  */
-export const deleteExercise = async (req, res, next) => {
+const deleteExercise = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -175,4 +175,12 @@ export const deleteExercise = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+module.exports = {
+  getExercises,
+  getExerciseById,
+  createExercise,
+  updateExercise,
+  deleteExercise,
 };

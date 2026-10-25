@@ -1,16 +1,16 @@
 /**
  * exerciseRoutes.js
- * Express Routes for Exercises (MVC: Route layer)
+ * Express Routes for Exercises (MVC: Route layer - CommonJS)
  */
 
-import express from 'express';
-import {
+const express = require('express');
+const {
   getExercises,
   getExerciseById,
   createExercise,
   updateExercise,
   deleteExercise,
-} from '../controllers/exerciseController.js';
+} = require('../controllers/exerciseController');
 
 const router = express.Router();
 
@@ -23,4 +23,4 @@ router.route('/:id')
   .put(updateExercise)
   .delete(deleteExercise);
 
-export default router;
+module.exports = router;

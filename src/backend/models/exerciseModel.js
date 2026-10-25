@@ -1,9 +1,9 @@
 /**
  * exerciseModel.js
- * Mongoose Schema and Model for Exercises (MVC: Model layer)
+ * Mongoose Schema and Model for Exercises (MVC: Model layer - CommonJS)
  */
 
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const exerciseSchema = new mongoose.Schema(
   {
@@ -69,5 +69,7 @@ const exerciseSchema = new mongoose.Schema(
   }
 );
 
-export const Exercise = mongoose.model('Exercise', exerciseSchema);
-export default Exercise;
+const Exercise = mongoose.model('Exercise', exerciseSchema);
+
+module.exports = Exercise;
+module.exports.Exercise = Exercise;
