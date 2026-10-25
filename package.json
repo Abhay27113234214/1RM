@@ -4,9 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/backend/server.js",
-    "start:workout": "node src/backend/server.js",
-    "dev:workout": "nodemon src/backend/server.js",
-    "seed:workout": "node src/backend/workout_seed/workout.seed.js",
+    "dev": "nodemon src/backend/server.js",
     "start:json-server": "json-server --watch db.json --host 0.0.0.0 --port 10000"
   },
   "dependencies": {
