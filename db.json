@@ -239,8 +239,18 @@
       "username": "abhaykohli27",
       "email": "abhay@gmail.com",
       "password": "123456",
-      "incomplete": true,
-      "id": "7KgBcEjY-P0"
+      "incomplete": false,
+      "id": "7KgBcEjY-P0",
+      "age": "23",
+      "sex": "Man",
+      "main_goal": "Get stronger",
+      "experience": "Intermediate",
+      "training_days": "4-5",
+      "measurements": {
+        "height": "23",
+        "weight": "23",
+        "body_fat": "23"
+      }
     },
     {
       "name": "deepu",

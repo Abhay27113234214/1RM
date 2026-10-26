@@ -1,5 +1,12 @@
 const {User} = require("../models/userModel")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
+require("dotenv").config({
+    path: require("path").resolve(__dirname, "../../../.env")
+});
+
+const SECRET_KEY = process.env.SECRET_KEY
 
 const createUser = async (request, response) => {
     try {
@@ -21,8 +28,12 @@ const createUser = async (request, response) => {
             password: await bcrypt.hash(password, 10)
         }
         const data = await User.create(newUser)
+        const token = jwt.sign({
+            "id":data._id
+        }, SECRET_KEY, {"expiresIn":"1hr"})
         response.status(201).send({
-            success: true
+            success: true,
+            token: token
         })
         return;
     } catch (error) {
@@ -56,7 +67,10 @@ const loginUser = async (request, response) => {
             })
             return;
         }
-        response.send({success: true, user: user_query[0]})
+        const token = jwt.sign({
+            "id":user_query[0]._id
+        }, SECRET_KEY, {"expiresIn":"1hr"})
+        response.send({success: true, user: user_query[0], token: token})
     } catch (error) {
         response.send({
             success: false,
@@ -67,4 +81,41 @@ const loginUser = async (request, response) => {
     }
 }
 
-module.exports = { createUser, loginUser }
+const getUserFromToken = async (request, response) => {
+    const token = request.headers.authorization.split(" ")[1];
+    const decode = jwt.verify(token, SECRET_KEY)
+    if (decode) {
+        const user = await User.findById(decode.id).exec()
+        response.send({
+            success: true,
+            user: user
+        })
+        return
+    } else {
+        response.send({
+            success: false,
+            reason: "invalid_jwt"
+        })
+        return
+    }
+}
+
+const updateUser = async (request, response) => {
+    const token = request.headers.authorization.split(" ")[1];
+    const decode = jwt.verify(token, SECRET_KEY)
+    if (decode) {
+        const data = await User.findByIdAndUpdate(decode.id, request.body, {returnDocument: 'after'})
+        response.send({
+            success: true
+        })
+        return
+    } else {
+        response.status(504).send({
+            success: false,
+            reason: "invalid_jwt"
+        })
+        return
+    }
+}
+
+module.exports = { createUser, loginUser, getUserFromToken, updateUser }
