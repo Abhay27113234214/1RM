@@ -66,6 +66,5 @@ export let addMeasurements = async (measurements) => {
         body: JSON.stringify(update)
     })
     let response_for_updating_user = await update_user_response.json()
-    console.log(response_for_updating_user)
     return response_for_updating_user
 }
