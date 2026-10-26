@@ -1,4 +1,5 @@
 import { register, login, logout, addMeasurements } from "./utils/userUtils.js"
+import { showToast } from "./utils/frontend_utils.js";
 
 const $ = s => document.querySelector(s);
 // the above is an arrow function used to quickly select an element with a given class or id
@@ -27,47 +28,6 @@ const signinForm = $('#signinForm'), signupForm = $('#signupForm');
 const obFields = $('#obFields');
 const authTitle = $('#authTitle');
 let lastFocus = null;
-
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-
-        t.style.height = t.offsetHeight + 'px';
-
-        requestAnimationFrame(() => {
-            // slide aur fade out vali annimation
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500); // safety k liye 
-    }
-
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 
 function buildMeasureBox(host) {

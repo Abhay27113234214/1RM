@@ -10,6 +10,7 @@ const authenticationMiddleware = (request, response, next) => {
     const token = headers.split(" ")[1]
     const decode = jwt.verify(token, SECRET_KEY)
     if (decode) {
+        request.user = decode
         next()
     } else {
         response.send({

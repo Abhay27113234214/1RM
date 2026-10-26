@@ -1,17 +1,17 @@
-/* ============================================================
-   Visual glue + UI state. YOUR logic plugs into the TODOs:
-     load/save session    → #exList (template #exTpl)
-     finish workout       → #finishBtn
-     exercise search      → #exSearch / #suggList (stub list below)
-     create exercise      → #createExBtn (links to create-exercise.html)
-     notes                → textarea per exercise
-   ============================================================ */
+import { logout, getCurrentUser } from "./utils/userUtils.js"
+import { authenticate } from "./utils/authUtils.js";
+import { showToast } from "./utils/frontend_utils.js";
+
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const exList = $('#exList');
 
 
-
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
+    window.location.href = "index.html?message=not_logged_in&from=home&status=error"
+}
+const current_user = await getCurrentUser()
 
 /* ---------- exercise types ---------- */
 const FIELD_META = {
@@ -83,54 +83,6 @@ $$('.set-row').forEach(row => {
     const kg = row.querySelector('.s-kg'); if (kg && !kg.dataset.field) kg.dataset.field = 'kg';
     const reps = row.querySelector('.s-reps'); if (reps && !reps.dataset.field) reps.dataset.field = 'reps';
 });
-
-
-const current_user = JSON.parse(localStorage.getItem('current_user'))
-if (!current_user) {
-    window.location.href = "index.html?message=not_logged_in&from=workout&status=error"
-}
-
-
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-
-        t.style.height = t.offsetHeight + 'px';
-
-        requestAnimationFrame(() => {
-            // slide aur fade out vali annimation
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500); // safety k liye 
-    }
-
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 
 // jo clock vaali functionality hai vo saari

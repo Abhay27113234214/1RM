@@ -1,8 +1,7 @@
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
+import { logout, getCurrentUser } from "./utils/userUtils.js"
+import { authenticate } from "./utils/authUtils.js"
+import { showToast } from "./utils/frontend_utils.js";
+
 /* ============================================================
    Workout-detail glue — dynamic, same patterns as home.js.
    Loads the workout via ?id= from your json-server:
@@ -17,11 +16,11 @@ const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
 
 const API = 'http://localhost:3000';
 
-let current_user = null;
-try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
-if (!current_user) {
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
     window.location.href = "index.html?message=not_logged_in&from=home&status=error"
 }
+const current_user = await getCurrentUser()
 
 const wk = await loadWorkout()
 
@@ -36,41 +35,6 @@ function initialsOf(name) {
         el.textContent = current_user.name.charAt(0).toUpperCase() + current_user.name.slice(1);
     });
 })();
-
-/* ---------- toast (home.js) ---------- */
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-        t.style.height = t.offsetHeight + 'px';
-        requestAnimationFrame(() => {
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500);
-    }
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 /* ---------- nav / drawer ---------- */
 const navBar = $('#navBar');

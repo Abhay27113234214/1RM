@@ -1,18 +1,16 @@
-
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
+import { logout, getCurrentUser } from "./utils/userUtils.js"
+import { authenticate } from "./utils/authUtils.js";
+import { showToast } from "./utils/frontend_utils.js";
 
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
-/* ---------- auth guard (same as home) ---------- */
-const current_user = JSON.parse(localStorage.getItem('current_user'));
-if (!current_user) {
-  window.location.href = "index.html?message=not_logged_in&status=error";
+
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
+    window.location.href = "index.html?message=not_logged_in&from=home&status=error"
 }
+const current_user = await getCurrentUser()
 
 /* ---------- dynamic user data (same as home) ---------- */
 function dynamic_user_data_replacing() {
@@ -25,46 +23,6 @@ function dynamic_user_data_replacing() {
     ele.innerHTML = `@${current_user.username}`);
 }
 dynamic_user_data_replacing();
-
-/* ---------- toasts (same markup/behaviour as index.js) ---------- */
-function showToast(message, type = 'ok', duration = 3400) {
-  let zone = $('#toastZone');
-  if (!zone) {
-    zone = document.createElement('div');
-    zone.id = 'toastZone';
-    zone.className = 'toast-zone';
-    document.body.appendChild(zone);
-  }
-  const isError = type === 'error';
-  const t = document.createElement('div');
-  t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-  t.innerHTML =
-    '<span class="t-star">✱</span>' +
-    '<div class="t-body">' +
-      '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-      '<span class="t-msg">' + message + '</span>' +
-    '</div>' +
-    '<button class="t-x" aria-label="Dismiss">✕</button>' +
-    '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-  zone.appendChild(t);
-  let gone = false;
-  function dismiss() {
-    if (gone) return;
-    gone = true;
-    clearTimeout(timer);
-    t.style.height = t.offsetHeight + 'px';
-    requestAnimationFrame(() => {
-      t.classList.add('bye');
-      t.style.height = '0px';
-      t.style.paddingTop = '0';
-      t.style.paddingBottom = '0';
-      t.style.marginTop = '-10px';
-    });
-    setTimeout(() => t.remove(), 500);
-  }
-  const timer = setTimeout(dismiss, duration);
-  t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 /* ---------- nav border on scroll (same as home) ---------- */
 const navBar = $('#navBar');

@@ -1,18 +1,6 @@
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
-/* ============================================================
-   Visual-only glue. YOUR logic plugs into the TODOs:
-     hasWorkoutToday       → hide #startWorkout when true
-     .post click / Enter   → open workout detail page   (TODO)
-     [data-profile]        → open profile page          (TODO)
-     [data-todo]           → settings / sign out        (TODO)
-     #feed, #feed2         → render with #postTpl
-     #loadMore             → pagination
-   ============================================================ */
-
+import { getCurrentUser, logout } from "./utils/userUtils.js"
+import { showToast } from "./utils/frontend_utils.js";
+import { authenticate } from "./utils/authUtils.js";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -31,55 +19,13 @@ function getMessageAndAct() {
 }
 getMessageAndAct()
 
-const current_user = JSON.parse(localStorage.getItem('current_user')) // starting mein hi current user ko store kr liya 
-if (!current_user) {
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
     window.location.href = "index.html?message=not_logged_in&from=home&status=error"
 }
+const current_user = await getCurrentUser()
 
 const localDateKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-
-
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-
-        t.style.height = t.offsetHeight + 'px';
-
-        requestAnimationFrame(() => {
-            // slide aur fade out vali annimation
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500); // safety k liye 
-    }
-
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
-
 
 // this is the resume workout floater
 function checkResumeFloat() {
