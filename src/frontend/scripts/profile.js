@@ -1,9 +1,6 @@
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
-
+import { logout, getCurrentUser } from "./utils/userUtils.js"
+import { authenticate } from "./utils/authUtils.js";
+import { showToast } from "./utils/frontend_utils.js";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -11,14 +8,11 @@ const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
 
-/* ---------- current user (home.js pattern + demo fallback) ---------- */
-let current_user = null;
-try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
-if (!current_user) {
-    window.location.href = "/templates/index.html?message=not_logged_in&from=home&status=error"
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
+    window.location.href = "index.html?message=not_logged_in&from=home&status=error"
 }
-
-
+const current_user = await getCurrentUser()
 
 function applyUser() {
     const name = current_user.name.trim();
@@ -38,40 +32,6 @@ function applyUser() {
         (last ? ' <em>' + escHtml(last) + '</em>' : '');
 }
 applyUser();
-
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-        t.style.height = t.offsetHeight + 'px';
-        requestAnimationFrame(() => {
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500);
-    }
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 const navBar = $('#navBar');
 const onScroll = () => navBar.classList.toggle('scrolled', window.scrollY > 10);
@@ -183,7 +143,7 @@ function tooltipFor(entry, label) {
 
 let myWorkouts = [];
 try {
-    const res = await fetch('https://onerm-4tup.onrender.com/workouts?user_id:eq=' + current_user.id);
+    const res = await fetch('http://localhost:3000/workouts?user_id:eq=' + current_user.id);
     myWorkouts = await res.json();
 } catch (e) { myWorkouts = []; }
 
@@ -324,7 +284,7 @@ function signOut() {
     showToast('Signed out ✱ see you at the rack.');
     logout()
     setTimeout(() => {
-        window.location.href = '/templates/index.html?message=logged_out&status=success';
+        window.location.href = 'index.html?message=logged_out&status=success';
     }, 1200);
 }
 $('#signOutBtn').addEventListener('click', signOut);
@@ -571,7 +531,7 @@ function openPost(post) {
     openingPost = true;
     post.closest('.post-shell').classList.add('opening');   // pressed look
     setTimeout(() => {
-        window.location.href = '/templates/post.html?id=' + id;
+        window.location.href = 'post.html?id=' + id;
     }, OPEN_DELAY);
 }
 

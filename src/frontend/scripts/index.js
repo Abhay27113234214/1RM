@@ -1,91 +1,5 @@
-let login = async (email, password) => {
-    let user_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${email}`)
-    let users = await user_response.json()
-    if (users.length < 1) {
-        return {
-            success: false,
-            reason: "user_not_found"
-        }
-    }
-    let user = users[0]
-    if (user.password != password) {
-        return {
-            success: false,
-            reason: "invalid_password"
-        }
-    }
-    localStorage.setItem("current_user", JSON.stringify(user))
-    return {success: true}
-}
-
-let register = async (user) => {
-    let user_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${user.email}`)
-    let user_in_db = await user_response.json()
-    if (user_in_db.length >= 1) {
-        return {
-            success: false,
-            reason: "user_already_exists"
-        }
-    }
-    user['incomplete'] = true
-    let create_user_response = await fetch(`https://onerm-4tup.onrender.com/users`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    })
-    if (create_user_response.status) {
-        localStorage.setItem("current_user", JSON.stringify(user))
-        return {
-            success: true
-        }
-    } else {
-        return{
-            success: false,
-            reason: "some_error_occurred"
-        }
-    }
-}
-
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
-
-
-let addMeasurements = async (measurements) => {
-    const current_user = JSON.parse(localStorage.getItem('current_user'))
-    let curr_user_db_response = await fetch(`https://onerm-4tup.onrender.com/users?email:eq=${current_user.email}`)
-    let curr_user_db = await curr_user_db_response.json()
-    let modified_user = curr_user_db[0]
-    modified_user['incomplete'] = false
-    modified_user['age'] = measurements.age 
-    modified_user['sex'] = measurements.sex 
-    modified_user['main_goal'] = measurements.goal 
-    modified_user['experience'] = measurements.experience 
-    modified_user['training_days'] = measurements.trainingDays 
-    modified_user['measurements'] = {
-        height: measurements.height,
-        weight: measurements.weight,
-        body_fat: measurements.bodyFat
-    }
-    let response = await fetch(`https://onerm-4tup.onrender.com/users/${modified_user.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(modified_user)
-    })
-    if (response.status != 200 && response.status != 204 ) {
-        return {
-            success: false
-        }
-    }
-    return { success: true }
-}
-
+import { register, login, logout, addMeasurements } from "./utils/userUtils.js"
+import { showToast } from "./utils/frontend_utils.js";
 
 const $ = s => document.querySelector(s);
 // the above is an arrow function used to quickly select an element with a given class or id
@@ -114,47 +28,6 @@ const signinForm = $('#signinForm'), signupForm = $('#signupForm');
 const obFields = $('#obFields');
 const authTitle = $('#authTitle');
 let lastFocus = null;
-
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-
-        t.style.height = t.offsetHeight + 'px';
-
-        requestAnimationFrame(() => {
-            // slide aur fade out vali annimation
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500); // safety k liye 
-    }
-
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 
 function buildMeasureBox(host) {
@@ -316,7 +189,7 @@ signinForm.addEventListener('submit', async e => {
     if (result.success) {
         showToast('User Logged in successfully!!')
         await sleep(4000)
-        window.location.href = "/templates/home.html"
+        window.location.href = "home.html"
         // closeDialog() // shyd yeh baad mein remove karna pade 
     } else {
         if (result.reason === 'user_not_found') {
@@ -333,9 +206,6 @@ signinForm.addEventListener('submit', async e => {
 // create account → Continue → measurements dialog (no validation, per request) 
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // TODO: your account-creation logic here
-    // (name: #suName, email: #suEmail, password: #suPass).
-    // The transition to the measurements dialog below happens regardless.
     let name = document.getElementById("suName").value
     let username = document.getElementById("suUsername").value
     let email = document.getElementById("suEmail").value
@@ -386,8 +256,8 @@ $('#obSave').addEventListener('click', async () => {
     let result = await addMeasurements(measurements)
     if (result.success) {
         showToast('Measurements and goals aligned!')
-        await sleep(4000)
-        window.location.href = "/templates/home.html"
+        await sleep(3000)
+        window.location.href = "home.html"
     } else {
         showToast('There was an error. Try again later', 'error')
     }
@@ -398,8 +268,8 @@ $('#obSkip').addEventListener('click', async () => {
     // mujhe ni lagta is function ki koi zaroorat hai
     // hai bhai zaroorat
     showToast('No worries, You can fill them later on!')
-    await sleep(4000)
-    window.location.href = "/templates/home.html"
+    await sleep(3000)
+    window.location.href = "home.html"
     closeDialog();
 });
 

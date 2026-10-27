@@ -21,7 +21,9 @@
       "user_id": "uzRzsAftMcU",
       "total_time": "0:13",
       "total_volume": "50,000",
-      "spots": [],
+      "spots": [
+        "7KgBcEjY-P0"
+      ],
       "comments": [],
       "id": "J5pnIbe5zbk"
     },
@@ -157,7 +159,8 @@
       "total_time": "6:20",
       "total_volume": "6,379",
       "spots": [
-        "7KgBcEjY-P0"
+        "7KgBcEjY-P0",
+        null
       ],
       "comments": [
         {
@@ -237,8 +240,18 @@
       "username": "abhaykohli27",
       "email": "abhay@gmail.com",
       "password": "123456",
-      "incomplete": true,
-      "id": "7KgBcEjY-P0"
+      "incomplete": false,
+      "id": "7KgBcEjY-P0",
+      "age": "23",
+      "sex": "Man",
+      "main_goal": "Get stronger",
+      "experience": "Intermediate",
+      "training_days": "4-5",
+      "measurements": {
+        "height": "23",
+        "weight": "23",
+        "body_fat": "23"
+      }
     },
     {
       "name": "deepu",
@@ -283,6 +296,14 @@
       "password": "123456",
       "incomplete": true,
       "id": "T2KjNFfHFlY"
+    },
+    {
+      "name": "mara",
+      "username": "mara",
+      "email": "mara@gmail.com",
+      "password": "123456",
+      "incomplete": true,
+      "id": "sS89tbP"
     }
   ],
   "exercises": [

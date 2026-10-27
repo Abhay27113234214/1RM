@@ -1,13 +1,12 @@
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
+import { logout, getCurrentUser } from "./utils/userUtils.js"
+import { authenticate } from "./utils/authUtils.js"
+import { showToast } from "./utils/frontend_utils.js";
+
 /* ============================================================
    Workout-detail glue — dynamic, same patterns as home.js.
    Loads the workout via ?id= from your json-server:
-       GET https://onerm-4tup.onrender.com/workouts?id=<id>
-       GET https://onerm-4tup.onrender.com/users?id=<user_id>   (author)
+       GET http://localhost:3000/workouts?id=<id>
+       GET http://localhost:3000/users?id=<user_id>   (author)
 ============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -15,13 +14,13 @@ const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
 
-const API = 'https://onerm-4tup.onrender.com';
+const API = 'http://localhost:3000';
 
-let current_user = null;
-try { current_user = JSON.parse(localStorage.getItem('current_user')); } catch (e) { }
-if (!current_user) {
-    window.location.href = "/?message=not_logged_in&from=home&status=error"
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
+    window.location.href = "index.html?message=not_logged_in&from=home&status=error"
 }
+const current_user = await getCurrentUser()
 
 const wk = await loadWorkout()
 
@@ -36,41 +35,6 @@ function initialsOf(name) {
         el.textContent = current_user.name.charAt(0).toUpperCase() + current_user.name.slice(1);
     });
 })();
-
-/* ---------- toast (home.js) ---------- */
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-        t.style.height = t.offsetHeight + 'px';
-        requestAnimationFrame(() => {
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500);
-    }
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
 
 /* ---------- nav / drawer ---------- */
 const navBar = $('#navBar');
@@ -330,10 +294,10 @@ async function loadWorkout() {
             const wk = Array.isArray(data) ? data[0] : data;
             if (wk && wk.exercises) return wk;
             showToast('Session not found.', 'error');
-            window.location.href = "/templates/home.html?message=session_not_found&status=error"
+            window.location.href = "home.html?message=session_not_found&status=error"
         } catch (e) {
             showToast('Some Error occured. Try again after some time', 'error');
-            window.location.href = "/templates/home.html"
+            window.location.href = "home.html"
         }
     }
 }
@@ -467,7 +431,7 @@ $('#cmtInput').addEventListener('keydown', e => { if (e.key === 'Enter') postCom
 // workout ko save krne k litye agr koi workout vaale page se ht jaata hai to workout 
 // apne aap save ho jaaye comments aur spot k sath
 window.addEventListener("pagehide", async function() {
-    let workout_save_response = await fetch(`https://onerm-4tup.onrender.com/workouts/${wk.id}`, {
+    let workout_save_response = await fetch(`http://localhost:3000/workouts/${wk.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

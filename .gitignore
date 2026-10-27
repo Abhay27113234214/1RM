@@ -1,11 +1,11 @@
 # db.json
 tests/
+
 # package*.*
 node_modules/
 package*.*
 
-# Environment variables
-.env
-
 # Local Netlify folder
 .netlify
+
+.env

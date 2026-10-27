@@ -1,18 +1,6 @@
-let logout = () => {
-    localStorage.removeItem('current_user')
-    localStorage.removeItem('current_user_workout')
-    localStorage.removeItem('current_user_workout_incomplete')
-}
-/* ============================================================
-   Visual-only glue. YOUR logic plugs into the TODOs:
-     hasWorkoutToday       → hide #startWorkout when true
-     .post click / Enter   → open workout detail page   (TODO)
-     [data-profile]        → open profile page          (TODO)
-     [data-todo]           → settings / sign out        (TODO)
-     #feed, #feed2         → render with #postTpl
-     #loadMore             → pagination
-   ============================================================ */
-
+import { getCurrentUser, logout } from "./utils/userUtils.js"
+import { showToast } from "./utils/frontend_utils.js";
+import { authenticate } from "./utils/authUtils.js";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -31,55 +19,13 @@ function getMessageAndAct() {
 }
 getMessageAndAct()
 
-const current_user = JSON.parse(localStorage.getItem('current_user')) // starting mein hi current user ko store kr liya 
-if (!current_user) {
-    window.location.href = "/?message=not_logged_in&from=home&status=error"
+if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
+    sessionStorage.removeItem('token')
+    window.location.href = "index.html?message=not_logged_in&from=home&status=error"
 }
+const current_user = await getCurrentUser()
 
 const localDateKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-
-
-function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
-    const isError = type === 'error';
-
-    const t = document.createElement('div');
-    t.className = 'toast ' + (isError ? 't-err' : 't-ok');
-    t.innerHTML =
-        '<span class="t-star">✱</span>' +
-        '<div class="t-body">' +
-        '<b class="t-title">' + (isError ? 'Hold up' : 'Nice') + '</b>' +
-        '<span class="t-msg">' + message + '</span>' +
-        '</div>' +
-        '<button class="t-x" aria-label="Dismiss">✕</button>' +
-        '<i class="t-bar" style="animation-duration:' + duration + 'ms"></i>';
-    zone.appendChild(t);
-
-    let gone = false;
-    function dismiss() {
-        if (gone) return;
-        gone = true;
-        clearTimeout(timer);
-
-        t.style.height = t.offsetHeight + 'px';
-
-        requestAnimationFrame(() => {
-            // slide aur fade out vali annimation
-            t.classList.add('bye');
-            t.style.height = '0px';
-            t.style.paddingTop = '0';
-            t.style.paddingBottom = '0';
-            t.style.marginTop = '-10px';
-        });
-
-        t.addEventListener('animationend', () => t.remove());
-        setTimeout(() => t.remove(), 500); // safety k liye 
-    }
-
-    const timer = setTimeout(dismiss, duration);
-    t.querySelector('.t-x').addEventListener('click', dismiss);
-}
-
 
 // this is the resume workout floater
 function checkResumeFloat() {
@@ -158,7 +104,7 @@ $('#todayLine').innerHTML = '<b>✱</b> ' + new Date().toLocaleDateString('en-US
 
 // start workout card, but only shown when the user who is logged in has had a workout today 
 const date = localDateKey()
-const url = `https://onerm-4tup.onrender.com/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
+const url = `http://localhost:3000/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
 let workout_response = await fetch(url)
 let workouts = await workout_response.json()
 const hasWorkoutToday = workouts.length >= 1;
@@ -189,7 +135,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(
 // profile, sign in, sign out
 $$('[data-profile]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault(); closeDrawer();
-    window.location.href = "/templates/profile.html"
+    window.location.href = "profile.html"
 }));
 $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
@@ -198,7 +144,7 @@ $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
         // yrr yeh vaala page ni banaya TODO
     } else if (action === "signout") {
         logout()
-        window.location.href = "/?message=logged_out&status=success"
+        window.location.href = "index.html?message=logged_out&status=success"
     }
 }));
 
@@ -405,10 +351,10 @@ let format_total_time = (t) => {
 };
 
 async function getWorkout(id) {
-    return (await fetch('https://onerm-4tup.onrender.com/workouts/' + id)).json();
+    return (await fetch('http://localhost:3000/workouts/' + id)).json();
 }
 async function patchWorkout(id, changes) {
-    return (await fetch('https://onerm-4tup.onrender.com/workouts/' + id, {
+    return (await fetch('http://localhost:3000/workouts/' + id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(changes)
@@ -419,7 +365,7 @@ let feed = $('#feed')
 let myToday = $('#myToday')
 
 let buildPostCard = async (element) => {
-    let user_response = await fetch(`https://onerm-4tup.onrender.com/users/${element.user_id}`)
+    let user_response = await fetch(`http://localhost:3000/users/${element.user_id}`)
     let user = await user_response.json()
     let user_initials = ''
     let photo = (element.photos && element.photos.length >= 1) ? element.photos[0] : "../assets/default_workout_image.png"
@@ -460,7 +406,7 @@ let buildPostCard = async (element) => {
     `
 }
 let renderPosts = async () => {
-    let workouts_response = await fetch("https://onerm-4tup.onrender.com/workouts?_sort=-date")
+    let workouts_response = await fetch("http://localhost:3000/workouts?_sort=-date")
     let workouts = await workouts_response.json()
     const today = localDateKey()
 
@@ -492,7 +438,7 @@ function openPost(post) {
     openingPost = true;
     post.closest('.post-shell').classList.add('opening');   // pressed look
     setTimeout(() => {
-        window.location.href = '/templates/post.html?id=' + id;
+        window.location.href = 'post.html?id=' + id;
     }, OPEN_DELAY);
 }
 
@@ -533,7 +479,7 @@ function workoutVolume(w) {
     if (cells.length !== 7) return;
 
     // meri saari workouts lao
-    const res = await fetch(`https://onerm-4tup.onrender.com/workouts?user_id:eq=${current_user.id}`);
+    const res = await fetch(`http://localhost:3000/workouts?user_id:eq=${current_user.id}`);
     const mine = await res.json();
 
     // current week: Monday-start (labels M T W T F S S k mutabiq)
