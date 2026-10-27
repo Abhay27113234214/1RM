@@ -13,6 +13,7 @@ const API_BASE = "http://localhost:5000/api";
 import { logout, getCurrentUser } from "./utils/userUtils.js"
 import { authenticate } from "./utils/authUtils.js";
 import { showToast } from "./utils/frontend_utils.js";
+const formData = new FormData() // this is for sending all the files and the other workout related fields to the backend in a single request
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -112,35 +113,125 @@ const fmtClock = ms => {
 
 const localDateKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 
-let workout = JSON.parse(localStorage.getItem("current_user_workout")) // this is the object which will be edited when the user is doing his workout 
-if (workout) {
-    restore_session()
-} else {
-    workout = {}
-    workout['start_time'] = Date.now()
+let workout = null;
+try {
+    workout = JSON.parse(localStorage.getItem("current_user_workout"));
+} catch (e) {
+    workout = null;
 }
 
-// resume aware time functionality 
-// ms already trained before this page load (0 for a fresh workout)
-const bankedTime = (workout.pause_time && workout.start_time)
-    ? Math.max(0, workout.pause_time - workout.start_time)
-    : 0;
-// virtual start: makes (Date.now() - startedAt) continue from the paused time
-const startedAt = Date.now() - bankedTime;
-// show the banked time immediately, before the first interval tick
-$('#ssTime').textContent = fmtClock(bankedTime);
+let startedAt = Date.now();
 
+// Persist active workout state to localStorage
+function saveSessionState() {
+    if (!workout) return;
+    const elapsed = Math.max(0, Date.now() - startedAt);
+    workout.pause_time = Date.now();
+    workout.elapsed_time = elapsed;
+    workout.time = fmtClock(elapsed);
+    workout.start_time = startedAt;
+    workout.startedAt = startedAt;
+    localStorage.setItem("current_user_workout", JSON.stringify(workout));
+}
 
-setInterval(() => { $('#ssTime').textContent = fmtClock(Date.now() - startedAt); }, 1000);
-// this fmtClock function is calculating the total time for which the workout has been going on
-// yahan per setInterval isi liye use kiya hai kyunki har second baad time ko update bhi to krna padega na 
+// Restore session: restores start_time/timer AND exercises/sets
+function restore_session() {
+    if (!workout) return;
 
+    // 1. Calculate already elapsed (banked) workout time
+    let bankedTime = 0;
+    if (typeof workout.elapsed_time === 'number') {
+        bankedTime = workout.elapsed_time;
+    } else if (workout.pause_time && workout.start_time) {
+        bankedTime = Math.max(0, workout.pause_time - workout.start_time);
+    }
 
-window.addEventListener("pagehide", function () { // this function will be triggered when the user leaves the tab or closes the browser tab
-    workout['pause_time'] = Date.now() // I am storing the date in seconds from epoch so that later on
-    // when the user resumes an unfinished session I can call the fmtclock functionality on this only
-    localStorage.setItem("current_user_workout", JSON.stringify(workout))
-})
+    // 2. Adjust startedAt and workout.start_time so the clock seamlessly resumes
+    startedAt = Date.now() - bankedTime;
+    workout.start_time = startedAt;
+    workout.startedAt = startedAt;
+    workout.elapsed_time = bankedTime;
+    workout.time = fmtClock(bankedTime);
+    delete workout.pause_time;
+    localStorage.setItem("current_user_workout", JSON.stringify(workout));
+
+    $('#ssTime').textContent = fmtClock(bankedTime);
+
+    // 3. Restore exercises and completed sets
+    if (workout.exercises && Object.keys(workout.exercises).length > 0) {
+        exList.innerHTML = '';
+        Object.entries(workout.exercises).forEach(([ex_name, ex_data]) => {
+            const type = ex_data.type || 'weight_and_reps';
+            const tpl = $('#exTpl').content.cloneNode(true).querySelector('.ex-card');
+            tpl.dataset.type = type;
+            tpl.querySelector('[data-bind="name"]').textContent = ex_name;
+            tpl.querySelector('[data-bind="eq"]').textContent = type;
+            tpl.querySelector('[data-bind="last"]').textContent = 'resuming your session ✱';
+
+            // buildSets creates the header + one empty row
+            buildSets(tpl);
+
+            // Remove the empty row created by buildSets
+            const sets = tpl.querySelector('.sets');
+            const emptyRow = sets.querySelector('.set-row');
+            if (emptyRow) emptyRow.remove();
+
+            // Now add the saved sets
+            if (ex_data.sets) {
+                Object.entries(ex_data.sets).forEach(([set_num, set_vals]) => {
+                    const row = makeSetRow(tpl, null);
+                    Object.entries(set_vals).forEach(([field, value]) => {
+                        const input = row.querySelector(`[data-field="${field}"]`);
+                        if (input) input.value = value;
+                    });
+                    row.classList.add('done');
+                    row.querySelector('[data-done]').classList.add('on');
+                    sets.appendChild(row);
+                });
+            }
+
+            // Restore notes if they exist
+            if (ex_data.notes) {
+                const noteBox = tpl.querySelector('.note-box');
+                const textarea = noteBox.querySelector('textarea');
+                textarea.value = ex_data.notes;
+                noteBox.classList.add('open');
+                tpl.querySelector('[data-note]').classList.add('has');
+            }
+
+            exList.appendChild(tpl);
+        });
+
+        updateStats();
+    }
+
+    // 4. Notification toast if returning from home
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("from") === 'home' && params.get("message") === "resume_workout") {
+        showToast("Workout resumed ✱ Welcome back!");
+    }
+}
+
+// Initialize session
+if (workout && (workout.start_time || workout.startedAt || (workout.exercises && Object.keys(workout.exercises).length > 0))) {
+    restore_session();
+} else {
+    workout = {
+        start_time: Date.now(),
+        startedAt: Date.now(),
+        exercises: {}
+    };
+    startedAt = workout.start_time;
+    $('#ssTime').textContent = '0:00';
+    localStorage.setItem("current_user_workout", JSON.stringify(workout));
+}
+
+setInterval(() => {
+    $('#ssTime').textContent = fmtClock(Date.now() - startedAt);
+}, 1000);
+
+window.addEventListener("pagehide", saveSessionState);
+window.addEventListener("beforeunload", saveSessionState);
 
 
 // total stats calculate karne vaali saari functionality
@@ -198,8 +289,9 @@ document.addEventListener('click', e => { // listen for every click on the docum
             openDock('next · ' + name + ' · set ' + nextNo);
             workout['exercises'][ex_name]['sets'][set_number] = vals
         } else {
-            delete workout['exercises'][ex_name]['sets'][set_number]   // isko maine bilkul change nahi kiya 
+            delete workout['exercises'][ex_name]['sets'][set_number]
         }
+        saveSessionState();
     }
 
     // set add krna, uper vaali row k sets aur reps ko hi copy kr leta hai yeh
@@ -233,6 +325,7 @@ document.addEventListener('click', e => { // listen for every click on the docum
         setTimeout(() => { card.remove(); updateStats(); }, 280);
         let exercise_name = card.querySelector('.ex-name').textContent
         delete workout['exercises'][exercise_name]
+        saveSessionState();
     }
 });
 // what is this above function actually doing??
@@ -251,7 +344,9 @@ document.addEventListener('input', e => {
     btn.classList.toggle('has', e.target.value.trim() !== '');
     // TODO: autosave the note (per exercise)
     let exercise_name = e.target.closest('.ex-card').querySelector('.ex-name').textContent
+    if (!workout['exercises'][exercise_name]) workout['exercises'][exercise_name] = {};
     workout['exercises'][exercise_name]['notes'] = e.target.value
+    saveSessionState();
 });
 
 // adding, removing exercises
@@ -491,37 +586,50 @@ const fmPhotos = $('#fmPhotos');
 fmPhotos.addEventListener('change', () => { // change is an event when the value of an input field changed and the user leaves/commits the field
     [...fmPhotos.files].forEach(file => {
         if (!file.type.startsWith('image/')) return;
-        const reader = new FileReader(); // FileReader is a API for reading files 
-        reader.onload = () => { photoData.push(reader.result); renderShots(); };
-        // reading a file is an asynchronous operation, so reader.onload is like telling js to do something after the reading of the file is finished 
-        // it is like setting a callback before the operation even begins 
-        reader.readAsDataURL(file);
-        // so after reading the file as a Data URL (which is a string encoded version of the image), the photoData.push() and renderShots() functions 
-        // are called
+        photoData.push(file)
+        renderShots()
     });
     fmPhotos.value = ''; // allow re-adding the same file later
 });
 
+
+const photoUrls = new Map();
 function renderShots() {
     const wrap = $('#fmShots');
     wrap.querySelectorAll('.fm-shot').forEach(el => el.remove());
     const add = wrap.querySelector('.fm-add');
-    photoData.forEach((src, i) => {
+    photoData.forEach((file, i) => {
+        if (!photoUrls.has(file)) {
+            photoUrls.set(file, URL.createObjectURL(file));
+        }
+        const src = photoUrls.get(file);
         const fig = document.createElement('figure');
         fig.className = 'fm-shot';
-        fig.innerHTML = '<img src="' + src + '" alt="workout photo">' +
-            '<button type="button" data-rm="' + i + '" aria-label="Remove photo">✕</button>';
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'workout photo';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.rm = i;
+        btn.setAttribute('aria-label', 'Remove photo');
+        btn.textContent = '✕';
+        fig.append(img, btn);
         wrap.insertBefore(fig, add);
     });
 }
-// photos k previews ko hatane k liye aur agr photo remove krni hai to vo vaali functionality
+
 $('#fmShots').addEventListener('click', e => {
     const btn = e.target.closest('[data-rm]');
     if (!btn) return;
-    photoData.splice(+btn.dataset.rm, 1); // photo ko list se remove kr diya 
-    // + to btn.dataset.rm ki value ko number mein convert kr raha hai aur kuch ni 
+    const index = Number(btn.dataset.rm);
+    const [removedFile] = photoData.splice(index, 1);
+    if (removedFile && photoUrls.has(removedFile)) {
+        URL.revokeObjectURL(photoUrls.get(removedFile));
+        photoUrls.delete(removedFile);
+    }
     renderShots();
 });
+
 
 // actual workout save krne vaala function
 async function submitWorkout(withDetails) {
@@ -532,32 +640,47 @@ async function submitWorkout(withDetails) {
         workout['title'] = $('#fmTitle').value.trim() || "Grinded";
         workout['description'] = $('#fmDesc').value.trim();
         workout['photos'] = photoData
-        // abhi k liye hm photos ko as a Data URL hi save kr rahe hai per mera mnn hai k hm unhe assets meing jaake store kare aur 
-        // fir unka jo url hoga vo hm db.json mein store kare 
-        // TODO
     } else {
         workout['title'] = "Grinded"
         workout['photos'] = ["../assets/default_workout_image.png"]
     }
     workout['date'] = localDateKey()
     workout['user_id'] = current_user.id
+    workout['start_time'] = startedAt
     workout['total_time'] = fmtClock(Date.now() - startedAt)
     workout['total_volume'] = $('#ssVol').textContent
     workout['spots'] = []
     workout['comments'] = []
     delete workout.pause_time
-    // delete workout.start_time
+    delete workout.elapsed_time
+    delete workout.startedAt
+    delete workout.time
 
     try {
-        let response = await fetch(`${API_BASE}/workouts`, {
+        workout['photos'].forEach(file => {
+            formData.append('photos', file)
+        })
+        delete workout.photos 
+
+        formData.append('exercises', JSON.stringify(workout.exercises))
+
+        delete workout.exercises
+
+        Object.entries(workout).forEach(([key, value]) => {
+            formData.append(key, value)
+        })
+
+        let response = await fetch('http://localhost:5000/api/workouts', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(workout)
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
+            body: formData
         });
         if (response.status === 201) {
             localStorage.removeItem('current_user_workout');
             workout = {};
-            window.location.href = "/templates/home.html?message=workout_completed&from=workout";
+            window.location.href = "home.html?message=workout_completed&from=workout";
         } else if (response.status === 413) {
             saveBtn.disabled = false;
             showToast("Workout photos are too large (>10MB). Please remove some photos.", "error");
@@ -576,68 +699,6 @@ async function submitWorkout(withDetails) {
 }
 $('#fmSave').addEventListener('click', () => submitWorkout(true));
 $('#fmSkip').addEventListener('click', () => submitWorkout(false));
-
-
-function restore_session() {
-    let params = new URLSearchParams(window.location.search)
-    let message = params.get("message")
-    let from = params.get("from")
-
-    if (from == 'home' && message == "resume_workout") {
-        let workout = JSON.parse(localStorage.getItem("current_user_workout"))
-        if (!workout || !workout.exercises) return
-
-        Object.entries(workout.exercises).forEach(([ex_name, ex_data]) => {
-            const type = ex_data.type || 'weight and reps'
-            const tpl = $('#exTpl').content.cloneNode(true).querySelector('.ex-card')
-            tpl.dataset.type = type
-            tpl.querySelector('[data-bind="name"]').textContent = ex_name
-            tpl.querySelector('[data-bind="eq"]').textContent = type
-            tpl.querySelector('[data-bind="last"]').textContent = 'resuming your session ✱'
-
-            // buildSets creates the header + one empty row
-            buildSets(tpl)
-
-            // Remove the empty row created by buildSets
-            const sets = tpl.querySelector('.sets')
-            const emptyRow = sets.querySelector('.set-row')
-            if (emptyRow) emptyRow.remove()
-
-            // Now add the saved sets
-            if (ex_data.sets) {
-                Object.entries(ex_data.sets).forEach(([set_num, set_vals]) => {
-                    // Create a new empty row for this exercise type
-                    const row = makeSetRow(tpl, null)
-
-                    // Fill in the saved values
-                    Object.entries(set_vals).forEach(([field, value]) => {
-                        const input = row.querySelector(`[data-field="${field}"]`)
-                        if (input) input.value = value
-                    })
-
-                    // Mark as completed (since it was saved, it was done)
-                    row.classList.add('done')
-                    row.querySelector('[data-done]').classList.add('on')
-
-                    sets.appendChild(row)
-                })
-            }
-
-            // Restore notes if they exist
-            if (ex_data.notes) {
-                const noteBox = tpl.querySelector('.note-box')
-                const textarea = noteBox.querySelector('textarea')
-                textarea.value = ex_data.notes
-                noteBox.classList.add('open')
-                tpl.querySelector('[data-note]').classList.add('has')
-            }
-
-            exList.appendChild(tpl)
-        })
-
-        updateStats()
-    }
-}
 
 
 const createExModal = $('#createExModal');

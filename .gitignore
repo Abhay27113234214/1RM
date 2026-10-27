@@ -9,3 +9,5 @@ package*.*
 .netlify
 
 .env
+
+src/backend/uploads/

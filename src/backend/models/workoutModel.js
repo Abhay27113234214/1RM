@@ -33,7 +33,7 @@ const workoutSchema = mongoose.Schema({
     "photos": {type: [String], default: []},
     "date": {type: Date, default: Date.now},
     "total_time": {type: String},
-    "total_volume": {type: Number},
+    "total_volume": {type: String},
     "spots": { type: [{type: mongoose.Schema.Types.ObjectId, ref: "users" }], default: [] },
     "comments": {type: [commentSchema], default: []},
     "user": { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true}

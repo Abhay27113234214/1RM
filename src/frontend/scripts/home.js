@@ -51,7 +51,7 @@ function checkResumeFloat() {
     }
 
     $('#rfEx').textContent = Object.keys(active.exercises).at(-1);
-    if (!active.startedAt) $('#rfTimeWrap').style.display = 'none';
+    if ($('#rfTimeWrap')) $('#rfTimeWrap').style.display = (active.startedAt || active.start_time) ? '' : 'none';
 
     float.hidden = false;
     setTimeout(() => float.classList.add('on'), 350);
