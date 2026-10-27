@@ -14,11 +14,11 @@ const {
 
 const router = express.Router();
 
-router.route('/')
+router.route('/api/exercises')
   .get(getExercises)
   .post(createExercise);
 
-router.route('/:id')
+router.route('/api/exercises/:id')
   .get(getExerciseById)
   .put(updateExercise)
   .delete(deleteExercise);

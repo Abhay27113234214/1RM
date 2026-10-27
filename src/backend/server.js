@@ -3,6 +3,7 @@ const {connection} = require("./config/db.js")
 const app = express()
 const cors = require("cors")
 const {routes} = require("./routes/userRoutes.js")
+const exerciseRoutes = require('./routes/exerciseRoutes.js')
 app.use(express.json())
 
 app.use(cors({
@@ -10,6 +11,7 @@ app.use(cors({
 }))
 
 app.use("/", routes)
+app.use("/", exerciseRoutes)
 
 app.listen(5000, async () => {
     try {

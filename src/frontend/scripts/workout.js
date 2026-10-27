@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ============================================================
    Visual glue + UI state. YOUR logic plugs into the TODOs:
      load/save session    → #exList (template #exTpl)
@@ -11,11 +10,9 @@
 // Local development toggle:
 const API_BASE = "http://localhost:5000/api";
 // const API_BASE = "https://onerm-workout-api.onrender.com/api";
-=======
 import { logout, getCurrentUser } from "./utils/userUtils.js"
 import { authenticate } from "./utils/authUtils.js";
 import { showToast } from "./utils/frontend_utils.js";
->>>>>>> local_abhay
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -267,7 +264,6 @@ let SUGG = [
 ];
 
 async function fetch_exercises() {
-<<<<<<< HEAD
     try {
         let response = await fetch(`${API_BASE}/exercises`);
         if (!response.ok) {
@@ -282,14 +278,6 @@ async function fetch_exercises() {
     } catch (err) {
         console.error("fetch_exercises failed:", err);
         showToast("Could not load exercise list. Check backend connection.", "error");
-=======
-    let response = await fetch("http://localhost:3000/exercises")
-    let exercises = await response.json()
-    for (let i = 0; i < exercises.length; i++) {
-        SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
-            .toString(16)
-            .padStart(6, "0"), exercises[i].exercise_type])
->>>>>>> local_abhay
     }
 }
 
@@ -560,7 +548,6 @@ async function submitWorkout(withDetails) {
     delete workout.pause_time
     // delete workout.start_time
 
-<<<<<<< HEAD
     try {
         let response = await fetch(`${API_BASE}/workouts`, {
             method: 'POST',
@@ -583,18 +570,6 @@ async function submitWorkout(withDetails) {
         }
     } catch (err) {
         console.error("submitWorkout failed:", err);
-=======
-    let response = await fetch("http://localhost:3000/workouts", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(workout)
-    })
-    if (response.status === 201) {
-        localStorage.removeItem('current_user_workout')
-        workout = {}
-        window.location.href = "home.html?message=workout_completed&from=workout"
-    } else {
->>>>>>> local_abhay
         saveBtn.disabled = false;
         showToast("Network error: Could not reach backend server. Try again.", "error");
     }
@@ -750,7 +725,6 @@ $('#cxSave').addEventListener('click', async () => {
 
     const saveBtn = $('#cxSave');
     saveBtn.disabled = true;
-<<<<<<< HEAD
     try {
         const res = await fetch(`${API_BASE}/exercises`, {
             method: 'POST',
@@ -766,22 +740,6 @@ $('#cxSave').addEventListener('click', async () => {
             })
         });
         saveBtn.disabled = false;
-=======
-    const res = await fetch('http://localhost:3000/exercises', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            asset: 'None',
-            name,
-            equipment_type: cxState.equipment,
-            primary_muscle_group: cxState.muscle,
-            other_muscles: cxState.other,
-            exercise_type: cxState.type,
-            measurement: fieldsFor(cxState.type)   // ['kg','reps'] wagaira — db shape se match
-        })
-    });
-    saveBtn.disabled = false;
->>>>>>> local_abhay
 
         if (res.status === 201) {
             const created = await res.json();
