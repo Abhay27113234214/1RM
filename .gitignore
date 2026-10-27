@@ -2,6 +2,7 @@
 tests/
 # package*.*
 node_modules/
+package*.*
 
 # Environment variables
 .env
