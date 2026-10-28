@@ -132,4 +132,21 @@ const authenticateUserFronToken = (request, response) => {
     })
 }
 
-module.exports = { createUser, loginUser, getUserFromToken, updateUser, authenticateUserFronToken }
+const getUserFromId = async (request, response) => {
+    try {
+        const id = request.params.id
+        const user = await User.findById(id)
+        response.send({
+            success: true,
+            user
+        })
+        return
+    } catch (error) {
+        response.send({
+            success: false,
+            reason: error
+        })
+    }
+}
+
+module.exports = { createUser, loginUser, getUserFromToken, updateUser, authenticateUserFronToken, getUserFromId }

@@ -1,64 +1,60 @@
-import { logout, getCurrentUser } from "./utils/userUtils.js"
-import { authenticate } from "./utils/authUtils.js"
+import { logout, getCurrentUser, getUserById } from "./utils/userUtils.js";
+import { authenticate } from "./utils/authUtils.js";
 import { showToast } from "./utils/frontend_utils.js";
 
 /* ============================================================
-   Workout-detail glue — dynamic, same patterns as home.js.
-   Loads the workout via ?id= from your json-server:
-       GET http://localhost:3000/workouts?id=<id>
-       GET http://localhost:3000/users?id=<user_id>   (author)
+   Workout-detail glue — dynamic, matches MongoDB MVC API shape.
+   Loads the workout via ?id= from Express / MongoDB:
+       GET http://localhost:5000/api/workouts/get/:id
 ============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
-const escHtml = s => String(s).replace(/[&<>"']/g, c => ({
+const escHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
 
-const API = 'http://localhost:3000';
-
-if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
-    sessionStorage.removeItem('token')
-    window.location.href = "index.html?message=not_logged_in&from=home&status=error"
-}
-const current_user = await getCurrentUser()
-
-const wk = await loadWorkout()
+const API = 'http://localhost:5000/api';
 
 function initialsOf(name) {
     let out = '';
     String(name || '').trim().split(/\s+/).forEach(p => { if (p) out += p[0].toUpperCase(); });
     return out || '✱';
 }
-(function applyUser() {
+
+function applyUser(current_user) {
+    if (!current_user) return;
     $$('.current_user_initials').forEach(el => el.textContent = initialsOf(current_user.name));
     $$('.current_user_name').forEach(el => {
-        el.textContent = current_user.name.charAt(0).toUpperCase() + current_user.name.slice(1);
+        el.textContent = current_user.name ? (current_user.name.charAt(0).toUpperCase() + current_user.name.slice(1)) : 'Athlete';
     });
-})();
+}
 
 /* ---------- nav / drawer ---------- */
 const navBar = $('#navBar');
-const onScroll = () => navBar.classList.toggle('scrolled', window.scrollY > 10);
+const onScroll = () => navBar && navBar.classList.toggle('scrolled', window.scrollY > 10);
 window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
+if (onScroll) onScroll();
 
 const drawer = $('#drawer'), drawerBack = $('#drawerBack'), burger = $('#burgerBtn');
 function openDrawer() {
+    if (!drawer) return;
     drawer.classList.add('open'); drawerBack.classList.add('open'); burger.classList.add('open');
     drawer.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
 }
 function closeDrawer() {
+    if (!drawer) return;
     drawer.classList.remove('open'); drawerBack.classList.remove('open'); burger.classList.remove('open');
     drawer.setAttribute('aria-hidden', 'true'); document.body.style.overflow = '';
 }
-burger.addEventListener('click', () => drawer.classList.contains('open') ? closeDrawer() : openDrawer());
-drawerBack.addEventListener('click', closeDrawer);
-$('#drawerX').addEventListener('click', closeDrawer);
+if (burger) burger.addEventListener('click', () => drawer && drawer.classList.contains('open') ? closeDrawer() : openDrawer());
+if (drawerBack) drawerBack.addEventListener('click', closeDrawer);
+const drawerX = $('#drawerX');
+if (drawerX) drawerX.addEventListener('click', closeDrawer);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 $$('[data-todo]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
     if (el.dataset.todo === 'signout') {
-        logout()
+        logout();
         showToast('Signed out ✱ see you at the rack.');
         setTimeout(() => { location.href = 'index.html?message=logged_out&status=success'; }, 1200);
     }
@@ -70,7 +66,7 @@ const io = new IntersectionObserver(es => es.forEach(x => {
 }), { threshold: .1 });
 $$('.reveal').forEach(el => io.observe(el));
 
-//  DATA HELPERS for your workout object shape
+// DATA HELPERS for workout object shape
 const EX_COLORS = ['#FF4A11', '#1E9E6A', '#3B6FE0', '#D89B0B', '#D6486F'];
 const TYPE_LABEL = {
     weight_and_reps: 'weight × reps',
@@ -95,10 +91,12 @@ function fmtDistance(m) {
     }
     return m + ' m';
 }
+
 function fmtSet(set, type) {
+    if (!set) return '—';
     if (type === 'weight_and_reps') {
-        const kg = (set.kg !== undefined && set.kg !== '') ? escHtml(set.kg) + ' kg' : '—';
-        const reps = (set.reps !== undefined && set.reps !== '') ? escHtml(set.reps) : '—';
+        const kg = (set.kg !== undefined && set.kg !== '' && set.kg !== null) ? escHtml(set.kg) + ' kg' : '—';
+        const reps = (set.reps !== undefined && set.reps !== '' && set.reps !== null) ? escHtml(set.reps) : '—';
         return kg + '<span class="dim">×</span>' + reps;
     }
     if (type === 'distance_and_duration') {
@@ -107,47 +105,115 @@ function fmtSet(set, type) {
     if (type === 'bodyweight_reps') {
         return escHtml(set.reps || '—') + '<span class="dim">reps</span>';
     }
+    if (type === 'duration') {
+        return escHtml(set.time || '—');
+    }
     return Object.entries(set)
+        .filter(([k]) => k !== '_id')
         .map(([k, v]) => escHtml(v) + '<span class="dim">' + escHtml(k) + '</span>')
-        .join(' · ');
+        .join(' · ') || '—';
 }
+
 /* lifted kilos of one set (weight exercises only) */
 function setKg(set) {
-    const kg = parseFloat(set.kg); const reps = parseInt(set.reps, 10);
+    if (!set) return 0;
+    const kg = parseFloat(set.kg);
+    const reps = parseInt(set.reps, 10);
     return (isNaN(kg) ? 0 : kg) * (isNaN(reps) ? 0 : reps);
 }
 
-
-// this is the function that is estimating the 1RM of the user
+// Estimates 1RM (Epley formula)
 function estOneRm(sets) {
     let best = null;
-    Object.values(sets).forEach(s => {
-        const kg = parseFloat(s.kg); const reps = parseInt(s.reps, 10);
+    const setsArr = Array.isArray(sets) ? sets : Object.values(sets || {});
+    setsArr.forEach(s => {
+        const kg = parseFloat(s.kg);
+        const reps = parseInt(s.reps, 10);
         if (isNaN(kg) || !kg || isNaN(reps) || !reps) return;
         const est = kg * (1 + reps / 30);
         if (!best || est > best.est) best = { est };
     });
     return best ? Math.round(best.est * 2) / 2 : null;
 }
-function fmtWhen(dateStr, startTime) {
+
+function fmtWhen(dateVal, startTime) {
     let out = '';
     try {
-        const d = new Date(dateStr + 'T00:00:00');
-        out = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-    } catch (e) { out = dateStr || ''; }
+        const d = dateVal ? new Date(dateVal) : (startTime ? new Date(startTime) : new Date());
+        if (!isNaN(d.getTime())) {
+            out = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+    } catch (_) {}
+    if (!out && dateVal) out = String(dateVal);
+
     if (startTime) {
         try {
-            const t = new Date(startTime);
-            out += ' · ' + t.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-        } catch (e) { }
+            const t = new Date(Number(startTime));
+            if (!isNaN(t.getTime())) {
+                out += (out ? ' · ' : '') + t.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            }
+        } catch (_) {}
     }
-    return out;
+    return out || '—';
 }
 
-// render kr rahe hai workout ko 
+function normalizeExercises(rawExercises) {
+    if (!rawExercises) return [];
+    if (Array.isArray(rawExercises)) {
+        return rawExercises.map(item => {
+            const exerciseObj = item.exercise;
+            let name = 'Exercise';
+            let type = item.type || 'weight_and_reps';
+
+            if (typeof exerciseObj === 'object' && exerciseObj !== null) {
+                name = exerciseObj.name || name;
+                type = item.type || exerciseObj.exercise_type || type;
+            } else if (typeof exerciseObj === 'string' && exerciseObj) {
+                name = item.name || exerciseObj;
+            } else if (item.name) {
+                name = item.name;
+            }
+
+            let sets = [];
+            if (Array.isArray(item.sets)) {
+                sets = item.sets;
+            } else if (typeof item.sets === 'object' && item.sets !== null) {
+                sets = Object.values(item.sets);
+            }
+
+            return {
+                name,
+                type,
+                notes: item.notes || '',
+                sets
+            };
+        });
+    }
+
+    if (typeof rawExercises === 'object') {
+        return Object.entries(rawExercises).map(([name, item]) => {
+            const type = item.type || 'weight_and_reps';
+            let sets = [];
+            if (Array.isArray(item.sets)) {
+                sets = item.sets;
+            } else if (typeof item.sets === 'object' && item.sets !== null) {
+                sets = Object.values(item.sets);
+            }
+            return {
+                name,
+                type,
+                notes: item.notes || '',
+                sets
+            };
+        });
+    }
+
+    return [];
+}
+
+// Render workout data into page
 function renderWorkout(wk, author) {
-    const exercises = wk.exercises || {};
-    const names = Object.keys(exercises);
+    const exList = normalizeExercises(wk.exercises);
 
     document.title = '1RM ✱ ' + (wk.title || 'Session');
     $('#postWhen').textContent = fmtWhen(wk.date, wk.start_time) || '—';
@@ -158,35 +224,48 @@ function renderWorkout(wk, author) {
     $('#authorHandle').textContent = author.username ? '@' + author.username : '';
     $('#authorMeta').innerHTML = '<span>' + escHtml(fmtWhen(wk.date, wk.start_time)) + '</span>';
 
-    /* title — one clean style, nothing floating near it */
+    /* title & desc */
     $('#postTitle').innerHTML = '<span class="t-star">✱</span>' + escHtml(wk.title || 'Untitled session');
-    $('#postDesc').textContent = wk.description || '';
-    if (!wk.description) $('#postDesc').hidden = true;
+    const descEl = $('#postDesc');
+    if (descEl) {
+        descEl.textContent = wk.description || '';
+        descEl.hidden = !wk.description;
+    }
 
     /* photos: first big, the rest as thumbs */
     const photos = Array.isArray(wk.photos) ? wk.photos.filter(Boolean) : [];
     if (photos.length) {
         $('#postImg').src = photos[0];
         $('#postImgWrap').hidden = false;
-        if (photos.length > 1) {
-            const th = $('#postThumbs');
+        const th = $('#postThumbs');
+        if (photos.length > 1 && th) {
             th.hidden = false;
             th.innerHTML = photos.slice(1).map(p => '<img src="' + p + '" alt="Session photo">').join('');
+        } else if (th) {
+            th.hidden = true;
         }
+    } else {
+        $('#postImgWrap').hidden = true;
+        if ($('#postThumbs')) $('#postThumbs').hidden = true;
     }
 
     /* tags */
-    const tags = [...new Set(names.map(n => TYPE_TAG[exercises[n].type]).filter(Boolean))];
+    const tags = [...new Set(exList.map(e => TYPE_TAG[e.type] || 'strength').filter(Boolean))];
     $('#postTags').innerHTML = tags.map(t => '<span class="wk-tag">' + escHtml(t) + '</span>').join('');
     if (tags.length) $('#imgTag').innerHTML = '<b>✱</b> ' + escHtml(tags[0]);
 
     /* totals */
-    const vol = wk.total_volume || '0';
-    const time = wk.total_time || '—';
-    const exCount = names.length;
+    let calculatedVol = 0;
     let setCount = 0;
-    names.forEach(n => { setCount += Object.keys(exercises[n].sets || {}).length; });
-    $('#footVolume').textContent = vol + ' kg';
+    exList.forEach(ex => {
+        setCount += ex.sets.length;
+        ex.sets.forEach(s => { calculatedVol += setKg(s); });
+    });
+    const vol = wk.total_volume || (calculatedVol ? calculatedVol.toLocaleString('en-US') : '0');
+    const time = wk.total_time || '—';
+    const exCount = exList.length;
+
+    $('#footVolume').textContent = vol + (String(vol).includes('kg') ? '' : ' kg');
     $('#footTime').textContent = time;
     $('#footEx').textContent = exCount;
     $('#statVolume').textContent = vol;
@@ -195,18 +274,16 @@ function renderWorkout(wk, author) {
     $('#statSets').textContent = setCount;
 
     /* spots */
-    let spots = wk.spots !== undefined ? wk.spots : []; 
+    const spots = Array.isArray(wk.spots) ? wk.spots : [];
     $('#spotCount').textContent = spots.length;
-    $('#spottedBy').textContent = '+ ' + Math.max(spots.length - 3, 0) + ' spotted this';
-    if (author.self) $('#followBtn').style.display = 'none';
+    $('#spottedBy').textContent = spots.length > 0 ? '+ ' + Math.max(spots.length - 3, 0) + ' spotted this' : 'be the first to spot';
+    if (author.self && $('#followBtn')) $('#followBtn').style.display = 'none';
 
     /* exercise blocks */
     const list = $('#exList');
     list.innerHTML = '';
-    names.forEach((name, i) => {
-        const ex = exercises[name];
-        const sets = ex.sets || {};
-        const setKeys = Object.keys(sets);
+    exList.forEach((ex, i) => {
+        const sets = ex.sets || [];
         const color = EX_COLORS[i % EX_COLORS.length];
         const typeLbl = TYPE_LABEL[ex.type] || ex.type || 'sets';
         const est = ex.type === 'weight_and_reps' ? estOneRm(sets) : null;
@@ -218,19 +295,19 @@ function renderWorkout(wk, author) {
 
         let html =
             '<div class="ex-head">' +
-            '<span class="nm">' + escHtml(name) + '</span>' +
+            '<span class="nm">' + escHtml(ex.name) + '</span>' +
             (est ? '<span class="est-badge">≈ ' + est + ' kg 1RM</span>' : '') +
-            '<span class="ex-type">' + escHtml(typeLbl) + ' · ' + setKeys.length +
-            (setKeys.length === 1 ? ' set' : ' sets') + '</span>' +
+            '<span class="ex-type">' + escHtml(typeLbl) + ' · ' + sets.length +
+            (sets.length === 1 ? ' set' : ' sets') + '</span>' +
             '</div>';
 
-        if (setKeys.length) {
+        if (sets.length) {
             html += '<div class="set-list">';
-            setKeys.forEach(k => {
+            sets.forEach((set, sIdx) => {
                 html +=
                     '<div class="set-row">' +
-                    '<span class="set-no">Set <b>' + escHtml(String(k).padStart(2, '0')) + '</b></span>' +
-                    '<span class="set-val">' + fmtSet(sets[k], ex.type) + '</span>' +
+                    '<span class="set-no">Set <b>' + String(sIdx + 1).padStart(2, '0') + '</b></span>' +
+                    '<span class="set-val">' + fmtSet(set, ex.type) + '</span>' +
                     '</div>';
             });
             html += '</div>';
@@ -245,12 +322,12 @@ function renderWorkout(wk, author) {
     /* volume-by-exercise bars */
     const volWrap = $('#volBars');
     volWrap.innerHTML = '';
-    const vols = names.map((n, i) => {
-        const ex = exercises[n];
+    const vols = exList.map((ex, i) => {
         let v = 0;
-        Object.values(ex.sets || {}).forEach(s => { v += setKg(s); });
-        return { name: n, v, c: EX_COLORS[i % EX_COLORS.length] };
+        ex.sets.forEach(s => { v += setKg(s); });
+        return { name: ex.name, v, c: EX_COLORS[i % EX_COLORS.length] };
     }).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+
     if (vols.length) {
         const max = vols[0].v;
         vols.forEach((x, i) => {
@@ -270,8 +347,11 @@ function renderWorkout(wk, author) {
     /* estimated maxes list */
     const estWrap = $('#estList');
     estWrap.innerHTML = '';
-    const ests = names.map(n => ({ n, e: exercises[n].type === 'weight_and_reps' ? estOneRm(exercises[n].sets || {}) : null }))
+    const ests = exList
+        .filter(ex => ex.type === 'weight_and_reps')
+        .map(ex => ({ n: ex.name, e: estOneRm(ex.sets) }))
         .filter(x => x.e);
+
     if (ests.length) {
         ests.sort((a, b) => b.e - a.e).forEach(x => {
             const row = document.createElement('div');
@@ -284,39 +364,227 @@ function renderWorkout(wk, author) {
     }
 }
 
-
 async function loadWorkout() {
     const id = new URLSearchParams(location.search).get('id');
-    if (id) {
-        try {
-            const res = await fetch(API + '/workouts?id=' + encodeURIComponent(id));
-            const data = await res.json();
-            const wk = Array.isArray(data) ? data[0] : data;
-            if (wk && wk.exercises) return wk;
-            showToast('Session not found.', 'error');
-            window.location.href = "home.html?message=session_not_found&status=error"
-        } catch (e) {
-            showToast('Some Error occured. Try again after some time', 'error');
-            window.location.href = "home.html"
-        }
-    }
-}
-async function loadAuthor(wk) {
-    if (current_user.id && wk.user_id && current_user.id === wk.user_id) {
-        return { name: current_user.name, username: current_user.username, self: true };
+    if (!id) {
+        showToast('No session specified.', 'error');
+        window.location.href = "home.html";
+        return null;
     }
     try {
-        const res = await fetch(API + '/users?id=' + encodeURIComponent(wk.user_id));
-        const users = await res.json();
-        const u = Array.isArray(users) ? users[0] : users;
-        if (u && u.name) return { name: u.name, username: u.username, self: false };
-    } catch (e) { }
+        const cleanId = id.startsWith(':') ? id.slice(1) : id;
+        const res = await fetch(API + '/workouts/get/' + cleanId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        const workout = data.workout;
+        if (workout) return workout;
+        showToast('Session not found.', 'error');
+        window.location.href = "home.html?message=session_not_found&status=error";
+        return null;
+    } catch (e) {
+        console.error('loadWorkout failed:', e);
+        showToast('Could not load session. Check backend connection.', 'error');
+        setTimeout(() => {
+            window.location.href = "home.html";
+        }, 1500);
+        return null;
+    }
+}
+
+async function loadAuthor(wk, current_user) {
+    if (!wk) return { name: '1RM Lifter', username: '', self: false };
+    const currentUserId = String(current_user?.id || current_user?._id || '');
+    const wkUser = wk.user;
+    const wkUserId = String(wkUser?._id ?? wkUser ?? '');
+
+    const isSelf = Boolean(currentUserId && wkUserId && currentUserId === wkUserId);
+
+    if (typeof wkUser === 'object' && wkUser !== null && wkUser.name) {
+        return {
+            name: wkUser.name,
+            username: wkUser.username || '',
+            self: isSelf
+        };
+    }
+
+    if (isSelf) {
+        return {
+            name: current_user.name,
+            username: current_user.username || '',
+            self: true
+        };
+    }
+
+    if (wkUserId && typeof wkUserId === 'string' && wkUserId.length === 24) {
+        try {
+            const res = await getUserById(wkUserId);
+            const u = res?.user || res;
+            const userObj = Array.isArray(u) ? u[0] : u;
+            if (userObj && userObj.name) {
+                return {
+                    name: userObj.name,
+                    username: userObj.username || '',
+                    self: false
+                };
+            }
+        } catch (_) {}
+    }
+
     return { name: '1RM Lifter', username: '', self: false };
 }
-(async function init() {
-    const author = await loadAuthor(wk);
-    renderWorkout(wk, author);
-})();
+
+let get_proper_time_from_start = (oldTime) => {
+    if (!oldTime) return 'just now';
+    const timeMs = typeof oldTime === 'number' ? oldTime : new Date(oldTime).getTime();
+    if (isNaN(timeMs)) return 'just now';
+    const elapsed = Date.now() - timeMs;
+    if (elapsed < 60000) return 'just now';
+    const days = Math.floor(elapsed / 86400000);
+    const hours = Math.floor((elapsed % 86400000) / 3600000);
+    const minutes = Math.floor((elapsed % 3600000) / 60000);
+    let result = "";
+    if (days > 0) result += `${days}d `;
+    if (hours > 0) result += `${hours}h `;
+    if (minutes > 0) result += `${minutes}m`;
+    return result.trim() || 'just now';
+};
+
+async function saveWorkoutChanges(wk, changes) {
+    const rawId = wk._id || wk.id;
+    if (!rawId) return null;
+    try {
+        const cleanId = String(rawId).startsWith(':') ? String(rawId).slice(1) : String(rawId);
+        const res = await fetch(API + '/workouts/' + cleanId, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
+            body: JSON.stringify(changes)
+        });
+        if (!res.ok) {
+            console.error('saveWorkoutChanges error HTTP', res.status);
+            return null;
+        }
+        const data = await res.json();
+        return data.workout || null;
+    } catch (e) {
+        console.error('Failed to save workout changes:', e);
+        return null;
+    }
+}
+
+function initActionsAndComments(wk, current_user) {
+    const currentUserId = String(current_user?.id || current_user?._id || '');
+    let spots = Array.isArray(wk.spots) ? wk.spots : [];
+    const spotted = spots.some(s => String(s?._id ?? s) === currentUserId);
+    const spotBtn = $('#spotBtn'), spotCount = $('#spotCount');
+    if (spotted && spotBtn) spotBtn.classList.add('on');
+
+    if (spotBtn) {
+        spotBtn.addEventListener('click', async () => {
+            const on = spotBtn.classList.toggle('on');
+            spotCount.textContent = (+spotCount.textContent) + (on ? 1 : -1);
+            if (on) {
+                showToast("Spotted ✱");
+                if (!spots.some(s => String(s?._id ?? s) === currentUserId)) {
+                    spots.push(currentUserId);
+                }
+            } else {
+                const index = spots.findIndex(s => String(s?._id ?? s) === currentUserId);
+                if (index > -1) {
+                    spots.splice(index, 1);
+                }
+            }
+            $('#spottedBy').textContent = spots.length > 0 ? '+ ' + Math.max(spots.length - 3, 0) + ' spotted this' : 'be the first to spot';
+            await saveWorkoutChanges(wk, { spots });
+        });
+    }
+
+    const followBtn = $('#followBtn');
+    if (followBtn) {
+        followBtn.addEventListener('click', () => {
+            const on = followBtn.classList.toggle('on');
+            followBtn.textContent = on ? 'Following ✱' : 'Follow';
+            showToast(on ? 'Following ✱ their sessions will hit your feed.' : 'Unfollowed — no hard feelings.');
+        });
+    }
+
+    const shareBtn = $('#shareBtn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href);
+            }
+            showToast('Link copied ✱ share the grind.');
+        });
+    }
+
+    /* comments */
+    const cmtList = $('#cmtList');
+    let commentTotal = 0;
+    const comments = Array.isArray(wk.comments) ? wk.comments : [];
+
+    function addComment(c, delay) {
+        const el = document.createElement('div');
+        el.className = 'cmt-card';
+        if (delay) el.style.setProperty('--ad', delay + 'ms');
+        const initial = c.i || initialsOf(c.n || c.user?.name || 'User');
+        const name = c.n || c.user?.name || 'User';
+        const handle = c.h || (c.user?.username ? '@' + c.user.username : '@user');
+        const rawTime = c.t || c.createdAt;
+        const timeRel = rawTime ? get_proper_time_from_start(rawTime) : 'just now';
+        const time = timeRel === 'just now' ? 'just now' : timeRel + ' ago';
+        const text = c.x || c.comment || '';
+        el.innerHTML =
+            '<span class="av sm">' + escHtml(initial) + '</span>' +
+            '<div class="cmt-body">' +
+            '<div class="cmt-meta"><b>' + escHtml(name) + '</b><span>' + escHtml(handle) + ' · ' + escHtml(time) + '</span></div>' +
+            '<p>' + escHtml(text) + '</p>' +
+            '</div>';
+        cmtList.appendChild(el);
+        commentTotal++;
+        $('#cmtCount').textContent = commentTotal;
+    }
+
+    comments.forEach((c, i) => addComment(c, i * 80));
+
+    async function postComment() {
+        const input = $('#cmtInput');
+        const val = input.value.trim();
+        if (!val) { showToast('Say something first ✱', 'error'); return; }
+        const newC = {
+            i: initialsOf(current_user.name),
+            n: current_user.name,
+            h: '@' + current_user.username,
+            t: Date.now(),
+            x: val,
+            user: current_user.id,
+            comment: val
+        };
+        addComment(newC);
+        if (!Array.isArray(wk.comments)) wk.comments = [];
+        wk.comments.push(newC);
+        input.value = '';
+        input.focus();
+        const updated = await saveWorkoutChanges(wk, { comments: wk.comments });
+        if (updated && Array.isArray(updated.comments)) {
+            wk.comments = updated.comments;
+        }
+    }
+
+    const cmtPost = $('#cmtPost');
+    if (cmtPost) cmtPost.addEventListener('click', postComment);
+    const cmtInput = $('#cmtInput');
+    if (cmtInput) cmtInput.addEventListener('keydown', e => { if (e.key === 'Enter') postComment(); });
+}
 
 /* =========================================================
    TABS
@@ -329,6 +597,7 @@ tabs.forEach(t => t.addEventListener('click', () => {
     t.classList.add('on');
     const key = t.dataset.tab;
     Object.entries(panels).forEach(([k, p]) => {
+        if (!p) return;
         if (k === key) {
             p.hidden = false;
             p.classList.remove('swap'); void p.offsetWidth; p.classList.add('swap');
@@ -340,103 +609,23 @@ tabs.forEach(t => t.addEventListener('click', () => {
 }));
 
 /* =========================================================
-   SPOT / FOLLOW / SHARE
+   INITIALIZATION
 ========================================================= */
-let spots = wk.spots !== undefined ? wk.spots : []
-const spotted = spots.includes(current_user.id)
-const spotBtn = $('#spotBtn'), spotCount = $('#spotCount');
-if (spotted) spotBtn.classList.add('on')
-spotBtn.addEventListener('click', () => {
-    const on = spotBtn.classList.toggle('on');
-    spotCount.textContent = (+spotCount.textContent) + (on ? 1 : -1);
-    if (on) {
-        showToast("Spotted")
-        wk['spots'].push(current_user.id)
-    } else {
-        const index = wk['spots'].indexOf(current_user.id)
-        if (index > -1) {
-            wk['spots'].splice(index, 1)
-        }
+async function init() {
+    if (!(await authenticate())) {
+        sessionStorage.removeItem('token');
+        window.location.href = "index.html?message=not_logged_in&from=home&status=error";
+        return;
     }
-    
-});
+    const current_user = await getCurrentUser();
+    applyUser(current_user);
 
+    const wk = await loadWorkout();
+    if (!wk) return;
 
-// yeh hm baad mein karenge 
-const followBtn = $('#followBtn');
-followBtn.addEventListener('click', () => {
-    const on = followBtn.classList.toggle('on');
-    followBtn.textContent = on ? 'Following ✱' : 'Follow';
-    showToast(on ? 'Following ✱ their sessions will hit your feed.' : 'Unfollowed — no hard feelings.');
-    /* TODO: persist */
-});
-$('#shareBtn').addEventListener('click', () => showToast('Link copied ✱ share the grind.'));
-
-
-
-/* =========================================================
-   COMMENTS — rounded cards, simple list
-   TODO: fetch/persist via your backend
-========================================================= */
-const MY_INITIALS = initialsOf(current_user.name);
-const cmtList = $('#cmtList');
-let commentTotal = 0;
-
-let get_proper_time_from_start = (oldTIme) => {
-    const elapsed = Date.now() - oldTIme;
-    const days = Math.floor(elapsed / 86400000);
-    const hours = Math.floor((elapsed % 86400000) / 3600000);
-    const minutes = Math.floor((elapsed % 3600000) / 60000);
-    let result = "";
-    if (days > 0) result += `${days}d `;
-    if (hours > 0) result += `${hours}h `;
-    if (minutes > 0) result += `${minutes}m`;
-    return result.trim()
+    const author = await loadAuthor(wk, current_user);
+    renderWorkout(wk, author);
+    initActionsAndComments(wk, current_user);
 }
 
-function addComment(c, delay) {
-    const el = document.createElement('div');
-    el.className = 'cmt-card';
-    if (delay) el.style.setProperty('--ad', delay + 'ms');
-    el.innerHTML =
-        '<span class="av sm">' + escHtml(c.i) + '</span>' +
-        '<div class="cmt-body">' +
-        '<div class="cmt-meta"><b>' + escHtml(c.n) + '</b><span>' + escHtml(c.h) + ' · ' + escHtml(get_proper_time_from_start(c.t)) + '</span></div>' +
-        '<p>' + escHtml(c.x) + '</p>' +
-        '</div>';
-    cmtList.appendChild(el);
-    commentTotal++;
-    $('#cmtCount').textContent = commentTotal;
-}
-wk.comments.forEach((c, i) => addComment(c, i * 80));
-
-function postComment() {
-    const input = $('#cmtInput');
-    const val = input.value.trim();
-    if (!val) { showToast('Say something first ✱', 'error'); return; }
-    addComment({ i: MY_INITIALS, n: 'You', h: '@' + current_user.username, t: 'just now', x: val });
-    wk['comments'].push({
-        i: MY_INITIALS,
-        n: current_user.name,
-        h: '@'+current_user.username,
-        t: Date.now(),
-        x: val
-    })
-    input.value = '';
-    input.focus();
-}
-$('#cmtPost').addEventListener('click', postComment);
-$('#cmtInput').addEventListener('keydown', e => { if (e.key === 'Enter') postComment(); });
-
-// workout ko save krne k litye agr koi workout vaale page se ht jaata hai to workout 
-// apne aap save ho jaaye comments aur spot k sath
-window.addEventListener("pagehide", async function() {
-    let workout_save_response = await fetch(`http://localhost:3000/workouts/${wk.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(wk)
-    })
-    console.log(workout_save_response.status)
-})
+init();

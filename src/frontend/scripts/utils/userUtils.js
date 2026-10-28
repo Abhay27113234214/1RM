@@ -87,3 +87,18 @@ export let getCurrentUser = async () => {
         return response_for_user_get
     }
 }
+
+export let getUserById = async (id) => {
+    const get_user_reponse = await fetch(`http://localhost:5000/api/auth/get/${id}`, {
+        method: 'GET', 
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`
+        }
+    })
+    const response_for_get_user = get_user_reponse.json()
+    if (response_for_get_user.success) {
+        return response_for_get_user.user
+    } else {
+        return response_for_get_user
+    }
+} 

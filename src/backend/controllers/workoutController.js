@@ -168,8 +168,53 @@ const getWorkouts = async (request, response) => {
     }
 };
 
-const getWorkout = async (request, response) =>{
+const getWorkout = async (request, response) => {
+    try {
+        const rawId = request.params.id || '';
+        const id = rawId.startsWith(':') ? rawId.slice(1) : rawId;
+        const workout = await Workout.findById(id)
+            .populate('user', 'name username email')
+            .populate('exercises.exercise');
 
-}
+        if (!workout) {
+            return response.status(404).json({
+                success: false,
+                reason: 'workout_not_found'
+            });
+        }
 
-module.exports = { submitWorkout, getWorkouts };
+        return response.status(200).json({
+            success: true,
+            workout
+        });
+    } catch (error) {
+        console.error('getWorkout error:', error);
+        return response.status(500).json({
+            success: false,
+            reason: error.message
+        });
+    }
+};
+
+const patchWorkout = async (request, response) => {
+    try {
+        console.log(request.body)
+        const rawId = request.params.id || '';
+        const id = rawId.startsWith(':') ? rawId.slice(1) : rawId;
+        const workout = await Workout.findByIdAndUpdate(id, request.body, { new: true })
+            .populate('user', 'name username email')
+            .populate('exercises.exercise');
+        return response.status(200).json({
+            success: true,
+            workout
+        });
+    } catch (error) {
+        console.error('patchWorkout error:', error);
+        return response.status(500).json({
+            success: false,
+            reason: error.message
+        });
+    }
+};
+
+module.exports = { submitWorkout, getWorkouts, getWorkout, patchWorkout };

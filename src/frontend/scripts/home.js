@@ -146,12 +146,12 @@ document.addEventListener('click', async e => {
     const spot = e.target.closest('[data-action="spot"]');
     if (spot) {
         const shell = spot.closest('.post-shell');
-        const w = await getWorkout(shell.dataset.id);
+        const w = (await getWorkout(shell.dataset.id)).workout;
         let spots = w.spots || [];
         const has = spots.includes(current_user.id);
         spots = has ? spots.filter(uid => uid !== current_user.id) // agr current user ne pehle bhi like kiya hua hai to ab uss like ko remove krdo 
                     : [...spots, current_user.id]; // aur agr usne like nahi kiya hua to usse add krdo 
-        const updated = await patchWorkout(w.id, { spots });
+        const updated = (await patchWorkout(w._id, { spots })).workout;
         spot.classList.toggle('on', !has);
         spot.querySelector('[data-count]').textContent = updated.spots.length;
         return;
@@ -173,7 +173,7 @@ document.addEventListener('click', async e => {
         if (!text) { input.focus(); return; }
 
         send.disabled = true;
-        const w = await getWorkout(shell.dataset.id);
+        const w = (await getWorkout(shell.dataset.id)).workout;
         const comments = w.comments || [];
         let initials = ""
         current_user.name.trim().split(" ").forEach((spl) => initials += spl[0].toUpperCase())
@@ -356,13 +356,22 @@ let format_total_time = (t) => {
 };
 
 async function getWorkout(id) {
-    return (await fetch('http://localhost:5000/api/workouts/' + id)).json().catch(() => ({}));
+    return (await fetch('http://localhost:5000/api/workouts/' + id, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        }
+    })).json().catch(() => ({}));
 }
 
 async function patchWorkout(id, changes) {
     return (await fetch('http://localhost:5000/api/workouts/' + id, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' , 
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        },
         body: JSON.stringify(changes)
     })).json().catch(() => ({}));
 }

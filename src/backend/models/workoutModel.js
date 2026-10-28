@@ -21,11 +21,15 @@ const workoutExerciseSchema = mongoose.Schema({
 const commentSchema = mongoose.Schema({
     "user": {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "users",
-        required: true
+        ref: "users"
     },
-    "comment": {type: String, default: ""}
-})
+    "i": { type: String },
+    "n": { type: String },
+    "h": { type: String },
+    "x": { type: String },
+    "t": { type: Number, default: Date.now },
+    "comment": { type: String, default: "" }
+}, { timestamps: true })
 
 const workoutSchema = mongoose.Schema({
     "start_time": {type: Number, required: true},
