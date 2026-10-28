@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken")
 const cloudinary = require('../config/cloudinary');
 const fs = require('fs/promises');
 const { Workout } = require('../models/workoutModel');
-const { Exercise } = require('../models/exerciseModel')
+const { Exercise } = require('../models/exerciseModel');
+const { request } = require("http");
 
 cloudinary.config({
   secure: true
@@ -15,20 +16,6 @@ require("dotenv").config({
 });
 
 const SECRET_KEY = process.env.SECRET_KEY
-
-const uploadImage = async (imagePath) => {
-    const options = {
-        folder: 'workout-photos',
-        use_filename: true,
-        unique_filename: true,
-        overwrite: false
-    };
-
-    const result = await cloudinary.uploader.upload(imagePath, options);
-
-    return result.secure_url;
-};
-
 
 const submitWorkout = async (request, response) => {
     const files = request.files || [];
@@ -50,14 +37,20 @@ const submitWorkout = async (request, response) => {
         const exercises = await Promise.all(
             Object.entries(exerciseDictionary).map(
                 async ([exerciseName, exerciseData]) => {
-                    const exercise = await Exercise.findOne({
-                        name: exerciseName
+                    const cleanName = exerciseName.trim();
+                    const escapedName = cleanName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    let exercise = await Exercise.findOne({
+                        name: new RegExp(`^${escapedName}$`, 'i')
                     });
 
                     if (!exercise) {
-                        throw new Error(
-                            `Exercise not found: ${exerciseName}`
-                        );
+                        exercise = await Exercise.create({
+                            name: cleanName,
+                            primary_muscle_group: 'other',
+                            exercise_type: exerciseData.type || 'weight_and_reps',
+                            measurement: ['reps', 'kg'],
+                            is_custom: true
+                        });
                     }
 
                     const sets = Object.entries(
@@ -65,12 +58,19 @@ const submitWorkout = async (request, response) => {
                     )
                         .sort(([a], [b]) => Number(a) - Number(b))
                         .map(([, set]) => {
-                            const convertedSet = {
-                                reps: Number(set.reps)
-                            };
+                            const convertedSet = {};
 
+                            if (set.reps !== undefined && set.reps !== '') {
+                                convertedSet.reps = Number(set.reps) || 0;
+                            }
                             if (set.kg !== undefined && set.kg !== '') {
                                 convertedSet.kg = Number(set.kg);
+                            }
+                            if (set.time !== undefined && set.time !== '') {
+                                convertedSet.time = String(set.time);
+                            }
+                            if (set.distance !== undefined && set.distance !== '') {
+                                convertedSet.distance = Number(set.distance);
                             }
 
                             return convertedSet;
@@ -144,4 +144,32 @@ const submitWorkout = async (request, response) => {
     }
 };
 
-module.exports = { submitWorkout };
+const getWorkouts = async (request, response) => {
+    try {
+        const filter = request.body.filter || {};
+        const sort = request.body.sort || { start_time: -1 };
+
+        const workouts = await Workout.find(filter)
+            .populate('user', 'name username email')
+            .populate('exercises.exercise')
+            .sort(sort);
+
+        return response.status(200).json({
+            success: true,
+            workouts
+        });
+    } catch (error) {
+        console.error(error);
+
+        return response.status(500).json({
+            success: false,
+            reason: 'failed_to_fetch_workouts'
+        });
+    }
+};
+
+const getWorkout = async (request, response) =>{
+
+}
+
+module.exports = { submitWorkout, getWorkouts };

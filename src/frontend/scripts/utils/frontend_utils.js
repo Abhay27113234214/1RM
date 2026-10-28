@@ -3,7 +3,13 @@ export const $ = s => document.querySelector(s);
 export const $$ = s => Array.from(document.querySelectorAll(s));
 
 export function showToast(message, type = 'ok', duration = 3800) {
-    const zone = $('#toastZone');
+    let zone = $('#toastZone');
+    if (!zone) {
+        zone = document.createElement('div');
+        zone.id = 'toastZone';
+        zone.className = 'toast-zone';
+        document.body.appendChild(zone);
+    }
     const isError = type === 'error';
 
     const t = document.createElement('div');

@@ -77,6 +77,7 @@ export let getCurrentUser = async () => {
     const response_for_user_get = await get_user_response.json()
     if (response_for_user_get.success) {
         const current_user = {
+            "id": response_for_user_get.id || response_for_user_get._id,
             "email": response_for_user_get.email,
             "username": response_for_user_get.username,
             "name": response_for_user_get.name

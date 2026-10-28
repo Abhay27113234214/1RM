@@ -1,6 +1,7 @@
 import { getCurrentUser, logout } from "./utils/userUtils.js"
 import { showToast } from "./utils/frontend_utils.js";
 import { authenticate } from "./utils/authUtils.js";
+import { getWorkouts } from "./utils/workoutUtils.js";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -102,15 +103,6 @@ onScroll();
 
 $('#todayLine').innerHTML = '<b>✱</b> ' + new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + ' <span class="live-dot"></span>';
 
-// start workout card, but only shown when the user who is logged in has had a workout today 
-const date = localDateKey()
-const url = `http://localhost:3000/workouts?user_id:eq=${current_user.id}&date:eq=${date}`;
-let workout_response = await fetch(url)
-let workouts = await workout_response.json()
-const hasWorkoutToday = workouts.length >= 1;
-if (hasWorkoutToday) {
-    $('#startWorkout').hidden = true;
-}
 
 /* reveal on scroll */
 const io = new IntersectionObserver(es => es.forEach(x => {
@@ -324,7 +316,20 @@ const summarizeSet = (set) => {
 };
 
 let renderWorkoutInPostCard = (element) => {
-    const exercises = element.exercises || {};
+    const exercises = element.exercises || [];
+    if (Array.isArray(exercises)) {
+        return exercises.map(exItem => {
+            const name = exItem.exercise?.name || 'Exercise';
+            const sets = exItem.sets || [];
+            const count = sets.length;
+            const last = sets[count - 1] || {};
+            return `
+                <div class="p-row" style="--c:${dotColorFor(name)}">
+                    <span class="nm">${name}</span>
+                    <span class="mt">${count} set${count !== 1 ? 's' : ''} · ${summarizeSet(last)}</span>
+                </div>`;
+        }).join('');
+    }
     return Object.entries(exercises).map(([name, ex]) => {
         const sets = Object.values(ex.sets || {});
         const count = sets.length;
@@ -351,34 +356,40 @@ let format_total_time = (t) => {
 };
 
 async function getWorkout(id) {
-    return (await fetch('http://localhost:3000/workouts/' + id)).json();
+    return (await fetch('http://localhost:5000/api/workouts/' + id)).json().catch(() => ({}));
 }
+
 async function patchWorkout(id, changes) {
-    return (await fetch('http://localhost:3000/workouts/' + id, {
+    return (await fetch('http://localhost:5000/api/workouts/' + id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(changes)
-    })).json();
+    })).json().catch(() => ({}));
 }
 
 let feed = $('#feed')
 let myToday = $('#myToday')
 
 let buildPostCard = async (element) => {
-    let user_response = await fetch(`http://localhost:3000/users/${element.user_id}`)
-    let user = await user_response.json()
-    let user_initials = ''
-    let photo = (element.photos && element.photos.length >= 1) ? element.photos[0] : "../assets/default_workout_image.png"
-    user.name.trim().split(" ").forEach((spl) => user_initials += spl[0].toUpperCase())
+    let user = (typeof element.user === 'object' && element.user !== null)
+        ? element.user
+        : { name: current_user.name || 'Athlete', username: current_user.username || 'athlete' };
+    let user_initials = '';
+    let photo = (element.photos && element.photos.length >= 1) ? element.photos[0] : "../assets/default_workout_image.png";
+    const userName = user.name || 'User';
+    userName.trim().split(" ").forEach((spl) => {
+        if (spl) user_initials += spl[0].toUpperCase();
+    });
     const spots = element.spots || [];
     const comments = element.comments || [];
-    const spotted = spots.includes(current_user.id);
+    const currentUserId = current_user.id;
+    const spotted = spots.some(s => String(s?._id ?? s) === String(currentUserId));
     const lastC = comments[comments.length - 1];
     return `
-        <div class="post-shell" data-id="${element.id}">
+        <div class="post-shell" data-id="${element._id || element.id}">
             <article class="post" tabindex="0" role="button" aria-label="Open ${user.name}'s workout">
                 <div class="p-head">
-                    <span class="av" style="background:#FF4A11">${user_initials}</span>
+                    <span class="av" style="background:#FF4A11">${user_initials || 'U'}</span>
                     <div class="p-who">
                         <div class="p-name">${user.name}</div>
                         <div class="p-meta"><span>@${user.username}</span><span>·</span><span>${get_proper_time_from_start(element.start_time)} ago</span></div>
@@ -396,7 +407,7 @@ let buildPostCard = async (element) => {
                     <button class="act" data-action="comment">Comment · <span data-ccount>${comments.length}</span></button>
                     <button class="act share" data-action="share">Share</button>
                 </div>
-                ${lastC ? `<div class="p-comment"><b>${esc(lastC.n)} · ${get_proper_time_from_start(lastC.t)} ago</b>“${esc(lastC.x)}”</div>` : ''}
+                ${lastC ? `<div class="p-comment"><b>${esc(lastC.n || lastC.user?.name || '')} · ${get_proper_time_from_start(lastC.t || Date.now())} ago</b>“${esc(lastC.x || lastC.comment || '')}”</div>` : ''}
                 <div class="p-cbox" hidden>
                     <input type="text" placeholder="Say something nice…">
                     <button class="btn-primary" data-action="send">Post</button>
@@ -405,27 +416,47 @@ let buildPostCard = async (element) => {
         </div>
     `
 }
+
 let renderPosts = async () => {
-    let workouts_response = await fetch("http://localhost:3000/workouts?_sort=-date")
-    let workouts = await workouts_response.json()
-    const today = localDateKey()
+    try {
+        const workouts = await getWorkouts({}, { date: -1 });
+        if (!Array.isArray(workouts)) return;
 
-    // meri aaj ki workouts -> date ke neeche vaala section
-    const mineToday = workouts.filter(w => w.user_id == current_user.id && w.date === today)
-    // feed > sirf baaki log (meri workouts upar already dikhi hain)
-    const feedList = workouts.filter(w => w.user_id != current_user.id)
+        const today = localDateKey();
+        const currentUserId = String(current_user.id);
 
-    if (mineToday.length && myToday) {
-        myToday.innerHTML = '<div class="my-today-lbl">your sessions today</div>'
-        for (const element of mineToday) {
-            myToday.innerHTML += await buildPostCard(element)
+        const mineToday = workouts.filter(w => {
+            const wUserId = String(w.user?._id ?? w.user ?? w.user_id);
+            const wDate = localDateKey(new Date(w.date || w.createdAt));
+            return wUserId === currentUserId && wDate === today;
+        });
+
+        const feedList = workouts.filter(w => {
+            const wUserId = String(w.user?._id ?? w.user ?? w.user_id);
+            return wUserId !== currentUserId;
+        });
+
+        if (mineToday.length >= 1 && $('#startWorkout')) {
+            $('#startWorkout').hidden = true;
         }
-    }
 
-    for (const element of feedList) {
-        feed.innerHTML += await buildPostCard(element)
+        if (myToday) {
+            myToday.innerHTML =
+                '<div class="my-today-lbl">your sessions today</div>';
+            for (const workout of mineToday) {
+                myToday.innerHTML += await buildPostCard(workout);
+            }
+        }
+        if (feed) {
+            feed.innerHTML = '';
+            for (const workout of feedList) {
+                feed.innerHTML += await buildPostCard(workout);
+            }
+        }
+    } catch (err) {
+        console.error("renderPosts error:", err);
     }
-}
+};
 renderPosts()
 
 

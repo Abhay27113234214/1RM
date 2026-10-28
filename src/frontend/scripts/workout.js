@@ -13,7 +13,6 @@ const API_BASE = "http://localhost:5000/api";
 import { logout, getCurrentUser } from "./utils/userUtils.js"
 import { authenticate } from "./utils/authUtils.js";
 import { showToast } from "./utils/frontend_utils.js";
-const formData = new FormData() // this is for sending all the files and the other workout related fields to the backend in a single request
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -235,7 +234,6 @@ window.addEventListener("beforeunload", saveSessionState);
 
 
 // total stats calculate karne vaali saari functionality
-// TODO: different tarah ki exercises, alag tareeke se measure hoti hai to uska bhi dekhna padega
 function updateStats() {
     $('#ssCount').textContent = exList.querySelectorAll('.ex-card').length;
     let vol = 0;
@@ -350,41 +348,59 @@ document.addEventListener('input', e => {
 });
 
 // adding, removing exercises
-let SUGG = [
-    // ['Overhead Press', 'barbell', '#FF4A11'], ['Incline DB Press', 'dumbbell', '#FF4A11'], ['Dips', 'bodyweight', '#FF4A11'],
-    // ['Deadlift', 'barbell', '#3B6FE0'], ['Pull-ups', 'bodyweight', '#3B6FE0'], ['Face Pulls', 'cable', '#3B6FE0'],
-    // ['Romanian Deadlift', 'barbell', '#1E9E6A'], ['Walking Lunges', 'dumbbell', '#1E9E6A'], ['Leg Press', 'machine', '#1E9E6A'],
-    // ['Plank', 'bodyweight', '#D89B0B'], ['Hanging Leg Raise', 'bodyweight', '#D89B0B'],
-    // ['5K Run', 'track', '#D6486F'], ['Rowing', 'erg', '#D6486F']
-];
+let SUGG = [];
+let isFetchingExercises = false;
+
+try {
+    const cached = JSON.parse(sessionStorage.getItem('cached_exercises') || 'null');
+    if (Array.isArray(cached) && cached.length > 0) {
+        SUGG = cached;
+    }
+} catch (_) {}
 
 async function fetch_exercises() {
+    if (isFetchingExercises) return;
+    isFetchingExercises = true;
     try {
         let response = await fetch(`${API_BASE}/exercises`);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
         let exercises = await response.json();
-        for (let i = 0; i < exercises.length; i++) {
-            SUGG.push([exercises[i].name, exercises[i].exercise_type, "#" + Math.floor(Math.random() * 16777215)
-                .toString(16)
-                .padStart(6, "0"), exercises[i].exercise_type]);
-        }
+        SUGG = exercises.map(ex => [
+            ex.name,
+            ex.exercise_type,
+            "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0"),
+            ex.exercise_type
+        ]);
+        try {
+            sessionStorage.setItem('cached_exercises', JSON.stringify(SUGG));
+        } catch (_) {}
     } catch (err) {
         console.error("fetch_exercises failed:", err);
-        showToast("Could not load exercise list. Check backend connection.", "error");
+        if (SUGG.length === 0) {
+            showToast("Could not load exercise list. Check backend connection.", "error");
+        }
+    } finally {
+        isFetchingExercises = false;
+        if (addEx && addEx.classList.contains('open')) {
+            renderSugg(exSearch?.value || '');
+        }
     }
 }
 
-fetch_exercises()
+fetch_exercises();
 
 const addEx = $('#addEx'), exSearch = $('#exSearch'), suggList = $('#suggList');
 
 function openAddEx() {
     addEx.classList.add('open');
     $('#addExBox').hidden = false;
-    renderSugg(exSearch.value);
-    exSearch.focus();
+    renderSugg(exSearch.value || '');
+    if (SUGG.length === 0) {
+        fetch_exercises();
+    }
+    setTimeout(() => exSearch.focus(), 50);
 }
 function closeAddEx() {
     addEx.classList.remove('open');
@@ -397,8 +413,16 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && addEx.classList.contains('open')) closeAddEx();
 });
 
-function renderSugg(q) {
-    const list = SUGG.filter(x => x[0].toLowerCase().includes(q.toLowerCase()));
+function renderSugg(q = '') {
+    if (isFetchingExercises && SUGG.length === 0) {
+        suggList.innerHTML = '<div class="sugg-empty">Loading exercises ✱</div>';
+        return;
+    }
+    const query = (q || '').trim().toLowerCase();
+    const list = query
+        ? SUGG.filter(x => x[0].toLowerCase().includes(query))
+        : SUGG;
+
     suggList.innerHTML = list.length
         ? list.map(x => '<button class="sugg-item" style="--c:' + x[2] + '" data-name="' + x[0] + '" data-type="' + x[1] + '"><span class="sd"></span><span class="sn">' + x[0] + '</span><span class="st">' + x[1] + '</span></button>').join('')
         : '<div class="sugg-empty">Nothing found — build it as a custom exercise ✱</div>';
@@ -535,7 +559,6 @@ document.addEventListener('click', e => {
         updateStats();
     }, 320);
 
-    // TODO: also remove this set from your session data
     delete workout['exercises'][ex_name]['sets'][s_number]
     // this code above is removing the set from my session data
 });
@@ -560,6 +583,7 @@ $('#finishBtn').addEventListener('click', () => {
 
 // dialogue close karne k liye 
 function closeFinish() {
+    if (isSubmittingWorkout) return;
     finishModal.classList.remove('open');
     finishModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
@@ -631,69 +655,134 @@ $('#fmShots').addEventListener('click', e => {
 });
 
 
+// Client-side image compression: downscales phone/camera images to ~1200px / ~150KB
+// so Cloudinary and backend uploads take <1s instead of 15-20 seconds
+async function compressImage(file, maxWidth = 1200, quality = 0.75) {
+    if (!file || !file.type || !file.type.startsWith('image/')) return file;
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                let { width, height } = img;
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob((blob) => {
+                    if (blob && blob.size < file.size) {
+                        const newName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+                        resolve(new File([blob], newName, { type: 'image/jpeg' }));
+                    } else {
+                        resolve(file);
+                    }
+                }, 'image/jpeg', quality);
+            };
+            img.onerror = () => resolve(file);
+            img.src = e.target.result;
+        };
+        reader.onerror = () => resolve(file);
+        reader.readAsDataURL(file);
+    });
+}
+
+let isSubmittingWorkout = false;
+
 // actual workout save krne vaala function
 async function submitWorkout(withDetails) {
+    if (isSubmittingWorkout) return;
     const saveBtn = $('#fmSave');
-    saveBtn.disabled = true;
+    const skipBtn = $('#fmSkip');
+    const originalSaveHtml = saveBtn ? saveBtn.innerHTML : 'Save workout <span class="arr">→</span>';
+    const originalSkipHtml = skipBtn ? skipBtn.innerHTML : 'Skip — save as is';
 
-    if (withDetails) {
-        workout['title'] = $('#fmTitle').value.trim() || "Grinded";
-        workout['description'] = $('#fmDesc').value.trim();
-        workout['photos'] = photoData
-    } else {
-        workout['title'] = "Grinded"
-        workout['photos'] = ["../assets/default_workout_image.png"]
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+        showToast("You are not logged in. Redirecting...", "error");
+        setTimeout(() => {
+            window.location.href = "index.html?message=not_logged_in&from=workout&status=error";
+        }, 500);
+        return;
     }
-    workout['date'] = localDateKey()
-    workout['user_id'] = current_user.id
-    workout['start_time'] = startedAt
-    workout['total_time'] = fmtClock(Date.now() - startedAt)
-    workout['total_volume'] = $('#ssVol').textContent
-    workout['spots'] = []
-    workout['comments'] = []
-    delete workout.pause_time
-    delete workout.elapsed_time
-    delete workout.startedAt
-    delete workout.time
+
+    isSubmittingWorkout = true;
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `Saving… <span class="live-dot"></span>`;
+    }
+    if (skipBtn) skipBtn.disabled = true;
 
     try {
-        workout['photos'].forEach(file => {
-            formData.append('photos', file)
-        })
-        delete workout.photos 
+        const formData = new FormData();
+        const title = withDetails ? ($('#fmTitle').value.trim() || "Grinded") : "Grinded";
+        const description = withDetails ? $('#fmDesc').value.trim() : "";
+        const photosToSend = withDetails ? photoData : [];
 
-        formData.append('exercises', JSON.stringify(workout.exercises))
+        if (photosToSend.length > 0) {
+            showToast("Compressing & uploading photos…");
+        }
 
-        delete workout.exercises
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('date', localDateKey());
+        formData.append('user_id', current_user.id || "");
+        formData.append('start_time', startedAt);
+        formData.append('total_time', fmtClock(Date.now() - startedAt));
+        formData.append('total_volume', $('#ssVol').textContent);
+        formData.append('spots', JSON.stringify([]));
+        formData.append('comments', JSON.stringify([]));
+        formData.append('exercises', JSON.stringify(workout?.exercises || {}));
 
-        Object.entries(workout).forEach(([key, value]) => {
-            formData.append(key, value)
-        })
+        for (const file of photosToSend) {
+            if (file instanceof File || file instanceof Blob) {
+                const compressed = await compressImage(file);
+                formData.append('photos', compressed);
+            }
+        }
 
         let response = await fetch('http://localhost:5000/api/workouts', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+                'Authorization': `Bearer ${token}`
             },
             body: formData
         });
-        if (response.status === 201) {
+
+        if (response.ok || response.status === 201 || response.status === 200) {
+            // Prevent saveSessionState from restoring workout to localStorage on unload
+            window.removeEventListener("pagehide", saveSessionState);
+            window.removeEventListener("beforeunload", saveSessionState);
             localStorage.removeItem('current_user_workout');
-            workout = {};
+            workout = null;
+            if (saveBtn) saveBtn.innerHTML = `Saved! ✱`;
+            try { closeFinish(); } catch (_) {}
+            try { showToast("Workout Completed ✱ Redirecting..."); } catch (_) {}
             window.location.href = "home.html?message=workout_completed&from=workout";
+            return;
         } else if (response.status === 413) {
-            saveBtn.disabled = false;
+            isSubmittingWorkout = false;
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = originalSaveHtml; }
+            if (skipBtn) { skipBtn.disabled = false; skipBtn.innerHTML = originalSkipHtml; }
             showToast("Workout photos are too large (>10MB). Please remove some photos.", "error");
         } else {
-            saveBtn.disabled = false;
+            isSubmittingWorkout = false;
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = originalSaveHtml; }
+            if (skipBtn) { skipBtn.disabled = false; skipBtn.innerHTML = originalSkipHtml; }
             let errorData;
             try { errorData = await response.json(); } catch (_) {}
-            const msg = errorData?.message || "Could not save the workout. Try again.";
+            const msg = errorData?.message || errorData?.reason || "Could not save the workout. Try again.";
             showToast(msg, "error");
         }
     } catch (err) {
         console.error("submitWorkout failed:", err);
-        saveBtn.disabled = false;
+        isSubmittingWorkout = false;
+        if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = originalSaveHtml; }
+        if (skipBtn) { skipBtn.disabled = false; skipBtn.innerHTML = originalSkipHtml; }
         showToast("Network error: Could not reach backend server. Try again.", "error");
     }
 }
@@ -797,15 +886,15 @@ $('#cxSave').addEventListener('click', async () => {
                 primary_muscle_group: cxState.muscle,
                 other_muscles: cxState.other,
                 exercise_type: cxState.type,
-                measurement: fieldsFor(cxState.type)   // ['kg','reps'] wagaira — db shape se match
+                measurement: fieldsFor(cxState.type) 
             })
         });
         saveBtn.disabled = false;
 
         if (res.status === 201) {
             const created = await res.json();
-            const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
             SUGG.push([created.name, created.exercise_type, color, created.exercise_type]); // search mein turant
+            try { sessionStorage.setItem('cached_exercises', JSON.stringify(SUGG)); } catch (_) {}
             closeCreateEx();
             showToast('“' + created.name + '” added to your library ✱');
             // reset for next time

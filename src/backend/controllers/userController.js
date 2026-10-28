@@ -101,6 +101,7 @@ const getUserFromToken = async (request, response) => {
     const user = await User.findById(request.user.id)
     return response.send({
         "success": true,
+        "id": user._id.toString(),
         "email": user.email,
         "username": user.username,
         "name": user.name

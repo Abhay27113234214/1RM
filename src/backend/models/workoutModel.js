@@ -2,7 +2,9 @@ const mongoose = require('mongoose')
 
 const setSchema = mongoose.Schema({
     "kg": {type: Number},
-    "reps": {type: Number, required: true}
+    "reps": {type: Number},
+    "time": {type: String},
+    "distance": {type: Number}
 },  { _id: false }) 
 
 const workoutExerciseSchema = mongoose.Schema({
