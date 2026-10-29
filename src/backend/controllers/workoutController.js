@@ -1,4 +1,4 @@
-const {User} = require("../models/userModel")
+const { User } = require("../models/userModel")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const cloudinary = require('../config/cloudinary');
@@ -8,7 +8,7 @@ const { Exercise } = require('../models/exerciseModel');
 const { request } = require("http");
 
 cloudinary.config({
-  secure: true
+    secure: true
 });
 
 require("dotenv").config({
@@ -21,6 +21,7 @@ const submitWorkout = async (request, response) => {
     const files = request.files || [];
 
     try {
+        console.log("2. Starting workout processing");
         const {
             start_time,
             title,
@@ -134,13 +135,11 @@ const submitWorkout = async (request, response) => {
         });
 
     } finally {
-        await Promise.all(
-            files.map(file =>
-                fs.unlink(file.path).catch(error => {
-                    console.error('File cleanup failed:', error);
-                })
-            )
-        );
+        for (const file of files) {
+            fs.unlink(file.path).catch(error => {
+                console.error("File cleanup failed:", error);
+            });
+        }
     }
 };
 
@@ -198,7 +197,6 @@ const getWorkout = async (request, response) => {
 
 const patchWorkout = async (request, response) => {
     try {
-        console.log(request.body)
         const rawId = request.params.id || '';
         const id = rawId.startsWith(':') ? rawId.slice(1) : rawId;
         const workout = await Workout.findByIdAndUpdate(id, request.body, { new: true })

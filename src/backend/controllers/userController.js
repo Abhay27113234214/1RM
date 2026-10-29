@@ -82,22 +82,6 @@ const loginUser = async (request, response) => {
 }
 
 const getUserFromToken = async (request, response) => {
-    // const token = request.headers.authorization.split(" ")[1];
-    // const decode = jwt.verify(token, SECRET_KEY)
-    // if (decode) {
-    //     const user = await User.findById(decode.id).exec()
-    //     response.send({
-    //         success: true,
-    //         user: user
-    //     })
-    //     return
-    // } else {
-    //     response.send({
-    //         success: false,
-    //         reason: "invalid_jwt"
-    //     })
-    //     return
-    // }
     const user = await User.findById(request.user.id)
     return response.send({
         "success": true,

@@ -18,7 +18,6 @@ const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const exList = $('#exList');
 
-
 if (!(await authenticate())) { // pehle authenticate krna hai fir jaake page load ho nahi to redirect to index 
     sessionStorage.removeItem('token')
     window.location.href = "index.html?message=not_logged_in&from=home&status=error"
@@ -745,6 +744,7 @@ async function submitWorkout(withDetails) {
             }
         }
 
+
         let response = await fetch('http://localhost:5000/api/workouts', {
             method: 'POST',
             headers: {
@@ -753,8 +753,8 @@ async function submitWorkout(withDetails) {
             body: formData
         });
 
+
         if (response.ok || response.status === 201 || response.status === 200) {
-            // Prevent saveSessionState from restoring workout to localStorage on unload
             window.removeEventListener("pagehide", saveSessionState);
             window.removeEventListener("beforeunload", saveSessionState);
             localStorage.removeItem('current_user_workout');
@@ -786,8 +786,8 @@ async function submitWorkout(withDetails) {
         showToast("Network error: Could not reach backend server. Try again.", "error");
     }
 }
-$('#fmSave').addEventListener('click', () => submitWorkout(true));
-$('#fmSkip').addEventListener('click', () => submitWorkout(false));
+$('#fmSave').addEventListener('click', (event) => { event.preventDefault(); submitWorkout(true);});
+$('#fmSkip').addEventListener('click', (event) => { event.preventDefault(); submitWorkout(false);});
 
 
 const createExModal = $('#createExModal');

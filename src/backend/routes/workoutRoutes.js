@@ -6,8 +6,8 @@ const multer = require('multer')
 const upload = multer({dest: 'src/backend/uploads/'})
 
 workoutRoutes.post("/api/workouts", authenticationMiddleware, upload.array('photos'), submitWorkout)
-workoutRoutes.post("/api/workouts/get", authenticationMiddleware, getWorkouts)
-workoutRoutes.get("/api/workouts/get/:id", authenticationMiddleware, getWorkout)
+workoutRoutes.post("/api/workouts/get", authenticationMiddleware, getWorkouts) // isme body bhejni hai, sort aur filter vaali
+workoutRoutes.get("/api/workouts/get/:id", authenticationMiddleware, getWorkout) // ye redundant hai, hata doonga
 workoutRoutes.get("/api/workouts/:id", authenticationMiddleware, getWorkout)
 workoutRoutes.patch("/api/workouts/:id", authenticationMiddleware, patchWorkout)
 
