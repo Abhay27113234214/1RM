@@ -21,7 +21,6 @@ const submitWorkout = async (request, response) => {
     const files = request.files || [];
 
     try {
-        console.log("2. Starting workout processing");
         const {
             start_time,
             title,
@@ -199,7 +198,7 @@ const patchWorkout = async (request, response) => {
     try {
         const rawId = request.params.id || '';
         const id = rawId.startsWith(':') ? rawId.slice(1) : rawId;
-        const workout = await Workout.findByIdAndUpdate(id, request.body, { new: true })
+        const workout = await Workout.findByIdAndUpdate(id, request.body, { returnDocument: 'after' })
             .populate('user', 'name username email')
             .populate('exercises.exercise');
         return response.status(200).json({
