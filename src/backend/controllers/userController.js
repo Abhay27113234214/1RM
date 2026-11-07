@@ -1,6 +1,7 @@
 const {User} = require("../models/userModel")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const { default: mongoose } = require("mongoose");
 
 require("dotenv").config({
     path: require("path").resolve(__dirname, "../../../.env")
@@ -133,4 +134,31 @@ const getUserFromId = async (request, response) => {
     }
 }
 
-module.exports = { createUser, loginUser, getUserFromToken, updateUser, authenticateUserFronToken, getUserFromId }
+const deleteUser = async (request, response) => {
+    try {
+        const id = request.params.id 
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(404).send({
+                success: false,
+                reason: "user_not_found"
+            })
+        }
+        const deleted = await User.findByIdAndDelete(id);
+        if (!deleted) {
+            return res.status(404).send({
+                success: false,
+                reason: "user_not_found"
+            })
+        }
+        return res.status(200).send({
+            success: true
+        })
+    } catch (error) {
+        return res.send({
+            success: false,
+            reason: error
+        })
+    }
+}
+
+module.exports = { createUser, loginUser, getUserFromToken, updateUser, authenticateUserFronToken, getUserFromId, deleteUser }

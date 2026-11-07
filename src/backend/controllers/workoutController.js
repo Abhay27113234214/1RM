@@ -6,6 +6,7 @@ const fs = require('fs/promises');
 const { Workout } = require('../models/workoutModel');
 const { Exercise } = require('../models/exerciseModel');
 const { request } = require("http");
+const { default: mongoose } = require("mongoose");
 
 cloudinary.config({
     secure: true
@@ -214,4 +215,31 @@ const patchWorkout = async (request, response) => {
     }
 };
 
-module.exports = { submitWorkout, getWorkouts, getWorkout, patchWorkout };
+const deleteWorkout = async (request, response) => {
+    try {
+        const id = request.params.id 
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return response.status(404).send({
+                success: false,
+                reason: "workout_not_found"
+            })
+        }
+        const deleted = await Workout.findByIdAndDelete(id)
+        if (!deleted) {
+            return response.status(404).send({
+                success: false,
+                reason: "workout_not_found"
+            })
+        }
+        return response.status(200).send({
+            success: true
+        })
+    } catch (error) {
+        return response.send({
+            success: false,
+            reason: error
+        })
+    }
+}
+
+module.exports = { submitWorkout, getWorkouts, getWorkout, patchWorkout, deleteWorkout };

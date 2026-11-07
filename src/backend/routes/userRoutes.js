@@ -1,4 +1,4 @@
-const {createUser, loginUser, getUserFromToken, updateUser, authenticateUserFronToken, getUserFromId} = require("../controllers/userController")
+const {createUser, loginUser, getUserFromToken, updateUser, authenticateUserFronToken, getUserFromId, deleteUser} = require("../controllers/userController")
 const express = require("express")
 const routes = express.Router()
 const {authenticationMiddleware} = require("../middlewares/authMiddlewares")
@@ -12,5 +12,6 @@ routes.post("/api/auth/login", loginUser)
 routes.get("/api/auth/get", authenticationMiddleware, getUserFromToken)
 routes.get("/api/auth/get/:id", authenticationMiddleware, getUserFromId)
 routes.patch("/api/auth/update", authenticationMiddleware, updateUser) 
+routes.delete("/api/auth/remove/:id", authenticationMiddleware, deleteUser)
 
 module.exports = {routes}
