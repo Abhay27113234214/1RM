@@ -10,8 +10,8 @@ routes.get("/api/auth", authenticationMiddleware, authenticateUserFronToken)
 routes.post("/api/auth/register", createUser)
 routes.post("/api/auth/login", loginUser)
 routes.get("/api/auth/get", authenticationMiddleware, getUserFromToken)
-routes.get("/api/auth/get/:id", authenticationMiddleware, getUserFromId)
-routes.patch("/api/auth/update", authenticationMiddleware, updateUser) 
-routes.delete("/api/auth/remove/:id", authenticationMiddleware, deleteUser)
+routes.get("/api/auth/:id", authenticationMiddleware, getUserFromId)
+routes.patch("/api/auth/:id", authenticationMiddleware, updateUser) 
+routes.delete("/api/auth/:id", authenticationMiddleware, deleteUser)
 
 module.exports = {routes}

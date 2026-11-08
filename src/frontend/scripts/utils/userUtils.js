@@ -42,7 +42,7 @@ export let logout = () => {
     localStorage.removeItem('current_user_workout_incomplete')
 }
 
-export let addMeasurements = async (measurements) => {
+export let addMeasurements = async (measurements, id) => {
     let update = {}
     update['incomplete'] = false
     update['age'] = measurements.age 
@@ -55,7 +55,7 @@ export let addMeasurements = async (measurements) => {
         weight: measurements.weight,
         body_fat: measurements.bodyFat
     }
-    const update_user_response = await fetch("http://localhost:5000/api/auth/update", {
+    const update_user_response = await fetch(`http://localhost:5000/api/auth/${id}`, {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export let getCurrentUser = async () => {
 }
 
 export let getUserById = async (id) => {
-    const get_user_reponse = await fetch(`http://localhost:5000/api/auth/get/${id}`, {
+    const get_user_reponse = await fetch(`http://localhost:5000/api/auth/${id}`, {
         method: 'GET', 
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`
@@ -102,3 +102,7 @@ export let getUserById = async (id) => {
         return response_for_get_user
     }
 } 
+
+export let updateUser = async (id) => {
+    const update_user_response = await fetch(`http://localhost:5000/api/auth/${id}`)
+}

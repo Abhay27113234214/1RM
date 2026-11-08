@@ -1,6 +1,7 @@
 import { logout, getCurrentUser, getUserById } from "./utils/userUtils.js";
 import { authenticate } from "./utils/authUtils.js";
 import { showToast, handleUrlFlashMessages } from "./utils/frontend_utils.js";
+import { loadWorkout, patchWorkout } from "./utils/workoutUtils.js";
 
 /* ============================================================
    1. CONFIG, CONSTANTS & DOM HELPERS
@@ -11,7 +12,7 @@ const escHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
 
-const API = 'http://localhost:5000/api';
+
 
 const EX_COLORS = ['#FF4A11', '#1E9E6A', '#3B6FE0', '#D89B0B', '#D6486F'];
 const TYPE_LABEL = {
@@ -268,42 +269,8 @@ function setupTabs() {
 }
 
 /* ============================================================
-   5. API HELPERS
+   5. AUTHOR HELPER
 ============================================================ */
-async function loadWorkout() {
-    const id = new URLSearchParams(location.search).get('id');
-    if (!id) {
-        showToast('No session specified.', 'error');
-        window.location.href = "home.html";
-        return null;
-    }
-    try {
-        const cleanId = id.startsWith(':') ? id.slice(1) : id;
-        const res = await fetch(API + '/workouts/get/' + cleanId, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-            }
-        });
-        if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        const workout = data.workout;
-        if (workout) return workout;
-        showToast('Session not found.', 'error');
-        window.location.href = "home.html?message=session_not_found&status=error";
-        return null;
-    } catch (e) {
-        console.error('loadWorkout failed:', e);
-        showToast('Could not load session. Check backend connection.', 'error');
-        setTimeout(() => {
-            window.location.href = "home.html";
-        }, 1500);
-        return null;
-    }
-}
-
 async function loadAuthor(wk, currentUser) {
     if (!wk) return { name: '1RM Lifter', username: '', self: false };
     const currentUserId = String(currentUser?.id || currentUser?._id || '');
@@ -346,30 +313,7 @@ async function loadAuthor(wk, currentUser) {
     return { name: '1RM Lifter', username: '', self: false };
 }
 
-async function saveWorkoutChanges(wk, changes) {
-    const rawId = wk._id || wk.id;
-    if (!rawId) return null;
-    try {
-        const cleanId = String(rawId).startsWith(':') ? String(rawId).slice(1) : String(rawId);
-        const res = await fetch(API + '/workouts/' + cleanId, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-            },
-            body: JSON.stringify(changes)
-        });
-        if (!res.ok) {
-            console.error('saveWorkoutChanges error HTTP', res.status);
-            return null;
-        }
-        const data = await res.json();
-        return data.workout || null;
-    } catch (e) {
-        console.error('Failed to save workout changes:', e);
-        return null;
-    }
-}
+
 
 /* ============================================================
    6. WORKOUT DETAIL RENDERING
@@ -582,7 +526,7 @@ function setupActionsAndComments(wk, currentUser) {
             }
             const spottedBy = $('#spottedBy');
             if (spottedBy) spottedBy.textContent = spots.length > 0 ? '+ ' + Math.max(spots.length - 3, 0) + ' spotted this' : 'be the first to spot';
-            await saveWorkoutChanges(wk, { spots });
+            await patchWorkout(wk._id || wk.id, { spots });
         });
     }
 
@@ -655,7 +599,8 @@ function setupActionsAndComments(wk, currentUser) {
         wk.comments.push(newC);
         input.value = '';
         input.focus();
-        const updated = await saveWorkoutChanges(wk, { comments: wk.comments });
+        const res = await patchWorkout(wk._id || wk.id, { comments: wk.comments });
+        const updated = res.workout || res;
         if (updated && Array.isArray(updated.comments)) {
             wk.comments = updated.comments;
         }

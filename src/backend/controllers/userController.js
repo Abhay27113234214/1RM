@@ -94,20 +94,44 @@ const getUserFromToken = async (request, response) => {
 }
 
 const updateUser = async (request, response) => {
-    const token = request.headers.authorization.split(" ")[1];
-    const decode = jwt.verify(token, SECRET_KEY)
-    if (decode) {
-        const data = await User.findByIdAndUpdate(decode.id, request.body, {returnDocument: 'after'})
-        response.send({
-            success: true
-        })
-        return
-    } else {
-        response.status(504).send({
+    // const token = request.headers.authorization.split(" ")[1];
+    // const decode = jwt.verify(token, SECRET_KEY)
+    // if (decode) {
+    //     const data = await User.findByIdAndUpdate(decode.id, request.body, {returnDocument: 'after'})
+    //     response.send({
+    //         success: true
+    //     })
+    //     return
+    // } else {
+    //     response.status(504).send({
+    //         success: false,
+    //         reason: "invalid_jwt"
+    //     })
+    //     return
+    // }
+    try {
+        const id = request.params.id 
+        if (id != request.user.id) {
+            return response.status(404).send({
+                success: false,
+                reason: "user_not_found"
+            })
+        }
+        const data = await User.findByIdAndUpdate(id, request.body, {returnDocument: 'after'})
+        if (data) {
+            return response.status(201).send({
+                success: true
+            })
+        }
+        return response.status(404).send({
             success: false,
-            reason: "invalid_jwt"
+            reason: 'user_not_found'
         })
-        return
+    } catch (error) {
+        return response.status(504).send({
+            success: true,
+            reason: error
+        })
     }
 }
 

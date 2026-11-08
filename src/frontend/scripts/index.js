@@ -1,4 +1,4 @@
-import { register, login, logout, addMeasurements } from "./utils/userUtils.js";
+import { register, login, logout, addMeasurements, getCurrentUser } from "./utils/userUtils.js";
 import { showToast, handleUrlFlashMessages } from "./utils/frontend_utils.js";
 
 /* ============================================================
@@ -237,6 +237,7 @@ function setupAuthModal() {
     const obSave = $('#obSave');
     if (obSave) {
         obSave.addEventListener('click', async () => {
+            const current_user = await getCurrentUser()
             const measurements = {
                 height: document.querySelector(".mHeight")?.value || "NA",
                 weight: document.querySelector(".mWeight")?.value || "NA",
@@ -247,7 +248,7 @@ function setupAuthModal() {
                 experience: document.querySelector('[data-mgroup="exp"] .on')?.textContent || "NA",
                 trainingDays: document.querySelector('[data-mgroup="days"] .on')?.textContent || "NA"
             };
-            const result = await addMeasurements(measurements);
+            const result = await addMeasurements(measurements, current_user.id);
             if (result.success) {
                 showToast('Measurements and goals aligned!');
                 await sleep(2000);
