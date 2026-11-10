@@ -11,16 +11,17 @@ const {
   updateExercise,
   deleteExercise,
 } = require('../controllers/exerciseController');
+const { authenticationMiddleware } = require('../middlewares/authMiddlewares');
 
 const router = express.Router();
 
 router.route('/api/exercises')
-  .get(getExercises)
-  .post(createExercise);
+  .get(authenticationMiddleware, getExercises)
+  .post(authenticationMiddleware, createExercise);
 
 router.route('/api/exercises/:id')
-  .get(getExerciseById)
-  .put(updateExercise)
-  .delete(deleteExercise);
+  .get(authenticationMiddleware, getExerciseById)
+  .put(authenticationMiddleware, updateExercise)
+  .delete(authenticationMiddleware, deleteExercise);
 
 module.exports = router;

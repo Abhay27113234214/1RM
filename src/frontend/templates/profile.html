@@ -3,13 +3,17 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1RM ✱ Your profile</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-400-normal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-500-normal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk@latest/latin-700-normal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-600-italic.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-600-normal.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>1RM ✱ Your Profile</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23FF4A11'>✱</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/500.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/700.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/400-italic.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5/600-italic.css">
   <link rel="stylesheet" href="../styles/profile.css">
 </head>
 
@@ -17,7 +21,7 @@
 
   <div class="toast-zone" id="toastZone"></div>
 
-  <!-- nav -->
+  <!-- ==================== NAVIGATION ==================== -->
   <nav class="nav-bar" id="navBar">
     <div class="wrap">
       <div class="nav">
@@ -27,8 +31,8 @@
           <a href="discover.html">Discover</a>
         </div>
         <div class="nav-acts">
-          <a href="workout.html" class="plus-btn" aria-label="Start workout">+</a>
-          <button class="av-btn" id="avBtn" aria-label="Your profile">
+          <a href="workout.html" class="plus-btn" aria-label="Start workout" title="Start workout">+</a>
+          <button class="av-btn" id="navAvBtn" aria-label="Your profile">
             <span class="av current_user_initials">AK</span>
           </button>
           <button class="burger" id="burgerBtn" aria-label="Menu"><i></i><i></i><i></i></button>
@@ -37,7 +41,7 @@
     </div>
   </nav>
 
-  <!-- drawer -->
+  <!-- ==================== MOBILE DRAWER ==================== -->
   <div class="drawer-back" id="drawerBack"></div>
   <aside class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-head">
@@ -46,12 +50,12 @@
         <div class="drawer-name current_user_name">Alex Kowalski</div>
         <div class="drawer-streak">✱ <b>34-day streak</b> · personal best</div>
       </div>
-      <button class="drawer-x" id="drawerX">✕</button>
+      <button class="drawer-x" id="drawerX" aria-label="Close menu">✕</button>
     </div>
     <nav class="drawer-nav">
       <a href="home.html">Home</a>
       <a href="discover.html">Discover</a>
-      <a href="#" class="here">My profile</a>
+      <a href="profile.html" class="here">My profile</a>
       <a href="workout.html">+ Log a session</a>
     </nav>
     <a href="workout.html" class="drawer-cta">
@@ -61,139 +65,302 @@
     </a>
     <div class="drawer-foot">
       <div class="links">
-        <a href="#" data-todo="settings">Settings</a>
+        <a href="#settingsPanel" data-todo="settings">Settings</a>
         <a href="#" data-todo="signout">Sign out</a>
       </div>
       <div class="copy">✱ 1RM © 2026 — made for the ones who <b>show up.</b></div>
     </div>
   </aside>
 
-  <!-- greeting + decorations -->
-  <header class="greet">
-    <div class="wrap greet-inner">
-      <!-- twinkling sparks -->
-      <span class="spark" style="top:36px; left:54%;" aria-hidden="true">✱</span>
-      <span class="spark" style="top:128px; left:72%; animation-delay:1.1s;" aria-hidden="true">✱</span>
-      <span class="spark" style="top:196px; left:60%; animation-delay:2.2s;" aria-hidden="true">✱</span>
+  <!-- ==================== ATHLETE HERO PROFILE ==================== -->
+  <section class="wrap hero-wrap">
+    <div class="profile-hero panel-flat reveal">
+      <span class="spark" style="top:22px; right:48px;" aria-hidden="true">✱</span>
+      <span class="spark" style="bottom:32px; right:120px; animation-delay:1.4s;" aria-hidden="true">✱</span>
 
-      <div class="eyebrow">Your profile</div>
-      <h1 id="greetName">Alex <em>Kowalski</em></h1>
-      <p class="greet-sub">
-        Logging since March 2024. Everything below is yours alone — edit any number
-        and the smart coach recalibrates on the spot.
-      </p>
-      <div class="greet-date" id="dateLine"></div>
-    </div>
-  </header>
-
-  <!-- layout -->
-  <main class="wrap">
-    <div class="profile">
-
-      <!-- ====== feed column ====== -->
-      <div class="feed-col">
-
-        <!-- month at a glance -->
-        <div class="day-sep reveal">This month</div>
-        <div class="panel-flat reveal">
-          <div class="month-head">
-            <div class="r-h">Your month at a glance</div>
-            <div class="heat-legend">
-              <span>Less</span>
-              <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i>
-              <span>More</span>
-            </div>
-          </div>
-          <p class="month-sub">
-            Four weeks of showing up. Darker means more work — empty means rest,
-            which is part of the plan too. Dashed squares are still to come.
-          </p>
-          <div class="month" id="monthGrid"></div>
-          <div class="month-note">✱ hover a square to relive it</div>
-          <div class="hs-row">
-            <div>
-              <div class="hv">0</div>
-              <div class="hl">longest streak · days</div>
-            </div>
-            <div>
-              <div class="hv" >0</div>
-              <div class="hl">best week · sessions</div>
-            </div>
-            <div>
-              <div class="hv" >0</div>
-              <div class="hl">total volume · kg</div>
-            </div>
-            <div>
-              <div class="hv">0</div>
-              <div class="hl">active days</div>
-            </div>
-            <!-- animated volume trend (coach-widget bars) -->
-            <div class="hs hs-bars">
-              <div class="tbar-row" aria-hidden="true">
-                <div class="tbar"></div>
-                <div class="tbar"></div>
-                <div class="tbar"></div>
-                <div class="tbar"></div>
-                <div class="tbar"></div>
-              </div>
-              <div class="hl">volume · last 4 wk</div>
-            </div>
-          </div>
+      <!-- hero utility top row -->
+      <div class="hero-top-bar">
+        <div class="hero-status-tag">
+          <span class="live-dot"></span>
+          <span>Active Lifter · In Season</span>
         </div>
-
-        <!-- recent sessions -->
-        <div id="myFeed">
-
-        </div>
-
-        <div class="load-wrap reveal">
-          <button class="act" id="loadMore">Load older sessions</button>
-        </div>
-
-        <!-- personal bests -->
-        <div class="day-sep reveal">Personal bests</div>
-        <div class="panel-flat pr-panel reveal">
-          <span class="pr-star" aria-hidden="true">✱</span>
-          <div class="r-h">✱ Fresh PRs</div>
-          <div class="pr-row"><span class="w">Bench Press</span><span class="l">Dec 14</span><span class="v">102.5
-              kg</span></div>
-          <div class="pr-row"><span class="w">Back Squat</span><span class="l">Dec 18</span><span class="v">155
-              kg</span></div>
-          <div class="pr-row"><span class="w">Deadlift</span><span class="l">Dec 12</span><span class="v">185
-              kg</span></div>
-          <div class="pr-row"><span class="w">Weighted Pull-up</span><span class="l">Dec 16</span><span class="v">+32
-              kg</span></div>
-          <div class="pr-row"><span class="w">Overhead Press</span><span class="l">Nov 28</span><span class="v">62.5
-              kg</span></div>
-          <button class="btn-quiet" id="prHistory">Full PR history ↓</button>
+        <div class="greet-date" id="dateLine">
+          <b>✱</b> Today <span class="live-dot"></span>
         </div>
       </div>
 
-      <!-- ====== rail ====== -->
-      <aside class="p-rail">
+      <!-- hero profile main info row -->
+      <div class="hero-main">
+        <div class="hero-av-box">
+          <div class="hero-av-ring">
+            <span class="av xl current_user_initials">AK</span>
+          </div>
+          <button class="hero-av-edit" id="avBtn" aria-label="Edit profile" title="Edit Profile">✎</button>
+        </div>
 
-        <div class="panel-flat reveal">
-          <div class="rp-head">
-            <span class="av lg current_user_initials">AK</span>
-            <div class="rp-id">
-              <div class="rp-name current_user_name">Alex Kowalski</div>
-              <div class="rp-handle current_user_username">@alexk_fit</div>
+        <div class="hero-id">
+          <div class="hero-eyebrow">
+            <span>Athlete Profile</span>
+            <span class="dot-sep">·</span>
+            <span>ID #1RM-2026</span>
+          </div>
+
+          <div class="hero-header-row">
+            <h1 class="hero-name" id="greetName">Alex <em>Kowalski</em></h1>
+            <div class="hero-stats-strip">
+              <div class="hero-stat-cell">
+                <span class="hero-stat-val" id="heroWorkoutCount">0</span>
+                <span class="hero-stat-lbl">workouts</span>
+              </div>
+              <span class="hero-stat-sep">·</span>
+              <div class="hero-stat-cell">
+                <span class="hero-stat-val" id="heroFollowers">1.4k</span>
+                <span class="hero-stat-lbl">followers</span>
+              </div>
+              <span class="hero-stat-sep">·</span>
+              <div class="hero-stat-cell">
+                <span class="hero-stat-val" id="heroFollowing">382</span>
+                <span class="hero-stat-lbl">following</span>
+              </div>
             </div>
           </div>
-          <div class="rp-meta">
-            <span><b>✱</b> Pro member</span>
-            <span>Joined Mar 2024</span>
+
+          <div class="hero-badges-row">
+            <span class="hero-handle current_user_username">@alexk_fit</span>
+            <span class="hero-badge pro"><b>✱</b> Pro member</span>
+            <span class="hero-badge joined">Joined Mar 2024</span>
           </div>
-          <div class="rp-acts">
-            <button class="btn-primary" id="editProfileBtn">Edit profile <span class="arr">→</span></button>
-            <div class="rp-row2">
-              <button class="act" id="exportBtn">Export ↓</button>
-              <button class="act danger" id="signOutBtn">Sign out</button>
+
+          <p class="hero-bio" id="heroBio">
+            "Show up. Put in the work. The rack remembers every kilo." Everything below is yours alone — edit any number and the smart coach recalibrates on the spot.
+          </p>
+
+          <div class="hero-links" id="heroSocialLinks">
+            <!-- Populated dynamically with athlete's social media links -->
+          </div>
+
+          <div class="hero-tags">
+            <span class="htag"><b>Goal:</b> Build muscle</span>
+            <span class="htag"><b>Split:</b> 6-7 days/wk</span>
+            <span class="htag"><b>Body:</b> <span id="heroWeight">84.5</span>kg · <span id="heroHeight">182</span>cm</span>
+            <span class="htag"><b>Level:</b> Intermediate</span>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn-primary" id="editProfileBtn">
+            <span class="btn-icon">✎</span>
+            <span>Edit profile</span>
+            <span class="arr">→</span>
+          </button>
+          <button class="act danger" id="signOutBtn" title="Sign out">Sign out</button>
+        </div>
+      </div>
+
+      <!-- hero athletic summary stats ribbon -->
+      <div class="hero-stats-bar">
+        <div class="hero-stat">
+          <div class="hero-hv hv-workouts" id="heroTotalWorkoutsStat">0</div>
+          <div class="hero-hl">total workouts · logged</div>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+          <div class="hero-hv hv-bestweek" data-count="5">5</div>
+          <div class="hero-hl">best week · sessions</div>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+          <div class="hero-hv hv-volume">0</div>
+          <div class="hero-hl">all-time volume · kg</div>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+          <div class="hero-hv hv-sessions">0</div>
+          <div class="hero-hl">active training days</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MONTH AT A GLANCE (CONSISTENCY CENTERPIECE) ==================== -->
+  <section class="wrap month-section">
+    <div class="panel-flat month-panel reveal" id="monthPanel">
+      <div class="month-head">
+        <div class="r-h">Your month at a glance</div>
+        <div class="heat-legend">
+          <span>Less</span>
+          <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i>
+          <span>More</span>
+        </div>
+      </div>
+      <p class="month-sub">
+        Four weeks of showing up. Darker means more work — empty means rest,
+        which is part of the plan too. Dashed squares are still to come.
+      </p>
+      <div class="month" id="monthGrid"></div>
+      <div class="month-note">✱ hover a square to relive it</div>
+      <div class="hs-row">
+        <div>
+          <div class="hv">0</div>
+          <div class="hl">longest streak · days</div>
+        </div>
+        <div>
+          <div class="hv">0</div>
+          <div class="hl">best week · sessions</div>
+        </div>
+        <div>
+          <div class="hv">0</div>
+          <div class="hl">total volume · kg</div>
+        </div>
+        <div>
+          <div class="hv">0</div>
+          <div class="hl">active days</div>
+        </div>
+        <!-- animated volume trend (coach-widget bars) -->
+        <div class="hs hs-bars">
+          <div class="tbar-row" aria-hidden="true">
+            <div class="tbar"></div>
+            <div class="tbar"></div>
+            <div class="tbar"></div>
+            <div class="tbar"></div>
+            <div class="tbar"></div>
+          </div>
+          <div class="hl">volume · last 4 wk</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MAIN DASHBOARD ==================== -->
+  <main class="wrap">
+    <div class="profile-dashboard">
+
+      <!-- ====== MAIN CONTENT COLUMN WITH TOGGLE BAR (LEFT) ====== -->
+      <div class="feed-col">
+
+        <!-- 3-VIEW CONTENT TOGGLE BAR -->
+        <div class="content-tabs-wrap">
+          <div class="content-tabs" role="tablist" aria-label="Profile views">
+            <button class="c-tab active" id="tabBtnSessions" data-tab="tabSessions" role="tab" aria-selected="true">
+              <span class="tab-mark">✱</span> Recent Sessions
+            </button>
+            <button class="c-tab" id="tabBtnPrs" data-tab="tabPrs" role="tab" aria-selected="false">
+              <span class="tab-mark">⚡</span> Personal Bests
+            </button>
+            <button class="c-tab" id="tabBtnSplits" data-tab="tabSplits" role="tab" aria-selected="false">
+              <span class="tab-mark">📋</span> Splits &amp; Programs
+            </button>
+          </div>
+        </div>
+
+        <!-- ── TAB VIEW 1: RECENT SESSIONS ── -->
+        <div class="tab-view active" id="tabSessions" role="tabpanel" aria-labelledby="tabBtnSessions">
+          <div class="day-sep">Training History</div>
+          <div id="myFeed"></div>
+          <div class="load-wrap reveal">
+            <button class="act" id="loadMore">Load older sessions</button>
+          </div>
+        </div>
+
+        <!-- ── TAB VIEW 2: PERSONAL BESTS ── -->
+        <div class="tab-view" id="tabPrs" role="tabpanel" aria-labelledby="tabBtnPrs" hidden>
+          <div class="day-sep">All-Time Records &amp; Milestones</div>
+
+          <div class="panel-flat pr-banner-panel">
+            <span class="pr-star" aria-hidden="true">✱</span>
+            <div class="r-h">✱ Fresh Personal Bests</div>
+            <div class="pr-club-badge">
+              <div class="pr-club-title">The 500 kg Barbell Club</div>
+              <div class="pr-club-sub">Combined 3-lift total: <b>442.5 kg</b> (88.5% to next 500kg elite plateau)</div>
+            </div>
+
+            <div class="pr-metrics-grid">
+              <div class="pr-metric-card">
+                <div class="pr-lift-name">Bench Press</div>
+                <div class="pr-lift-val">102.5 <span class="u">kg</span></div>
+                <div class="pr-lift-meta"><span class="pr-badge">PR</span> · Dec 14</div>
+              </div>
+              <div class="pr-metric-card">
+                <div class="pr-lift-name">Back Squat</div>
+                <div class="pr-lift-val">155.0 <span class="u">kg</span></div>
+                <div class="pr-lift-meta"><span class="pr-badge">PR</span> · Dec 18</div>
+              </div>
+              <div class="pr-metric-card">
+                <div class="pr-lift-name">Deadlift</div>
+                <div class="pr-lift-val">185.0 <span class="u">kg</span></div>
+                <div class="pr-lift-meta"><span class="pr-badge">PR</span> · Dec 12</div>
+              </div>
+              <div class="pr-metric-card">
+                <div class="pr-lift-name">Overhead Press</div>
+                <div class="pr-lift-val">62.5 <span class="u">kg</span></div>
+                <div class="pr-lift-meta"><span class="pr-badge">PR</span> · Nov 28</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="day-sep">Calisthenics &amp; Secondary Movements</div>
+          <div class="panel-flat">
+            <div class="r-h">Weighted &amp; Accessory PRs</div>
+            <div class="pr-rows">
+              <div class="pr-row">
+                <span class="w">Weighted Pull-up</span>
+                <span class="l">Dec 16 · bodyweight + 32kg</span>
+                <span class="v">+32.0 kg</span>
+              </div>
+              <div class="pr-row">
+                <span class="w">Weighted Dips</span>
+                <span class="l">Nov 15 · bodyweight + 40kg</span>
+                <span class="v">+40.0 kg</span>
+              </div>
+              <div class="pr-row">
+                <span class="w">Barbell Pendlay Row</span>
+                <span class="l">Dec 04 · strict floor pull</span>
+                <span class="v">92.5 kg</span>
+              </div>
+              <div class="pr-row">
+                <span class="w">Incline Dumbbell Press</span>
+                <span class="l">Dec 08 · 38kg dumbbells</span>
+                <span class="v">76.0 kg</span>
+              </div>
+              <div class="pr-row">
+                <span class="w">Romanian Deadlift (RDL)</span>
+                <span class="l">Nov 22 · hamstring focus</span>
+                <span class="v">140.0 kg</span>
+              </div>
+            </div>
+            <div class="pr-foot-actions">
+              <button class="btn-quiet" id="prHistory">Full PR history ↓</button>
             </div>
           </div>
         </div>
 
-        <div class="panel-flat reveal">
+        <!-- ── TAB VIEW 3: SPLITS & PROGRAMS ── -->
+        <div class="tab-view" id="tabSplits" role="tabpanel" aria-labelledby="tabBtnSplits" hidden>
+          <div class="day-sep">Current Training Split</div>
+
+          <div class="panel-flat split-summary-panel">
+            <div class="split-head-row">
+              <div>
+                <div class="r-h">Weekly Routine Architecture</div>
+                <div class="split-title">Push · Pull · Legs · Upper Hypertrophy</div>
+              </div>
+              <button class="btn-primary sm-btn" id="createProgramBtn">+ New Program</button>
+            </div>
+            <p class="split-sub">6 active training days / week · Rest and light mobility on Sunday · Programmed for continuous progressive overload.</p>
+            <div class="split-week-grid" id="splitWeekGrid"></div>
+          </div>
+
+          <div class="day-sep">User Created Programs</div>
+          <div class="programs-list" id="programsList"></div>
+        </div>
+
+      </div>
+
+      <!-- ====== STABLE PERFORMANCE & SETTINGS RAIL (RIGHT) ====== -->
+      <aside class="p-rail">
+
+        <!-- Body Measurements panel -->
+        <div class="panel-flat reveal" id="measurementsPanel">
           <div class="r-h">Body measurements</div>
           <div class="ms-grid">
             <div class="ms">
@@ -217,8 +384,9 @@
           <button class="btn-quiet" id="editMeasureBtn">Update numbers</button>
         </div>
 
-        <div class="panel-flat reveal">
-          <div class="r-h">Goals & preferences</div>
+        <!-- Goals & Preferences panel -->
+        <div class="panel-flat reveal" id="goalsPanel">
+          <div class="r-h">Goals &amp; preferences</div>
           <div class="gb">
             <div class="g-lbl">Main goal</div>
             <div class="chips" data-group="goal">
@@ -254,6 +422,7 @@
           </div>
         </div>
 
+        <!-- Settings panel -->
         <div class="panel-flat reveal" id="settingsPanel">
           <div class="r-h">Settings</div>
           <div class="set-row">
@@ -289,10 +458,11 @@
 
         <div class="rail-foot reveal">✱ 1RM © 2026 — made for the ones who <b>show up.</b></div>
       </aside>
+
     </div>
   </main>
 
-  <!-- mantra marquee -->
+  <!-- ==================== MANTRA MARQUEE ==================== -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
       <span>the rack remembers <b>✱</b> 34 days and counting <b>✱</b> earn the next plate <b>✱</b> rest is
@@ -308,56 +478,136 @@
     <div class="wrap"><b>✱</b> 1RM © 2026 — made for the ones who show up.</div>
   </footer>
 
-  <!-- edit modal -->
+  <!-- ==================== EDIT PROFILE MODAL ==================== -->
   <div class="modal" id="editModal" aria-hidden="true">
     <div class="modal-back" data-close></div>
     <div class="modal-panel">
-      <button class="modal-x" data-close>✕</button>
+      <button class="modal-x" data-close aria-label="Close edit modal">✕</button>
       <div class="modal-card">
-        <div class="step-lbl">your profile</div>
-        <h2 class="ob-title">Make it <em>yours.</em></h2>
+        <div class="step-lbl">athlete profile</div>
+        <h2 class="ob-title">Edit <em>Profile.</em></h2>
         <form id="editForm">
+          <div class="m-field" style="margin-top:0">
+            <label for="efFullName">Full name</label>
+            <input type="text" id="efFullName" placeholder="e.g. Alex Kowalski" required>
+          </div>
+
           <div class="m-grid">
             <div class="m-field" style="margin-top:0">
-              <label>First name</label>
-              <input type="text" id="efFirst" value="Alex">
+              <label for="efUser">Username <span class="lbl-locked">🔒 non-editable</span></label>
+              <input type="text" id="efUser" disabled readonly class="input-locked" title="Username cannot be changed">
             </div>
             <div class="m-field" style="margin-top:0">
-              <label>Last name</label>
-              <input type="text" id="efLast" value="Kowalski">
+              <label for="efEmail">Email <span class="lbl-locked">🔒 non-editable</span></label>
+              <input type="email" id="efEmail" disabled readonly class="input-locked" title="Email cannot be changed">
             </div>
           </div>
+
           <div class="m-field">
-            <label>Username</label>
-            <input type="text" id="efUser" value="alexk_fit">
+            <label for="efBio">Bio</label>
+            <textarea id="efBio" rows="3" placeholder="Tell the community about yourself, your training philosophy, or current PR targets..."></textarea>
           </div>
-          <div class="m-field">
-            <label>Email</label>
-            <input type="email" id="efEmail" value="alex@example.com">
-          </div>
+
+          <div class="m-section-label">Social Media &amp; Links</div>
+
           <div class="m-grid">
             <div class="m-field" style="margin-top:0">
-              <label>Height · cm</label>
-              <input type="number" id="efHeight" value="182">
+              <label for="efInstagram">Instagram</label>
+              <input type="text" id="efInstagram" placeholder="e.g. alexk_fit or instagram.com/...">
             </div>
             <div class="m-field" style="margin-top:0">
-              <label>Weight · kg</label>
-              <input type="number" step="0.1" id="efWeight" value="84.5">
-            </div>
-            <div class="m-field" style="margin-top:0">
-              <label>Body fat · %</label>
-              <input type="number" step="0.1" id="efFat" value="14.2">
+              <label for="efYoutube">YouTube</label>
+              <input type="text" id="efYoutube" placeholder="e.g. @alexk_fit or youtube.com/...">
             </div>
           </div>
+
+          <div class="m-grid">
+            <div class="m-field" style="margin-top:0">
+              <label for="efTwitter">X (Twitter)</label>
+              <input type="text" id="efTwitter" placeholder="e.g. alexk_fit or x.com/...">
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label for="efWebsite">Website / Link</label>
+              <input type="text" id="efWebsite" placeholder="e.g. https://mywebsite.com">
+            </div>
+          </div>
+
           <button type="submit" class="m-submit">Save changes <span class="arr">→</span></button>
         </form>
-        <div class="ob-foot">✱ You can update these anytime — the coach recalibrates instantly.</div>
+        <div class="ob-foot">✱ Your name, bio, and social links are publicly visible on your profile. Username &amp; email cannot be changed.</div>
       </div>
     </div>
   </div>
 
+  <!-- ==================== BODY MEASUREMENTS MODAL ==================== -->
+  <div class="modal" id="measureModal" aria-hidden="true">
+    <div class="modal-back" data-close-measure></div>
+    <div class="modal-panel">
+      <button class="modal-x" data-close-measure aria-label="Close modal">✕</button>
+      <div class="modal-card">
+        <div class="step-lbl">body vitals</div>
+        <h2 class="ob-title">Update <em>Measurements.</em></h2>
+        <form id="measureForm">
+          <div class="m-grid">
+            <div class="m-field" style="margin-top:0">
+              <label for="mfHeight">Height · cm</label>
+              <input type="number" id="mfHeight" value="182">
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label for="mfWeight">Weight · kg</label>
+              <input type="number" step="0.1" id="mfWeight" value="84.5">
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label for="mfFat">Body fat · %</label>
+              <input type="number" step="0.1" id="mfFat" value="14.2">
+            </div>
+          </div>
+          <button type="submit" class="m-submit">Save Vitals <span class="arr">→</span></button>
+        </form>
+        <div class="ob-foot">✱ You can update these anytime — the smart coach recalibrates instantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CREATE PROGRAM / SPLIT MODAL ==================== -->
+  <div class="modal" id="programModal" aria-hidden="true">
+    <div class="modal-back" data-close-program></div>
+    <div class="modal-panel">
+      <button class="modal-x" data-close-program aria-label="Close modal">✕</button>
+      <div class="modal-card">
+        <div class="step-lbl">program builder</div>
+        <h2 class="ob-title">Build a <em>routine.</em></h2>
+        <form id="programForm">
+          <div class="m-field">
+            <label for="pmTitle">Program Name</label>
+            <input type="text" id="pmTitle" placeholder="e.g. Heavy Push Day A" required>
+          </div>
+          <div class="m-grid">
+            <div class="m-field" style="margin-top:0">
+              <label for="pmFocus">Target Focus</label>
+              <input type="text" id="pmFocus" placeholder="e.g. Chest &amp; Triceps" required>
+            </div>
+            <div class="m-field" style="margin-top:0">
+              <label for="pmDays">Day / Schedule</label>
+              <input type="text" id="pmDays" placeholder="e.g. Monday · Day 1" required>
+            </div>
+          </div>
+          <div class="m-field">
+            <label for="pmExercises">Exercises &amp; Sets (Comma separated)</label>
+            <input type="text" id="pmExercises" placeholder="e.g. Barbell Bench Press 4x6, Incline DB Press 3x8, Dips 3x12" required>
+          </div>
+          <div class="m-field">
+            <label for="pmNotes">Coach Note / Cue</label>
+            <input type="text" id="pmNotes" placeholder="e.g. 2 min rest on compounds, control the eccentric">
+          </div>
+          <button type="submit" class="m-submit">Save Program <span class="arr">→</span></button>
+        </form>
+        <div class="ob-foot">✱ Saved routines are ready to load into today's session with one click.</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../scripts/profile.js"></script>
 </body>
 
 </html>
-
-<script type="module" src="../scripts/profile.js"></script>

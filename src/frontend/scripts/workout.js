@@ -525,7 +525,9 @@ async function fetchExercises() {
     if (isFetchingExercises) return;
     isFetchingExercises = true;
     try {
-        const response = await fetch(`${API_BASE}/exercises`);
+        const token = sessionStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${API_BASE}/exercises`, { headers });
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
@@ -996,9 +998,12 @@ function setupCreateExerciseModal() {
 
             cxSave.disabled = true;
             try {
+                const token = sessionStorage.getItem('token');
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
                 const res = await fetch(`${API_BASE}/exercises`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers,
                     body: JSON.stringify({
                         asset: 'None',
                         name,

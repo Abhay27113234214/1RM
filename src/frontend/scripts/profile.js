@@ -138,11 +138,111 @@ function tooltipFor(entry, label) {
 }
 
 /* ============================================================
-   2. USER PROFILE DISPLAY
+   2. USER PROFILE DISPLAY & METADATA
 ============================================================ */
+function getProfileData(currentUser) {
+    const uid = String(currentUser?.id || currentUser?._id || currentUser?.username || 'user');
+    let data = {};
+    try {
+        const stored = localStorage.getItem('user_profile_meta_' + uid);
+        if (stored) data = JSON.parse(stored);
+    } catch (_) {}
+
+    return {
+        name: data.name || currentUser?.name || 'Alex Kowalski',
+        bio: (data.bio !== undefined) ? data.bio : (currentUser?.bio || '"Show up. Put in the work. The rack remembers every kilo." Everything below is yours alone — edit any number and the smart coach recalibrates on the spot.'),
+        socialLinks: data.socialLinks || currentUser?.socialLinks || {
+            instagram: 'alexk_fit',
+            youtube: 'alexk_fit',
+            twitter: 'alexk_fit',
+            website: ''
+        },
+        followersCount: data.followersCount || currentUser?.followersCount || '1.4k',
+        followingCount: data.followingCount || currentUser?.followingCount || '382'
+    };
+}
+
+function saveProfileData(currentUser, data) {
+    const uid = String(currentUser?.id || currentUser?._id || currentUser?.username || 'user');
+    try {
+        localStorage.setItem('user_profile_meta_' + uid, JSON.stringify(data));
+    } catch (_) {}
+}
+
+function renderSocialLinks(links) {
+    const container = $('#heroSocialLinks');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const ig = links?.instagram?.trim();
+    const yt = links?.youtube?.trim();
+    const tw = links?.twitter?.trim();
+    const web = links?.website?.trim();
+
+    let count = 0;
+    const cleanHandle = (val) => val.replace(/^https?:\/\/(www\.)?/, '').replace(/^(instagram\.com|youtube\.com|x\.com|twitter\.com)\/?/i, '').replace(/^@/, '').replace(/\/$/, '');
+
+    if (ig) {
+        count++;
+        const url = /^https?:\/\//i.test(ig) ? ig : `https://instagram.com/${cleanHandle(ig)}`;
+        container.innerHTML += `
+            <a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="hero-link-pill" title="Instagram: @${escHtml(cleanHandle(ig))}">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span>${escHtml(cleanHandle(ig))}</span>
+            </a>`;
+    }
+
+    if (yt) {
+        count++;
+        const cleanYt = cleanHandle(yt);
+        const url = /^https?:\/\//i.test(yt) ? yt : `https://youtube.com/@${cleanYt}`;
+        container.innerHTML += `
+            <a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="hero-link-pill" title="YouTube: ${escHtml(cleanYt)}">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <span>${escHtml(cleanYt)}</span>
+            </a>`;
+    }
+
+    if (tw) {
+        count++;
+        const cleanTw = cleanHandle(tw);
+        const url = /^https?:\/\//i.test(tw) ? tw : `https://x.com/${cleanTw}`;
+        container.innerHTML += `
+            <a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="hero-link-pill" title="X: @${escHtml(cleanTw)}">
+                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span>${escHtml(cleanTw)}</span>
+            </a>`;
+    }
+
+    if (web) {
+        count++;
+        const url = /^https?:\/\//i.test(web) ? web : `https://${web}`;
+        const display = web.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+        container.innerHTML += `
+            <a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="hero-link-pill" title="Website: ${escHtml(display)}">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                <span>${escHtml(display)}</span>
+            </a>`;
+    }
+
+    if (count === 0) {
+        container.innerHTML = `
+            <button class="hero-link-pill add-link" id="heroAddLinksBtn" type="button">
+                <span>+ Add links</span>
+            </button>`;
+        const addBtn = $('#heroAddLinksBtn');
+        if (addBtn) {
+            addBtn.addEventListener('click', () => {
+                $('#editProfileBtn')?.click();
+            });
+        }
+    }
+}
+
 function applyUser(currentUser) {
     if (!currentUser) return;
-    const name = String(currentUser.name || '').trim();
+    const profileData = getProfileData(currentUser);
+    const name = String(profileData.name || currentUser.name || '').trim();
     const initials = initialsOf(name);
 
     $$('.current_user_initials').forEach(el => el.textContent = initials);
@@ -161,6 +261,18 @@ function applyUser(currentUser) {
         greetName.innerHTML = escHtml(first.toUpperCase()) +
             (last ? ' <em>' + escHtml(last) + '</em>' : '');
     }
+
+    const bioEl = $('#heroBio');
+    if (bioEl) {
+        bioEl.textContent = profileData.bio;
+    }
+
+    const followersEl = $('#heroFollowers');
+    if (followersEl) followersEl.textContent = profileData.followersCount;
+    const followingEl = $('#heroFollowing');
+    if (followingEl) followingEl.textContent = profileData.followingCount;
+
+    renderSocialLinks(profileData.socialLinks);
 }
 
 /* ============================================================
@@ -231,6 +343,7 @@ function setupNavigation() {
         cio.unobserve(x.target);
         const el = x.target;
         const target = parseFloat(el.dataset.count);
+        if (isNaN(target)) return;
         const t0 = performance.now(), dur = 1400;
         (function tick(t) {
             const p = Math.min(1, (t - t0) / dur);
@@ -240,6 +353,232 @@ function setupNavigation() {
         })(t0);
     }), { threshold: .5 });
     $$('[data-count]').forEach(el => cio.observe(el));
+
+}
+
+/* ============================================================
+   3B. CONTENT TOGGLE TABS (SESSIONS, PRS, SPLITS/PROGRAMS)
+============================================================ */
+function setupContentTabs() {
+    const tabs = $$('.c-tab');
+    if (!tabs.length) return;
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+
+            const targetId = tab.dataset.tab;
+            $$('.tab-view').forEach(view => {
+                if (view.id === targetId) {
+                    view.hidden = false;
+                    view.classList.add('active');
+                } else {
+                    view.hidden = true;
+                    view.classList.remove('active');
+                }
+            });
+        });
+    });
+}
+
+/* ============================================================
+   3C. USER SPLITS & PROGRAMS
+============================================================ */
+const DEFAULT_PROGRAMS = [
+    {
+        id: 'prog-1',
+        title: 'Push Day A — Chest, Delts & Triceps',
+        focus: 'Chest & Anterior Delts',
+        schedule: 'Monday · Day 1',
+        color: '#FF4A11',
+        exercises: ['Barbell Bench Press · 4 × 6', 'Incline Dumbbell Press · 3 × 8', 'Seated Overhead Press · 3 × 8', 'Weighted Dips · 3 × 12', 'Lateral Raises · 4 × 15'],
+        cue: '2s eccentric on bench press. Drive upper back into the pad. Rest 2–3m on heavy sets.',
+        isDefault: true
+    },
+    {
+        id: 'prog-2',
+        title: 'Pull Day A — Lats & Posterior Chain',
+        focus: 'Back, Rear Delts & Biceps',
+        schedule: 'Tuesday · Day 2',
+        color: '#3B6FE0',
+        exercises: ['Conventional Deadlift · 4 × 4', 'Weighted Pull-ups · 4 × 6', 'Barbell Chest-Supported Row · 3 × 8', 'Face Pulls · 3 × 20', 'Incline DB Curls · 3 × 12'],
+        cue: 'Lock lats in before breaking the floor. Pull elbow back rather than curling weight.',
+        isDefault: true
+    },
+    {
+        id: 'prog-3',
+        title: 'Leg Day A — Quad & Knee Flexion',
+        focus: 'Quads, Calves & Abs',
+        schedule: 'Wednesday · Day 3',
+        color: '#1E9E6A',
+        exercises: ['Barbell Back Squat · 4 × 6', 'Romanian Deadlift · 3 × 8', 'Bulgarian Split Squat · 3 × 10', 'Standing Calf Raise · 4 × 15', 'Hanging Leg Raise · 3 × 15'],
+        cue: 'Hit full depth with brace. Push floor apart on squat ascent.',
+        isDefault: true
+    },
+    {
+        id: 'prog-4',
+        title: 'Upper Power — Density & Volume',
+        focus: 'Upper Body Power & Hypertrophy',
+        schedule: 'Friday · Day 5',
+        color: '#D89B0B',
+        exercises: ['Paused Bench Press · 3 × 3', 'Barbell Pendlay Row · 4 × 6', 'Overhead Press · 3 × 6', 'Incline Hammer Curls · 3 × 12', 'Overhead Cable Ext · 3 × 15'],
+        cue: 'Strict pause at chest before pressing. Zero leg drive on Pendlay rows.',
+        isDefault: true
+    }
+];
+
+function getUserPrograms() {
+    try {
+        const stored = localStorage.getItem('user_programs');
+        if (stored) return JSON.parse(stored);
+    } catch (_) {}
+    return DEFAULT_PROGRAMS;
+}
+
+function saveUserPrograms(progs) {
+    try {
+        localStorage.setItem('user_programs', JSON.stringify(progs));
+    } catch (_) {}
+}
+
+function renderUserSplits() {
+    const weekGrid = $('#splitWeekGrid');
+    if (weekGrid) {
+        const todayIdx = (new Date().getDay() + 6) % 7; // Mon = 0
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const splitDays = [
+            { t: 'Push A', c: '#FF4A11' },
+            { t: 'Pull A', c: '#3B6FE0' },
+            { t: 'Legs A', c: '#1E9E6A' },
+            { t: 'Push B', c: '#FF4A11' },
+            { t: 'Pull B', c: '#3B6FE0' },
+            { t: 'Upper', c: '#D89B0B' },
+            { t: 'Rest', c: 'var(--muted)', rest: true }
+        ];
+        weekGrid.innerHTML = splitDays.map((item, i) => `
+            <div class="sp-day ${item.rest ? 'rest' : ''} ${i === todayIdx ? 'today' : ''}">
+                <span class="d">${days[i]}</span>
+                <span class="t" style="--sc:${item.c}">${item.t}</span>
+            </div>
+        `).join('');
+    }
+
+    const list = $('#programsList');
+    if (!list) return;
+    const progs = getUserPrograms();
+    if (!progs.length) {
+        list.innerHTML = `<div class="panel-flat"><p class="month-sub">No custom programs yet. Click "+ New Program" above to create your first routine.</p></div>`;
+        return;
+    }
+
+    list.innerHTML = progs.map(p => `
+        <article class="panel-flat program-card" data-prog-id="${p.id}">
+            <div class="prog-top">
+                <div class="prog-title-row">
+                    <span class="prog-dot" style="background:${p.color || '#FF4A11'}"></span>
+                    <h3 class="prog-title">${escHtml(p.title)}</h3>
+                    ${!p.isDefault ? `<button class="prog-del-btn" data-del-prog="${p.id}" title="Delete program">✕</button>` : ''}
+                </div>
+                <div class="prog-meta">
+                    <span class="prog-badge"><b>✱</b> ${escHtml(p.focus || 'Strength')}</span>
+                    <span class="prog-sched">${escHtml(p.schedule || 'Scheduled')}</span>
+                </div>
+            </div>
+            <div class="prog-exercises">
+                ${(Array.isArray(p.exercises) ? p.exercises : String(p.exercises).split(',')).map(ex => `
+                    <span class="prog-ex-pill">${escHtml(ex.trim())}</span>
+                `).join('')}
+            </div>
+            ${p.cue ? `<div class="prog-cue"><b>Coach Note:</b> “${escHtml(p.cue)}”</div>` : ''}
+            <div class="prog-acts">
+                <a href="workout.html" class="btn-start-prog">
+                    <span class="dc-plus">+</span>
+                    <span>Start this routine</span>
+                    <span class="arr">→</span>
+                </a>
+            </div>
+        </article>
+    `).join('');
+}
+
+function setupProgramCreation() {
+    const createBtn = $('#createProgramBtn');
+    const modal = $('#programModal');
+    const form = $('#programForm');
+
+    function openModal() {
+        if (!modal) return;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => $('#pmTitle')?.focus({ preventScroll: true }), 280);
+    }
+
+    function closeModal() {
+        if (!modal) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    if (createBtn) createBtn.addEventListener('click', openModal);
+
+    if (modal) {
+        modal.addEventListener('click', e => {
+            if (e.target.closest('[data-close-program]')) closeModal();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const title = $('#pmTitle')?.value.trim();
+            const focus = $('#pmFocus')?.value.trim() || 'Strength';
+            const schedule = $('#pmDays')?.value.trim() || 'Custom';
+            const exStr = $('#pmExercises')?.value.trim();
+            const notes = $('#pmNotes')?.value.trim() || '';
+
+            if (!title || !exStr) {
+                showToast('Provide a program title and exercises ✱', 'error');
+                return;
+            }
+
+            const newProg = {
+                id: 'prog-' + Date.now(),
+                title: title,
+                focus: focus,
+                schedule: schedule,
+                color: '#FF4A11',
+                exercises: exStr.split(',').map(s => s.trim()).filter(Boolean),
+                cue: notes,
+                isDefault: false
+            };
+
+            const progs = getUserPrograms();
+            progs.unshift(newProg);
+            saveUserPrograms(progs);
+            renderUserSplits();
+            form.reset();
+            closeModal();
+            showToast('Program created ✱ ready to hit the rack.');
+        });
+    }
+
+    document.addEventListener('click', e => {
+        const delBtn = e.target.closest('[data-del-prog]');
+        if (delBtn) {
+            const id = delBtn.dataset.delProg;
+            let progs = getUserPrograms();
+            progs = progs.filter(p => p.id !== id);
+            saveUserPrograms(progs);
+            renderUserSplits();
+            showToast('Program removed ✱');
+        }
+    });
 }
 
 /* ============================================================
@@ -304,19 +643,23 @@ function setupEditProfileModal(currentUser) {
     function openModal() {
         if (!editModal) return;
         lastFocus = document.activeElement;
-        const parts = String(currentUser.name || '').trim().split(/\s+/);
-        if ($('#efFirst')) $('#efFirst').value = parts[0] || '';
-        if ($('#efLast')) $('#efLast').value = parts.slice(1).join(' ');
-        if ($('#efUser')) $('#efUser').value = String(currentUser.username || '').replace(/^@/, '');
+        const profileData = getProfileData(currentUser);
+
+        if ($('#efFullName')) $('#efFullName').value = profileData.name || currentUser.name || '';
+        if ($('#efUser')) $('#efUser').value = '@' + String(currentUser.username || 'athlete').replace(/^@/, '');
         if ($('#efEmail')) $('#efEmail').value = currentUser.email || '';
-        if ($('#efHeight')) $('#efHeight').value = $('#msHeight')?.textContent || '';
-        if ($('#efWeight')) $('#efWeight').value = $('#msWeight')?.textContent || '';
-        if ($('#efFat')) $('#efFat').value = $('#msFat')?.textContent || '';
+        if ($('#efBio')) $('#efBio').value = profileData.bio || '';
+
+        const links = profileData.socialLinks || {};
+        if ($('#efInstagram')) $('#efInstagram').value = links.instagram || '';
+        if ($('#efYoutube')) $('#efYoutube').value = links.youtube || '';
+        if ($('#efTwitter')) $('#efTwitter').value = links.twitter || '';
+        if ($('#efWebsite')) $('#efWebsite').value = links.website || '';
 
         editModal.classList.add('open');
         editModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        setTimeout(() => $('#efFirst')?.focus({ preventScroll: true }), 320);
+        setTimeout(() => $('#efFullName')?.focus({ preventScroll: true }), 320);
     }
 
     function closeModal() {
@@ -341,39 +684,111 @@ function setupEditProfileModal(currentUser) {
     const editProfileBtn = $('#editProfileBtn');
     if (editProfileBtn) editProfileBtn.addEventListener('click', openModal);
 
-    const editMeasureBtn = $('#editMeasureBtn');
-    if (editMeasureBtn) editMeasureBtn.addEventListener('click', openModal);
-
     const avBtn = $('#avBtn');
     if (avBtn) avBtn.addEventListener('click', openModal);
+
+    const navAvBtn = $('#navAvBtn');
+    if (navAvBtn) navAvBtn.addEventListener('click', openModal);
 
     const editForm = $('#editForm');
     if (editForm) {
         editForm.addEventListener('submit', e => {
             e.preventDefault();
-            const first = $('#efFirst')?.value.trim();
-            const last = $('#efLast')?.value.trim() || '';
-            if (!first) {
-                showToast('Add at least a first name ✱', 'error');
+            const fullName = $('#efFullName')?.value.trim();
+            if (!fullName) {
+                showToast('Please enter your full name ✱', 'error');
                 return;
             }
-            currentUser.name = (first + ' ' + last).trim();
-            const un = $('#efUser')?.value.trim();
-            if (un) currentUser.username = un;
-            currentUser.email = $('#efEmail')?.value.trim();
+
+            const bio = $('#efBio')?.value.trim() ?? '';
+            const socialLinks = {
+                instagram: $('#efInstagram')?.value.trim() ?? '',
+                youtube: $('#efYoutube')?.value.trim() ?? '',
+                twitter: $('#efTwitter')?.value.trim() ?? '',
+                website: $('#efWebsite')?.value.trim() ?? ''
+            };
+
+            currentUser.name = fullName;
+
+            const profileData = getProfileData(currentUser);
+            profileData.name = fullName;
+            profileData.bio = bio;
+            profileData.socialLinks = socialLinks;
+
+            saveProfileData(currentUser, profileData);
 
             try {
                 localStorage.setItem('current_user', JSON.stringify(currentUser));
             } catch (_) {}
 
             applyUser(currentUser);
-
-            if ($('#efHeight')?.value && $('#msHeight')) $('#msHeight').textContent = $('#efHeight').value;
-            if ($('#efWeight')?.value && $('#msWeight')) $('#msWeight').textContent = $('#efWeight').value;
-            if ($('#efFat')?.value && $('#msFat')) $('#msFat').textContent = $('#efFat').value;
-
             closeModal();
-            showToast('Profile updated ✱ the coach recalibrated.');
+            showToast('Profile updated ✱ lookin\' sharp on the rack.');
+        });
+    }
+}
+
+/* ============================================================
+   5B. BODY MEASUREMENTS MODAL
+============================================================ */
+function setupMeasurementModal(currentUser) {
+    const measureModal = $('#measureModal');
+    const measureForm = $('#measureForm');
+    const editMeasureBtn = $('#editMeasureBtn');
+
+    function openMeasureModal() {
+        if (!measureModal) return;
+        if ($('#mfHeight')) $('#mfHeight').value = $('#msHeight')?.textContent || '182';
+        if ($('#mfWeight')) $('#mfWeight').value = $('#msWeight')?.textContent || '84.5';
+        if ($('#mfFat')) $('#mfFat').value = $('#msFat')?.textContent || '14.2';
+
+        measureModal.classList.add('open');
+        measureModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => $('#mfWeight')?.focus({ preventScroll: true }), 320);
+    }
+
+    function closeMeasureModal() {
+        if (!measureModal) return;
+        measureModal.classList.remove('open');
+        measureModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    if (editMeasureBtn) editMeasureBtn.addEventListener('click', openMeasureModal);
+
+    if (measureModal) {
+        measureModal.addEventListener('click', e => {
+            if (e.target.closest('[data-close-measure]')) closeMeasureModal();
+        });
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        if (measureModal && measureModal.classList.contains('open')) closeMeasureModal();
+    });
+
+    if (measureForm) {
+        measureForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const h = $('#mfHeight')?.value;
+            const w = $('#mfWeight')?.value;
+            const f = $('#mfFat')?.value;
+
+            if (h) {
+                if ($('#msHeight')) $('#msHeight').textContent = h;
+                if ($('#heroHeight')) $('#heroHeight').textContent = h;
+            }
+            if (w) {
+                if ($('#msWeight')) $('#msWeight').textContent = w;
+                if ($('#heroWeight')) $('#heroWeight').textContent = w;
+            }
+            if (f && $('#msFat')) {
+                $('#msFat').textContent = f;
+            }
+
+            closeMeasureModal();
+            showToast('Measurements saved ✱ coach recalibrated.');
         });
     }
 }
@@ -487,6 +902,18 @@ function renderStats(myWorkouts) {
     if (hvs[1]) hvs[1].textContent = bestWeek;
     if (hvs[2]) hvs[2].textContent = fmtInt(totalVol);
     if (hvs[3]) hvs[3].textContent = keys.length;
+
+    const heroWorkoutCount = $('#heroWorkoutCount');
+    if (heroWorkoutCount) heroWorkoutCount.textContent = myWorkouts.length;
+    const totalWorkoutsStat = $('#heroTotalWorkoutsStat');
+    if (totalWorkoutsStat) totalWorkoutsStat.textContent = myWorkouts.length;
+
+    const bestWeekEl = $('.hero-hv.hv-bestweek');
+    if (bestWeekEl) bestWeekEl.textContent = bestWeek;
+    const volEl = $('.hero-hv.hv-volume');
+    if (volEl) volEl.textContent = fmtInt(totalVol);
+    const sessEl = $('.hero-hv.hv-sessions');
+    if (sessEl) sessEl.textContent = keys.length;
 }
 
 function renderWeekBars(myWorkouts) {
@@ -708,8 +1135,11 @@ async function init() {
 
     applyUser(currentUser);
     setupNavigation();
+    setupContentTabs();
     setupSettingsAndPreferences();
     setupEditProfileModal(currentUser);
+    setupMeasurementModal(currentUser);
+    setupProgramCreation();
     setupPostInteractions(currentUser);
 
     const myWorkouts = await fetchUserWorkouts(currentUser);
@@ -717,6 +1147,7 @@ async function init() {
     renderStats(myWorkouts);
     renderWeekBars(myWorkouts);
     renderMyPosts(myWorkouts, currentUser);
+    renderUserSplits();
 }
 
 init();
